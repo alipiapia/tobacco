@@ -1,0 +1,51 @@
+<form autocomplete="off" class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.ttile)}
+            <input readonly="readonly" disabled="disabled" name="title" value='{$vo.title|default=""}' required="required" title="请输入名称" placeholder="请输入名称" class="layui-input layui-bg-gray">
+            {else}
+            <input name="title" value='{$vo.title|default=""}' required="required" title="请输入用户名称" placeholder="请输入名称" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-block">
+            <select required class="layui-select full-width" name="type">
+                {foreach $spec_type as $type}
+                <!--{if isset($vo.type) and $type.id eq $vo.type}-->
+                <option selected value="{$type.id}">{$type.title}</option>
+                <!--{else}-->
+                <option value="{$type.id}">{$type.title}</option>
+                <!--{/if}-->
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input placeholder="请输入排序" title="请输入排序" class="layui-input" name="sort" value="{$vo.sort|default='0'}" />
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入描述" title="请输入描述" class="layui-textarea" name="desc">{$vo.desc|default=""}</textarea>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+</form>
