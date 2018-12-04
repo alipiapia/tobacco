@@ -16,10 +16,11 @@ namespace app\admin\controller;
 
 use controller\BasicAdmin;
 use service\DataService;
+use service\ToolsService;
 use think\Db;
 
 /**
- * 产品 控制器
+ * 产品规格属性 控制器
  * Class ProductItem
  * @package app\admin\controller
  * @author Anyon <zoujingli@qq.com>
@@ -33,9 +34,18 @@ class ProductItem extends BasicAdmin
      * @var string
      */
     public $table = 'ProductItem';
+    public $productSpec;
+
+    function __construct(){
+        parent::__construct();
+        $this->productSpec = model('common/ProductSpec');
+        $this->specs = $this->productSpec->getColumn(['status' => 0, 'is_deleted' => 0], 'id,title,desc');
+        $this->assign('specs',$this->specs);
+        // halt($this->specs);
+    }
 
     /**
-     * 用户列表
+     * 产品规格列表
      * @return array|string
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -44,33 +54,33 @@ class ProductItem extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '系统用户管理';
+        $this->title = '产品规格属性管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['username', 'phone', 'mail'] as $key) {
+        foreach (['title', 'spec_id', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
         }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode(' - ', $get['date']);
-            $db->whereBetween('login_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
+            // $db->whereBetween('login_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
+            $db->whereBetween('create_at', [strtotime("{$start} 00:00:00"), strtotime("{$end} 23:59:59")]);
         }
         return parent::_list($db->where(['is_deleted' => '0']));
     }
 
     /**
-     * 授权管理
-     * @return array|string
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     * @throws \think\Exception
+     * 列表数据处理
+     * @param array $data
      */
-    public function auth()
+    protected function _index_data_filter(&$data)
     {
-        return $this->_form($this->table, 'auth');
+        // foreach ($data as &$vo) {
+        //     $vo['ids'] = join(',', ToolsService::getArrSubIds($data, $vo['id']));
+        // }
+        // $data = ToolsService::arr2table($data);
     }
 
     /**
-     * 用户添加
+     * 添加
      * @return array|string
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -83,7 +93,7 @@ class ProductItem extends BasicAdmin
     }
 
     /**
-     * 用户编辑
+     * 编辑
      * @return array|string
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -96,32 +106,6 @@ class ProductItem extends BasicAdmin
     }
 
     /**
-     * 用户密码修改
-     * @return array|string
-     * @throws \think\Exception
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     * @throws \think\exception\PDOException
-     */
-    public function pass()
-    {
-        if ($this->request->isGet()) {
-            $this->assign('verify', false);
-            return $this->_form($this->table, 'pass');
-        }
-        $post = $this->request->post();
-        if ($post['password'] !== $post['repassword']) {
-            $this->error('两次输入的密码不一致！');
-        }
-        $data = ['id' => $post['id'], 'password' => md5($post['password'])];
-        if (DataService::save($this->table, $data, 'id')) {
-            $this->success('密码修改成功，下次请使用新密码登录！', '');
-        }
-        $this->error('密码修改失败，请稍候再试！');
-    }
-
-    /**
      * 表单数据默认处理
      * @param array $data
      * @throws \think\db\exception\DataNotFoundException
@@ -131,65 +115,61 @@ class ProductItem extends BasicAdmin
     public function _form_filter(&$data)
     {
         if ($this->request->isPost()) {
-            if (isset($data['authorize']) && is_array($data['authorize'])) {
-                $data['authorize'] = join(',', $data['authorize']);
-            } else {
-                $data['authorize'] = '';
-            }
+            // if (isset($data['type']) && is_array($data['type'])) {
+            //     $data['type'] = join(',', $data['type']);
+            // } else {
+            //     $data['type'] = '';
+            // }
+            $data['create_at'] = time();
             if (isset($data['id'])) {
-                unset($data['username']);
-            } elseif (Db::name($this->table)->where(['username' => $data['username']])->count() > 0) {
-                $this->error('用户账号已经存在，请使用其它账号！');
+                unset($data['title']);
+                $data['update_at'] = time();
+            } elseif (Db::name($this->table)->where(['title' => $data['title']])->count() > 0) {
+                $this->error('名称已经存在，请使用其它名称！');
             }
         } else {
-            $data['authorize'] = explode(',', isset($data['authorize']) ? $data['authorize'] : '');
-            $this->assign('authorizes', Db::name('SystemAuth')->where(['status' => '1'])->select());
+            // $data['type'] = explode(',', isset($data['type']) ? $data['type'] : '');
+            // $this->assign('spec_type', $this->spec_type);
         }
     }
 
     /**
-     * 删除用户
+     * 删除
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
     public function del()
     {
-        if (in_array('10000', explode(',', $this->request->post('id')))) {
-            $this->error('系统超级账号禁止删除！');
-        }
         if (DataService::update($this->table)) {
-            $this->success("用户删除成功！", '');
+            $this->success("删除成功！", '');
         }
-        $this->error("用户删除失败，请稍候再试！");
+        $this->error("删除失败，请稍候再试！");
     }
 
     /**
-     * 用户禁用
+     * 禁用
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
     public function forbid()
     {
-        if (in_array('10000', explode(',', $this->request->post('id')))) {
-            $this->error('系统超级账号禁止操作！');
-        }
         if (DataService::update($this->table)) {
-            $this->success("用户禁用成功！", '');
+            $this->success("禁用成功！", '');
         }
-        $this->error("用户禁用失败，请稍候再试！");
+        $this->error("禁用失败，请稍候再试！");
     }
 
     /**
-     * 用户禁用
+     * 禁用
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
     public function resume()
     {
         if (DataService::update($this->table)) {
-            $this->success("用户启用成功！", '');
+            $this->success("启用成功！", '');
         }
-        $this->error("用户启用失败，请稍候再试！");
+        $this->error("启用失败，请稍候再试！");
     }
 
 }

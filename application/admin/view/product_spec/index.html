@@ -22,6 +22,24 @@
         </div>
     </div>
 
+    <!--{if !empty($spec_type)}-->
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-inline">
+            <select name="type" lay-search>
+                <option value="">类型</option>
+                {foreach $spec_type as $spec}
+                <!--{if $Think.get.type eq $spec.id}-->
+                <option selected="selected" value="{$spec.id}">{$spec.title}</option>
+                <!--{else}-->
+                <option value="{$spec.id}">{$spec.title}</option>
+                <!--{/if}-->
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <!--{/if}-->
+
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-inline">
@@ -70,7 +88,7 @@
         </thead>
         <tbody>
         <!--{foreach $list as $key=>$vo}-->
-        <tr>
+        <tr title="{$vo.title}">
             <td class='list-table-check-td think-checkbox'>
                 <input class="list-check-box" value='{$vo.id}' type='checkbox'>
             </td>
@@ -124,4 +142,10 @@
     {if isset($page)}<p>{$page|raw}</p>{/if}
     <!--{/empty}-->
 </form>
+<script>
+    (function () {
+        window.form.render();
+        window.laydate.render({range: true, elem: '#create_at'});
+    })();
+</script>
 {/block}
