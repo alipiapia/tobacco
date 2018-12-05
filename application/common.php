@@ -108,3 +108,14 @@ function local_image($url)
 {
     return \service\FileService::download($url)['url'];
 }
+
+//根据id获取规格属性
+function get_p_item($id)
+{
+    return db::name("ProductItem")->where(['id' => $id])->value('title');
+}
+
+//反序列化
+function mb_unserialize($str) {
+    return preg_replace_callback('#s:(\d+):"(.*?)";#s',function($match){return 's:'.strlen($match[2]).':"'.$match[2].'";';},$str);
+}

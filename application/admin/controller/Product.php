@@ -40,13 +40,13 @@ class Product extends BasicAdmin
         parent::__construct();
         $this->productSpec = model('common/ProductSpec');
         $this->productItem = model('common/ProductItem');
-        $this->specs = $this->productSpec->getColumn(['status' => 0, 'is_deleted' => 0], 'id,title,desc');
+        $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id desc', 'id,title,desc,type,mark');
+        foreach ($specs as $k => $v) {
+            $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id desc', 'id,title,desc');
+        }
+        // halt($specs);
+        $this->specs = $specs;
         $this->assign('specs',$this->specs);
-
-        $title_specs = $this->productItem->getColumn(['status' => 0, 'is_deleted' => 0, 'spec_id' => 1], 'id,title,desc');
-        $this->assign('title_specs',$title_specs);
-        // halt($title_specs);
-        // halt($this->specs);
     }
 
     /**
@@ -78,9 +78,11 @@ class Product extends BasicAdmin
      */
     protected function _index_data_filter(&$data)
     {
-        // foreach ($data as &$vo) {
-        //     $vo['ids'] = join(',', ToolsService::getArrSubIds($data, $vo['id']));
-        // }
+        // halt($data);
+        foreach ($data as &$vo) {
+            $vo['item'] = unserialize(base64_decode($vo['item']));
+        }
+        // halt($data);
         // $data = ToolsService::arr2table($data);
     }
 
@@ -120,20 +122,24 @@ class Product extends BasicAdmin
     public function _form_filter(&$data)
     {
         if ($this->request->isPost()) {
-            // if (isset($data['type']) && is_array($data['type'])) {
-            //     $data['type'] = join(',', $data['type']);
-            // } else {
-            //     $data['type'] = '';
-            // }
+            // halt($data);
+            if (isset($data['item']) && is_array($data['item'])) {
+                $data['item'] = base64_encode(serialize($data['item']));
+            } else {
+                $data['item'] = '';
+            }
+            // halt($data);
             $data['create_at'] = time();
             if (isset($data['id'])) {
-                unset($data['title']);
+                // unset($data['title']);
                 $data['update_at'] = time();
-            } elseif (Db::name($this->table)->where(['title' => $data['title']])->count() > 0) {
-                $this->error('名称已经存在，请使用其它名称！');
             }
+            //  elseif ($this->productItem->getValue(['title' => $data['cpmc']],'title') > 0) {
+            //     $this->error('名称已经存在，请使用其它名称！');
+            // }
         } else {
-            // $data['type'] = explode(',', isset($data['type']) ? $data['type'] : '');
+            // halt($data['item']);
+            $data['item'] = unserialize(base64_decode(isset($data['item']) ? $data['item'] : ''));
             // $this->assign('spec_type', $this->spec_type);
         }
     }

@@ -1,32 +1,53 @@
 <form autocomplete="off" class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">名称</label>
-        <div class="layui-input-block">
-            {if $vo and isset($vo.ttile)}
-            <input readonly="readonly" disabled="disabled" name="title" value='{$vo.title|default=""}' required="required" title="请输入名称" placeholder="请输入名称" class="layui-input layui-bg-gray">
-            {else}
-            <input name="title" value='{$vo.title|default=""}' required="required" title="请输入用户名称" placeholder="请输入名称" class="layui-input">
+    {if isset($specs)}
+        {foreach $specs as $spec}
+            <?php $c = $spec['mark'];?>
+            {if $spec.type eq '1'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">                        
+                        <input name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' required="required" title="请输入{$spec.title}" placeholder="请输入{$spec.title}" class="layui-input">
+                    </div>
+                </div>
             {/if}
-        </div>
-    </div>
+            {if $spec.type eq '2'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="item[{$c}]" placeholder="请输入{$spec.title}">{$vo["item"]["$c"]|default=''}</textarea>
+                    </div>
+                </div>
+            {/if}
+            {if $spec.type eq '3'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">
+                            {foreach $spec.items as $sp}
+                            <label class="think-radio">
+                            <?php if(isset($vo["item"]["$c"]) and $sp['id'] == $vo["item"]["$c"]){ ?>
+                                <input type="radio" checked name="item[{$c}]" value="{$sp.id}" lay-ignore> {$sp.title}
+                            <?php }else{ ?>
+                                <input type="radio" name="item[{$c}]" value="{$sp.id}" lay-ignore> {$sp.title}
+                            <?php } ?>
+                            </label>
+                            {/foreach}
+                        {if empty($spec)}<span class="color-desc" style="line-height:36px">未配置</span>{/if}
+                    </div>
+                </div>
+            {/if}
+            {if $spec.type eq '4'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">
+                        <textarea name="item[{$c}]" data-c="content">{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
+                    </div>
+                </div>
+            {/if}
+        {/foreach}
+    {/if}
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">名称</label>
-        <div class="layui-input-block">
-            <select required class="layui-select full-width" name="title_id">
-                {foreach $title_specs as $spec}
-                <!--{if isset($vo.title_id) and $spec.id eq $vo.title_id}-->
-                <option selected value="{$spec.id}">{$spec.title}</option>
-                <!--{else}-->
-                <option value="{$spec.id}">{$spec.title}</option>
-                <!--{/if}-->
-                {/foreach}
-            </select>
-        </div>
-    </div>
-
-    <div class="layui-form-item">
+<!--     <div class="layui-form-item">
         <label class="layui-form-label">排序</label>
         <div class="layui-input-block">
             <input placeholder="请输入排序" title="请输入排序" class="layui-input" name="sort" value="{$vo.sort|default='0'}" />
@@ -38,7 +59,7 @@
         <div class="layui-input-block">
             <textarea placeholder="请输入描述" title="请输入描述" class="layui-textarea" name="desc">{$vo.desc|default=""}</textarea>
         </div>
-    </div>
+    </div> -->
 
     <div class="hr-line-dashed"></div>
 
@@ -48,4 +69,10 @@
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
     </div>
     <script>window.form.render();</script>
+    <script type="text/javascript">
+        require(['jquery', 'ckeditor', 'angular'], function () {
+            window.form.render();
+            window.createEditor('[data-c="content"]', {height: 500});
+        })
+    </script>
 </form>

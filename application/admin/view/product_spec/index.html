@@ -41,6 +41,13 @@
     <!--{/if}-->
 
     <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">标识</label>
+        <div class="layui-input-inline">
+            <input name="mark" value="{$Think.get.mark|default=''}" placeholder="标识" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-inline">
             <input name="desc" value="{$Think.get.desc|default=''}" placeholder="请输入描述" class="layui-input">
@@ -80,6 +87,7 @@
             </th>
             <th class='text-left nowrap'>名 称</th>
             <th class='text-left nowrap'>类 型</th>
+            <th class='text-left nowrap'>标 识</th>
             <th class='text-left nowrap'>描 述</th>
             <th class='text-left nowrap'>添 加 时 间</th>
             <th class='text-left nowrap'>状 态</th>
@@ -100,10 +108,14 @@
             </td>
             <td class='text-left nowrap'>
                 {switch name="vo.type"}
-                {case value="0"}文本框{/case}
-                {case value="1"}单选框{/case}
-                {case value="2"}编辑器{/case}
+                {case value="1"}输入框{/case}
+                {case value="2"}文本框{/case}
+                {case value="3"}单选框{/case}
+                {case value="4"}编辑器{/case}
                 {/switch}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.mark}
             </td>
             <td class='text-left nowrap'>
                 {$vo.desc|default='<span class="color-desc">未设置描述</span>'|raw}

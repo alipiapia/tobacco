@@ -2,7 +2,7 @@
 
 {block name="button"}
 <!--{if auth("$classuri/add")}-->
-<button data-modal='{:url("$classuri/add")}' data-title="添加" class='layui-btn layui-btn-sm layui-btn-primary'>添加</button>
+<button data-open='{:url("$classuri/add")}' data-title="添加" class='layui-btn layui-btn-sm layui-btn-primary'>添加</button>
 <!--{/if}-->
 
 <!--{if auth("$classuri/del")}-->
@@ -79,7 +79,6 @@
                 <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
             </th>
             <th class='text-left nowrap'>名 称</th>
-            <th class='text-left nowrap'>类 型</th>
             <th class='text-left nowrap'>描 述</th>
             <th class='text-left nowrap'>添 加 时 间</th>
             <th class='text-left nowrap'>状 态</th>
@@ -88,7 +87,7 @@
         </thead>
         <tbody>
         <!--{foreach $list as $key=>$vo}-->
-        <tr title="{$vo.title}">
+        <tr title="{$vo.item.cpmc|default=''}">
             <td class='list-table-check-td think-checkbox'>
                 <input class="list-check-box" value='{$vo.id}' type='checkbox'>
             </td>
@@ -96,14 +95,7 @@
                 <input name="_{$vo.id}" value="{$vo.sort}" class="list-sort-input">
             </td>
             <td class='text-left nowrap'>
-                {$vo.title}
-            </td>
-            <td class='text-left nowrap'>
-                {switch name="vo.type"}
-                {case value="0"}文本框{/case}
-                {case value="1"}单选框{/case}
-                {case value="2"}编辑器{/case}
-                {/switch}
+                {$vo.item.cpmc|default=''}
             </td>
             <td class='text-left nowrap'>
                 {$vo.desc|default='<span class="color-desc">未设置描述</span>'|raw}
@@ -118,7 +110,7 @@
 
                 {if auth("$classuri/edit")}
                 <span class="text-explode">|</span>
-                <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                <a data-title="编辑" data-open='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
                 {/if}
 
                 {if $vo.status eq 0 and auth("$classuri/forbid")}

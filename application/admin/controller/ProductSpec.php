@@ -55,7 +55,7 @@ class ProductSpec extends BasicAdmin
     {
         $this->title = '产品规格管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'type', 'desc'] as $key) {
+        foreach (['title', 'type', 'mark', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
         }
         if (isset($get['date']) && $get['date'] !== '') {
@@ -125,6 +125,8 @@ class ProductSpec extends BasicAdmin
                 $data['update_at'] = time();
             } elseif (Db::name($this->table)->where(['title' => $data['title']])->count() > 0) {
                 $this->error('名称已经存在，请使用其它名称！');
+            } elseif (Db::name($this->table)->where(['mark' => $data['mark']])->count() > 0) {
+                $this->error('标识已经存在，请使用其它标识！');
             }
         } else {
             // $data['type'] = explode(',', isset($data['type']) ? $data['type'] : '');

@@ -3,11 +3,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">名称</label>
         <div class="layui-input-block">
-            {if $vo and isset($vo.ttile)}
-            <input readonly="readonly" disabled="disabled" name="title" value='{$vo.title|default=""}' required="required" title="请输入名称" placeholder="请输入名称" class="layui-input layui-bg-gray">
-            {else}
             <input name="title" value='{$vo.title|default=""}' required="required" title="请输入用户名称" placeholder="请输入名称" class="layui-input">
-            {/if}
         </div>
     </div>
 
@@ -23,6 +19,13 @@
                 <!--{/if}-->
                 {/foreach}
             </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">标识</label>
+        <div class="layui-input-block">
+            <input name="mark" value='{$vo.mark|default=""}' required="required" title="请输入标识" placeholder="请输入标识" class="layui-input">
         </div>
     </div>
 
