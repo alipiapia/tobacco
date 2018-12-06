@@ -38,11 +38,13 @@ class Product extends BasicAdmin
 
     function __construct(){
         parent::__construct();
+        // $e  =json_encode([1,2]);
+        // halt($e);
         $this->productSpec = model('common/ProductSpec');
         $this->productItem = model('common/ProductItem');
-        $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id desc', 'id,title,desc,type,mark');
+        $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
         foreach ($specs as $k => $v) {
-            $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id desc', 'id,title,desc');
+            $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
         }
         // halt($specs);
         $this->specs = $specs;
@@ -80,7 +82,8 @@ class Product extends BasicAdmin
     {
         // halt($data);
         foreach ($data as &$vo) {
-            $vo['item'] = unserialize(base64_decode($vo['item']));
+            // $vo['item'] = unserialize(base64_decode($vo['item']));
+            $vo['item'] = json_decode($vo['item'], true);
         }
         // halt($data);
         // $data = ToolsService::arr2table($data);
@@ -124,7 +127,8 @@ class Product extends BasicAdmin
         if ($this->request->isPost()) {
             // halt($data);
             if (isset($data['item']) && is_array($data['item'])) {
-                $data['item'] = base64_encode(serialize($data['item']));
+                // $data['item'] = base64_encode(serialize($data['item']));
+                $data['item'] = json_encode($data['item']);
             } else {
                 $data['item'] = '';
             }
@@ -138,9 +142,10 @@ class Product extends BasicAdmin
             //     $this->error('名称已经存在，请使用其它名称！');
             // }
         } else {
-            // halt($data['item']);
-            $data['item'] = unserialize(base64_decode(isset($data['item']) ? $data['item'] : ''));
-            // $this->assign('spec_type', $this->spec_type);
+            // halt($data);
+            // $data['item'] = unserialize(base64_decode(isset($data['item']) ? $data['item'] : ''));
+            $data['item'] = json_decode(isset($data['item']) ? $data['item'] : '', true);
+            // halt($data);
         }
     }
 

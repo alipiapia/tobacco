@@ -56,8 +56,11 @@ class ProductItem extends BasicAdmin
     {
         $this->title = '产品规格属性管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'spec_id', 'desc'] as $key) {
+        foreach (['title', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
+        }
+        if (isset($get['spec_id']) && $get['spec_id'] !== '') {
+            $db->where('spec_id', $get['spec_id']);
         }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode(' - ', $get['date']);
@@ -122,9 +125,9 @@ class ProductItem extends BasicAdmin
             // }
             $data['create_at'] = time();
             if (isset($data['id'])) {
-                unset($data['title']);
+                // unset($data['title']);
                 $data['update_at'] = time();
-            } elseif (Db::name($this->table)->where(['title' => $data['title']])->count() > 0) {
+            } elseif (Db::name($this->table)->where(['title' => $data['title'], 'spec_id' => $data['spec_id']])->count() > 0) {
                 $this->error('名称已经存在，请使用其它名称！');
             }
         } else {

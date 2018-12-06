@@ -15,24 +15,23 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">{$spec.title}</label>
                     <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="item[{$c}]" placeholder="请输入{$spec.title}">{$vo["item"]["$c"]|default=''}</textarea>
+                        <textarea class="layui-textarea" name="item[{$c}]" required="required" placeholder="请输入{$spec.title}">{$vo["item"]["$c"]|default=''}</textarea>
                     </div>
                 </div>
             {/if}
-            {if $spec.type eq '3'}
+            {if $spec.items and $spec.type eq '3'}
                 <div class="layui-form-item">
                     <label class="layui-form-label">{$spec.title}</label>
                     <div class="layui-input-block">
-                            {foreach $spec.items as $sp}
+                            {volist name="spec.items" id="sp" empty="未配置属性"}
                             <label class="think-radio">
-                            <?php if(isset($vo["item"]["$c"]) and $sp['id'] == $vo["item"]["$c"]){ ?>
-                                <input type="radio" checked name="item[{$c}]" value="{$sp.id}" lay-ignore> {$sp.title}
-                            <?php }else{ ?>
-                                <input type="radio" name="item[{$c}]" value="{$sp.id}" lay-ignore> {$sp.title}
-                            <?php } ?>
+                                {if isset($vo["item"]["$c"]) and $sp['id'] == $vo["item"]["$c"]}
+                                    <input type="radio" checked name="item[{$c}]" value="{$sp.id}" lay-verify="required" lay-ignore> {$sp.title}
+                                {else /}
+                                    <input type="radio" name="item[{$c}]" value="{$sp.id}" lay-verify="required" lay-ignore> {$sp.title}
+                                {/if}
                             </label>
-                            {/foreach}
-                        {if empty($spec)}<span class="color-desc" style="line-height:36px">未配置</span>{/if}
+                            {/volist}
                     </div>
                 </div>
             {/if}

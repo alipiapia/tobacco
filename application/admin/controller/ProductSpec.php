@@ -121,7 +121,7 @@ class ProductSpec extends BasicAdmin
             // }
             $data['create_at'] = time();
             if (isset($data['id'])) {
-                unset($data['title']);
+                // unset($data['title']);
                 $data['update_at'] = time();
             } elseif (Db::name($this->table)->where(['title' => $data['title']])->count() > 0) {
                 $this->error('名称已经存在，请使用其它名称！');
