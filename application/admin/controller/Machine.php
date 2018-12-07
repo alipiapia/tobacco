@@ -20,31 +20,31 @@ use service\ToolsService;
 use think\Db;
 
 /**
- * 产品 控制器
- * Class Product
+ * 机器 控制器
+ * Class Machine
  * @package app\admin\controller
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Product extends BasicAdmin
+class Machine extends BasicAdmin
 {
 
     /**
      * 指定当前数据表
      * @var string
      */
-    public $table = 'Product';
+    public $table = 'Machine';
     public $specs;
 
     function __construct(){
         parent::__construct();
         // $e  =json_encode([1,2]);
         // halt($e);
-        $this->productSpec = model('common/ProductSpec');
-        $this->productItem = model('common/ProductItem');
-        $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
+        $this->machineSpec = model('common/MachineSpec');
+        $this->machineItem = model('common/MachineItem');
+        $specs = $this->machineSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
         foreach ($specs as $k => $v) {
-            $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
+            $specs[$k]['items'] = $this->machineItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
         }
         // halt($specs);
         $this->specs = $specs;
@@ -52,7 +52,7 @@ class Product extends BasicAdmin
     }
 
     /**
-     * 产品列表
+     * 机器列表
      * @return array|string
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -61,7 +61,7 @@ class Product extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '产品管理';
+        $this->title = '机器管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['title', 'type', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
@@ -139,7 +139,7 @@ class Product extends BasicAdmin
             } else{
                 $data['create_at'] = time();
             }
-            //  elseif ($this->productItem->getValue(['title' => $data['cpmc']],'title') > 0) {
+            //  elseif ($this->machineItem->getValue(['title' => $data['cpmc']],'title') > 0) {
             //     $this->error('名称已经存在，请使用其它名称！');
             // }
         } else {

@@ -1,6 +1,6 @@
 <?php
 /**
- * 产品规格详情 模型
+ * 规格属性 模型
  *
  * Class ProductItem
  * @Space app\common\model

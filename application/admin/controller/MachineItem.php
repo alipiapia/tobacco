@@ -20,39 +20,32 @@ use service\ToolsService;
 use think\Db;
 
 /**
- * 产品 控制器
- * Class Product
+ * 规格属性 控制器
+ * Class MachineItem
  * @package app\admin\controller
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Product extends BasicAdmin
+class MachineItem extends BasicAdmin
 {
 
     /**
      * 指定当前数据表
      * @var string
      */
-    public $table = 'Product';
-    public $specs;
+    public $table = 'MachineItem';
+    public $machineSpec;
 
     function __construct(){
         parent::__construct();
-        // $e  =json_encode([1,2]);
-        // halt($e);
-        $this->productSpec = model('common/ProductSpec');
-        $this->productItem = model('common/ProductItem');
-        $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
-        foreach ($specs as $k => $v) {
-            $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
-        }
-        // halt($specs);
-        $this->specs = $specs;
+        $this->machineSpec = model('common/MachineSpec');
+        $this->specs = $this->machineSpec->getColumn(['status' => 0, 'is_deleted' => 0], 'id,title,desc');
         $this->assign('specs',$this->specs);
+        // halt($this->specs);
     }
 
     /**
-     * 产品列表
+     * 规格列表
      * @return array|string
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -61,10 +54,13 @@ class Product extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '产品管理';
+        $this->title = '机器规格属性管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'type', 'desc'] as $key) {
+        foreach (['title', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
+        }
+        if (isset($get['spec_id']) && $get['spec_id'] !== '') {
+            $db->where('spec_id', $get['spec_id']);
         }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode(' - ', $get['date']);
@@ -80,12 +76,9 @@ class Product extends BasicAdmin
      */
     protected function _index_data_filter(&$data)
     {
-        // halt($data);
-        foreach ($data as &$vo) {
-            // $vo['item'] = unserialize(base64_decode($vo['item']));
-            $vo['item'] = json_decode($vo['item'], true);
-        }
-        // halt($data);
+        // foreach ($data as &$vo) {
+        //     $vo['ids'] = join(',', ToolsService::getArrSubIds($data, $vo['id']));
+        // }
         // $data = ToolsService::arr2table($data);
     }
 
@@ -125,28 +118,24 @@ class Product extends BasicAdmin
     public function _form_filter(&$data)
     {
         if ($this->request->isPost()) {
-            // halt($data);
-            if (isset($data['item']) && is_array($data['item'])) {
-                // $data['item'] = base64_encode(serialize($data['item']));
-                $data['item'] = json_encode($data['item']);
-            } else {
-                $data['item'] = '';
+            // if (isset($data['type']) && is_array($data['type'])) {
+            //     $data['type'] = join(',', $data['type']);
+            // } else {
+            //     $data['type'] = '';
+            // }
+            
+            if(!isset($data['id'])){
+                $data['create_at'] = time();
             }
-            // halt($data);
             if (isset($data['id'])) {
                 // unset($data['title']);
                 $data['update_at'] = time();
-            } else{
-                $data['create_at'] = time();
+            } elseif (Db::name($this->table)->where(['title' => $data['title'], 'spec_id' => $data['spec_id']])->count() > 0) {
+                $this->error('名称已经存在，请使用其它名称！');
             }
-            //  elseif ($this->productItem->getValue(['title' => $data['cpmc']],'title') > 0) {
-            //     $this->error('名称已经存在，请使用其它名称！');
-            // }
         } else {
-            // halt($data);
-            // $data['item'] = unserialize(base64_decode(isset($data['item']) ? $data['item'] : ''));
-            $data['item'] = json_decode(isset($data['item']) ? $data['item'] : '', true);
-            // halt($data);
+            // $data['type'] = explode(',', isset($data['type']) ? $data['type'] : '');
+            // $this->assign('spec_type', $this->spec_type);
         }
     }
 

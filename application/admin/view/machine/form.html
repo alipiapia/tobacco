@@ -1,0 +1,77 @@
+<form autocomplete="off" class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
+
+    {if isset($specs)}
+        {foreach $specs as $spec}
+            <?php $c = $spec['mark'];?>
+            {if $spec.type eq '1'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">                        
+                        <input name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' required="required" title="请输入{$spec.title}" placeholder="请输入{$spec.title}" class="layui-input">
+                    </div>
+                </div>
+            {/if}
+            {if $spec.type eq '2'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="item[{$c}]" required="required" placeholder="请输入{$spec.title}">{$vo["item"]["$c"]|default=''}</textarea>
+                    </div>
+                </div>
+            {/if}
+            {if $spec.items and $spec.type eq '3'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">
+                            {volist name="spec.items" id="sp" empty="未配置属性"}
+                            <label class="think-radio">
+                                {if isset($vo["item"]["$c"]) and $sp['id'] == $vo["item"]["$c"]}
+                                    <input type="radio" checked name="item[{$c}]" value="{$sp.id}" lay-verify="required" lay-ignore> {$sp.title}
+                                {else /}
+                                    <input type="radio" name="item[{$c}]" value="{$sp.id}" lay-verify="required" lay-ignore> {$sp.title}
+                                {/if}
+                            </label>
+                            {/volist}
+                    </div>
+                </div>
+            {/if}
+            {if $spec.type eq '4'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">
+                        <textarea name="item[{$c}]" data-c="content">{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
+                    </div>
+                </div>
+            {/if}
+        {/foreach}
+    {/if}
+
+<!--     <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input placeholder="请输入排序" title="请输入排序" class="layui-input" name="sort" value="{$vo.sort|default='0'}" />
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入描述" title="请输入描述" class="layui-textarea" name="desc">{$vo.desc|default=""}</textarea>
+        </div>
+    </div> -->
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+    <script type="text/javascript">
+        require(['jquery', 'ckeditor', 'angular'], function () {
+            window.form.render();
+            window.createEditor('[data-c="content"]', {height: 500});
+        })
+    </script>
+</form>

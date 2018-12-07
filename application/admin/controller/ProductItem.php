@@ -123,7 +123,10 @@ class ProductItem extends BasicAdmin
             // } else {
             //     $data['type'] = '';
             // }
-            $data['create_at'] = time();
+            
+            if(!isset($data['id'])){
+                $data['create_at'] = time();
+            }
             if (isset($data['id'])) {
                 // unset($data['title']);
                 $data['update_at'] = time();

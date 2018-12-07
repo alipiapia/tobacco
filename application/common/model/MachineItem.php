@@ -1,8 +1,8 @@
 <?php
 /**
- * 规格 模型
+ * 规格属性 模型
  *
- * Class ProductSpec
+ * Class MachineItem
  * @Space app\common\model
  * @Author pp <124910168@qq.com>
  * @Date 27th Sept. 2018
@@ -11,7 +11,7 @@ namespace app\common\model;
 use think\Db;
 use think\Model;
 
-class ProductSpec extends Model { 
+class MachineItem extends Model { 
 
     /** 返回某个字段的值
      * @param $where 查询条件
