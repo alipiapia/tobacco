@@ -1,4 +1,5 @@
-<form autocomplete="off" class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
+
+<form autocomplete="off" onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" id="ProductForm" class='form-horizontal layui-form padding-top-20'>
 
     {if isset($specs)}
         {foreach $specs as $spec}
@@ -39,12 +40,25 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">{$spec.title}</label>
                     <div class="layui-input-block">
-                        <textarea name="item[{$c}]" data-c="content">{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
+                        <textarea name="item[{$c}]" data-content="content">{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
                     </div>
                 </div>
             {/if}
         {/foreach}
     {/if}
+    <div class="layui-form-item">
+        <label class="layui-form-label">视频</label>
+        <div class="layui-input-block">     
+            <div class="row">
+                <div class="col-sm-10 padding-right-0">
+                    <input style="border-right:none" name="goods_video" value="{$vo.goods_video|default=''}" class="layui-input" title="请输入链接或上传视频展示文件" placeholder="请输入链接或上传视频展示文件">
+                </div>
+                <div class="col-sm-2 padding-left-0">
+                    <button data-file="one" data-type="mp4" data-field="goods_video" type="button" class="layui-btn layui-btn-sm" style="height:38px;line-height:38px;width:100%">上传视频文件</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!--     <div class="layui-form-item">
         <label class="layui-form-label">排序</label>
@@ -71,7 +85,16 @@
     <script type="text/javascript">
         require(['jquery', 'ckeditor', 'angular'], function () {
             window.form.render();
-            window.createEditor('[data-c="content"]', {height: 500});
+            window.createEditor('[data-content="content"]', {height: 500});
+            var app = angular.module("ProductForm", []).run(callback);
+            angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+            function callback($rootScope) {
+                // 单图片上传处理
+                $('[data-img="img"]').uploadOneImage();
+                // 多图片上传处理
+                $('[data-imgs="imgs"]').uploadMultipleImage();
+            }
         })
     </script>
 </form>

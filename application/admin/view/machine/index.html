@@ -78,7 +78,7 @@
             <th class='list-table-sort-td'>
                 <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
             </th>
-            <th class='text-left nowrap'>名 称</th>
+            <th class='text-left nowrap'>机 型</th>
             <th class='text-left nowrap'>描 述</th>
             <th class='text-left nowrap'>添 加 时 间</th>
             <th class='text-left nowrap'>状 态</th>
@@ -87,7 +87,7 @@
         </thead>
         <tbody>
         <!--{foreach $list as $key=>$vo}-->
-        <tr title="{$vo.item.cpmc|default=''}">
+        <tr title="{$vo.item.jx|default=''}">
             <td class='list-table-check-td think-checkbox'>
                 <input class="list-check-box" value='{$vo.id}' type='checkbox'>
             </td>
@@ -95,7 +95,7 @@
                 <input name="_{$vo.id}" value="{$vo.sort}" class="list-sort-input">
             </td>
             <td class='text-left nowrap'>
-                {$vo.item.cpmc|default=''}
+                {$vo.item.jx|default=''}
             </td>
             <td class='text-left nowrap'>
                 {$vo.desc|default='<span class="color-desc">未设置描述</span>'|raw}
