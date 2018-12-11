@@ -1,4 +1,5 @@
-<form autocomplete="off" class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
+
+<form autocomplete="off" onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" id="ProductForm" class='form-horizontal layui-form padding-top-20'>
 
     {if isset($specs)}
         {foreach $specs as $spec}
@@ -39,26 +40,43 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">{$spec.title}</label>
                     <div class="layui-input-block">
-                        <textarea name="item[{$c}]" data-c="content">{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
+                        <textarea name="item[{$c}]" data-content="content">{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
+                    </div>
+                </div>
+            {/if}
+            {if $spec.type eq '5'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">                        
+                        <input type="hidden" data-img="img" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input">
+                    </div>
+                </div>
+            {/if}
+            {if $spec.type eq '6'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">                        
+                        <input type="hidden" data-imgs="imgs" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input">
+                    </div>
+                </div>
+            {/if}
+            {if $spec.type eq '7'}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$spec.title}</label>
+                    <div class="layui-input-block">     
+                        <div class="row">
+                            <div class="col-sm-10 padding-right-0">
+                                <input style="border-right:none" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input" title="请输入链接或上传视频展示文件" placeholder="请输入链接或上传视频展示文件">
+                            </div>
+                            <div class="col-sm-2 padding-left-0">
+                                <button data-file="one" data-type="mp4" data-field="item[{$c}]" type="button" class="layui-btn layui-btn-sm" style="height:38px;line-height:38px;width:100%">上传视频文件</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             {/if}
         {/foreach}
     {/if}
-
-<!--     <div class="layui-form-item">
-        <label class="layui-form-label">排序</label>
-        <div class="layui-input-block">
-            <input placeholder="请输入排序" title="请输入排序" class="layui-input" name="sort" value="{$vo.sort|default='0'}" />
-        </div>
-    </div>
-
-    <div class="layui-form-item">
-        <label class="layui-form-label">描述</label>
-        <div class="layui-input-block">
-            <textarea placeholder="请输入描述" title="请输入描述" class="layui-textarea" name="desc">{$vo.desc|default=""}</textarea>
-        </div>
-    </div> -->
 
     <div class="hr-line-dashed"></div>
 
@@ -67,11 +85,49 @@
         <button class="layui-btn" type='submit'>保存数据</button>
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
     </div>
-    <script>window.form.render();</script>
+    <!-- <script>window.form.render();</script> -->
     <script type="text/javascript">
         require(['jquery', 'ckeditor', 'angular'], function () {
             window.form.render();
-            window.createEditor('[data-c="content"]', {height: 500});
+            var app = angular.module("ProductForm", []).run(callback);
+            angular.bootstrap(document.getElementById(app.name), [app.name]);
+            
+            var content = $("[data-content='content']");
+            var arr =[];
+            $(content).each(function(){
+                // arr.push($(this));
+                if($(this)){
+                    window.createEditor($(this), {height: 100});
+                }
+            });
+            // console.log(arr);return false;
+            // if(content){
+                // window.createEditor('[data-content="content"]', {height: 500});
+            // }
+
+            function callback($rootScope) {
+                // 单图片上传处理
+                // $('[data-img="img"]').uploadOneImage();
+                var img = $("[data-img='img']");
+                var arr =[];
+                $(img).each(function(){
+                    // arr.push($(this));
+                    if($(this)){
+                        $(this).uploadOneImage();
+                    }
+                });
+
+                // 多图片上传处理
+                // $('[data-imgs="imgs"]').uploadMultipleImage();
+                var imgs = $("[data-imgs='imgs']");
+                var arr =[];
+                $(imgs).each(function(){
+                    // arr.push($(this));
+                    if($(this)){
+                        $(this).uploadMultipleImage();
+                    }
+                });
+            }
         })
     </script>
 </form>

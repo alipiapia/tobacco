@@ -82,6 +82,7 @@ class Product extends BasicAdmin
     {
         // halt($data);
         foreach ($data as &$vo) {
+            // halt(strlen($vo['item']));
             // $vo['item'] = unserialize(base64_decode($vo['item']));
             $vo['item'] = json_decode($vo['item'], true);
         }
