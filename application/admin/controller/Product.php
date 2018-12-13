@@ -36,7 +36,7 @@ class Product extends BasicAdmin
     public $table = 'Product';
     public $specs;
 
-    function __construct(){
+    public function __construct(){
         parent::__construct();
         // $e  =json_encode([1,2]);
         // halt($e);
