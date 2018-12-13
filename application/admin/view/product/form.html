@@ -40,7 +40,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">{$spec.title}</label>
                     <div class="layui-input-block">
-                        <textarea name="item[{$c}]" data-content="content">{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
+                        <textarea name="item[{$c}]" data-content="content" id="{$c}" data-c='{$vo["item"]["$c"]}'>{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
                     </div>
                 </div>
             {/if}
@@ -87,17 +87,39 @@
     </div>
     <!-- <script>window.form.render();</script> -->
     <script type="text/javascript">
-        require(['jquery', 'ckeditor', 'angular'], function () {
+        require(['jquery', 'ckeditor', 'angular', 'ueditor.all', 'ueditor.config'], function () {
             window.form.render();
             var app = angular.module("ProductForm", []).run(callback);
             angular.bootstrap(document.getElementById(app.name), [app.name]);
+
             
             var content = $("[data-content='content']");
             var arr =[];
             $(content).each(function(){
                 // arr.push($(this));
                 if($(this)){
-                    window.createEditor($(this), {height: 100});
+                    // window.createEditor($(this), {height: 100});
+
+                    //Ueditor 13th Dec. 2018
+                    var objId = $(this).attr("id");
+                    var cont = $(this).attr("data-c");
+                    var ue = UE.getEditor(objId,{
+                        autoHeight:true,
+                    });
+                    ue.ready(function() {
+                        ue.setHeight(200);
+                        //设置编辑器的内容
+                        // ue.setContent('hello');
+                        //获取html内容，返回: <p>hello</p>
+                        // var html = ue.getContent();
+                        //获取纯文本内容，返回: hello
+                        // var txt = ue.getContentTxt();
+
+                        // var cont = $(this).attr("data-c");
+                        // console.log(cont);
+                        // alert(cont);return false;
+                        ue.setContent(cont);
+                    });
                 }
             });
             // console.log(arr);return false;

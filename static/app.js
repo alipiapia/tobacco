@@ -30,6 +30,8 @@ require.config({
         'base64': ['plugs/jquery/base64.min'],
         'angular': ['plugs/angular/angular.min'],
         'ckeditor': ['plugs/ckeditor/ckeditor'],
+        'ueditor.all': ['plugs/ueditor/ueditor.all'],
+        'ueditor.config': ['plugs/ueditor/ueditor.config'],
         'websocket': ['plugs/socket/websocket'],
         'clipboard': ['plugs/clipboard/clipboard.min'],
         // jQuery
