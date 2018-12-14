@@ -104,10 +104,10 @@
                     var objId = $(this).attr("id");
                     var cont = $(this).attr("data-c");
                     var ue = UE.getEditor(objId,{
-                        autoHeight:true,
+                        // autoHeight:true,
                     });
                     ue.ready(function() {
-                        ue.setHeight(200);
+                        ue.setHeight(400);
                         //设置编辑器的内容
                         // ue.setContent('hello');
                         //获取html内容，返回: <p>hello</p>
