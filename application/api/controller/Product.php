@@ -65,11 +65,14 @@ class Product extends BasicApi
             // $db->whereBetween('login_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
             $db->whereBetween('create_at', [strtotime("{$start} 00:00:00"), strtotime("{$end} 23:59:59")]);
         }
-        $list = $db->select();
+        $list = $db->getLists();
         // halt($db);
         foreach ($list as $k => $v) {
-            $v['item'] = $this->formatItem($v['item']);
+            $mItem = $this->formatItem($v['item']);
+            $list[$k] = array_merge((array)$list[$k], $mItem);
+            unset($list[$k]['item']);
         }
+        // halt($list);
         $this->success('成功',$list);
     }
 
@@ -80,21 +83,46 @@ class Product extends BasicApi
         }
         $map = ['id' => input('id')];
         $info = $this->product->getOneDarry($map);
-        $info = $this->formatItem($info['item']);
+        $mItem = $this->formatItem($info['item']);
+        $info = array_merge($info, $mItem);
+        unset($info['item']);
         $this->success('', $info);
     }
 
     //item
-    private function formatItem($item){
+    private function formatItem($item, $title = 'title'){
         $item = json_decode($item, true);
         foreach ($item as $k => $v) {
             $item[$k] = $v;
-            $itemInfo = $this->productItem->getValue(['id' => $v], 'title');
+            $itemInfo = $this->productItem->getValue(['id' => $v], $title);
             if($itemInfo){
                 $item[$k] = $itemInfo;
             }
         }
         return $item;
+    }
+
+    //spec
+    private function formatSpec($spec, $title = 'title'){
+        $spec = json_decode($spec, true);
+        foreach ($spec as $k => $v) {
+            $spec[$k] = $k;
+            $specInfo = $this->productSpec->getValue(['mark' => $k], $title);
+            if($specInfo){
+                $spec[$k] = $specInfo;
+            }
+        }
+        return $spec;
+    }
+
+    //columns
+    public function doc(){
+        $map = ['id' => 1];
+        $info = $this->product->getOneDarry($map);
+        $mItem = $this->formatSpec($info['item']);
+        $info = array_merge($info, $mItem);
+        unset($info['item']);
+        $this->success('', $info);
     }
 
 }
