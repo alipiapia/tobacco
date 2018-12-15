@@ -47,13 +47,30 @@ class Product extends BasicApi
         //     $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
         // }
         // halt($specs);
-        // $this->success('成功',$specs);
+        // $this->success('请求成功',$specs);
     }
 
     //列表
     public function index()
     {
-        $this->title = '产品管理';
+        $map = [
+            'status' => 0,
+            'is_deleted' => '0',
+        ];
+        $param = $this->request->param();
+        foreach (['title', 'type', 'desc'] as $key) {
+            if(isset($param[$key]) && $param[$key] !== ''){
+                $map['title'] = ['like', "%{$param[$key]}%"];
+            }
+        }
+        $list = $this->product->getLists($map, '', 'id,title');
+        // halt($map);
+        $this->success('请求成功', $list);
+    }
+
+    //列表
+    public function list()
+    {
         list($get, $db) = [$this->request->get(), $this->product];
         // halt($get);
         $db->where(['status' => 0, 'is_deleted' => '0']);
@@ -69,11 +86,11 @@ class Product extends BasicApi
         // halt($db);
         foreach ($list as $k => $v) {
             $mItem = $this->formatItem($v['item']);
-            $list[$k] = array_merge((array)$list[$k], $mItem);
+            $list[$k] = array_merge($list[$k], $mItem);
             unset($list[$k]['item']);
         }
         // halt($list);
-        $this->success('成功',$list);
+        $this->success('请求成功', $list);
     }
 
     //详情
@@ -86,7 +103,7 @@ class Product extends BasicApi
         $mItem = $this->formatItem($info['item']);
         $info = array_merge($info, $mItem);
         unset($info['item']);
-        $this->success('', $info);
+        $this->success('请求成功', $info);
     }
 
     //item
@@ -122,7 +139,7 @@ class Product extends BasicApi
         $mItem = $this->formatSpec($info['item']);
         $info = array_merge($info, $mItem);
         unset($info['item']);
-        $this->success('', $info);
+        $this->success('请求成功', $info);
     }
 
 }

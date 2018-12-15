@@ -1,6 +1,12 @@
 
 <form autocomplete="off" onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" id="ProductForm" class='form-horizontal layui-form padding-top-20'>
 
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block">                        
+            <input name="title" value='{$vo["title"]|default=""}' required="required" title="请输入名称" placeholder="请输入名称" class="layui-input">
+        </div>
+    </div>
     {if isset($specs)}
         {foreach $specs as $spec}
             <?php $c = $spec['mark'];?>
