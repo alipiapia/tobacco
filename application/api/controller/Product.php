@@ -124,19 +124,57 @@ class Product extends BasicApi
                 $item[$k] = explode('|', $v);
             }
 
-            //防伪分组
+            //防伪分组条盒
             if(strpos($k, 'fwtjth') !== false){
-                $item['fwtjth'][$k] = $item[$k];
+                // $item['fwtjth'][$k] = $item[$k];
+                if(in_array($k, ['fwtjthzm', 'fwtjthbm'])){
+                    $item['fwtjth']['fwtjthzmbm'][] = $item[$k];
+                }
+                if(in_array($k, ['fwtjthzc', 'fwtjthyc'])){
+                    $item['fwtjth']['fwtjthzcyc'][] = $item[$k];
+                }
+                if(in_array($k, ['fwtjthdb', 'fwtjthdb2'])){
+                    $item['fwtjth']['fwtjthdbdb2'][] = $item[$k];
+                }
+                if($k == 'fwtjthqt'){
+                    $item['fwtjth']['fwtjthqt'][] = $item[$k];
+                }
                 unset($item[$k]);
                 // halt($k);
             }
+            //防伪分组小盒
             if(strpos($k, 'fwtjxh') !== false){
-                $item['fwtjxh'][$k] = $item[$k];
+                // $item['fwtjxh'][$k] = $item[$k];
+                if(in_array($k, ['fwtjxhzm', 'fwtjxhbm'])){
+                    $item['fwtjxh']['fwtjxhzmbm'][] = $item[$k];
+                }
+                if(in_array($k, ['fwtjxhzc', 'fwtjxhyc'])){
+                    $item['fwtjxh']['fwtjxhzcyc'][] = $item[$k];
+                }
+                if(in_array($k, ['fwtjxhdb', 'fwtjxhdb2'])){
+                    $item['fwtjxh']['fwtjxhdbdb2'][] = $item[$k];
+                }
+                if($k == 'fwtjxhqt'){
+                    $item['fwtjxh']['fwtjxhqt'][] = $item[$k];
+                }
                 unset($item[$k]);
                 // halt($k);
             }
+            //防伪分组烟支
             if(strpos($k, 'fwtjyz') !== false){
-                $item['fwtjyz'][$k] = $item[$k];
+                // $item['fwtjyz'][$k] = $item[$k];
+                if(in_array($k, ['fwtjyzzm', 'fwtjyzbm'])){
+                    $item['fwtjyz']['fwtjyzzmbm'][] = $item[$k];
+                }
+                if(in_array($k, ['fwtjyzzc', 'fwtjyzyc'])){
+                    $item['fwtjyz']['fwtjyzzcyc'][] = $item[$k];
+                }
+                if(in_array($k, ['fwtjyzdb', 'fwtjyzdb2'])){
+                    $item['fwtjyz']['fwtjyzdbdb2'][] = $item[$k];
+                }
+                if($k == 'fwtjyzqt'){
+                    $item['fwtjyz']['fwtjyzqt'][] = $item[$k];
+                }
                 unset($item[$k]);
                 // halt($k);
             }
