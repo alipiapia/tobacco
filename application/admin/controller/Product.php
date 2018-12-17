@@ -42,7 +42,7 @@ class Product extends BasicAdmin
         // halt($e);
         $this->productSpec = model('common/ProductSpec');
         $this->productItem = model('common/ProductItem');
-        $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
+        $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark,sort',0);
         foreach ($specs as $k => $v) {
             $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
         }

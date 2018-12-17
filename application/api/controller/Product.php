@@ -111,9 +111,34 @@ class Product extends BasicApi
         $item = json_decode($item, true);
         foreach ($item as $k => $v) {
             $item[$k] = $v;
+
+            //属性值
             $itemInfo = $this->productItem->getValue(['id' => $v], $title);
             if($itemInfo){
                 $item[$k] = $itemInfo;
+            }
+
+            //多图拆解
+            $specInfo = $this->productSpec->getValue(['mark' => $k], 'type');
+            if($specInfo == 6 && $v){
+                $item[$k] = explode('|', $v);
+            }
+
+            //防伪分组
+            if(strpos($k, 'fwtjth') !== false){
+                $item['fwtjth'][$k] = $item[$k];
+                unset($item[$k]);
+                // halt($k);
+            }
+            if(strpos($k, 'fwtjxh') !== false){
+                $item['fwtjxh'][$k] = $item[$k];
+                unset($item[$k]);
+                // halt($k);
+            }
+            if(strpos($k, 'fwtjyz') !== false){
+                $item['fwtjyz'][$k] = $item[$k];
+                unset($item[$k]);
+                // halt($k);
             }
         }
         return $item;

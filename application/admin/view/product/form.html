@@ -1,88 +1,180 @@
 
 <form autocomplete="off" onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" id="ProductForm" class='form-horizontal layui-form padding-top-20'>
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">名称</label>
-        <div class="layui-input-block">                        
-            <input name="title" value='{$vo["title"]|default=""}' required="required" title="请输入名称" placeholder="请输入名称" class="layui-input">
+    <div class="layui-tab layui-tab-card layui-box">
+        <ul class="layui-tab-title">
+            <li>详细参数</li>
+            <li>防伪图解</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">                        
+                        <input name="title" value='{$vo["title"]|default=""}' required="required" title="请输入名称" placeholder="请输入名称" class="layui-input">
+                    </div>
+                </div>
+                {if isset($specs)}
+                    {foreach $specs as $spec}
+                        {if $spec.sort neq '555'}
+                        <?php $c = $spec['mark'];?>
+                        {if $spec.type eq '1'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">                        
+                                    <input name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' required="required" title="请输入{$spec.title}" placeholder="请输入{$spec.title}" class="layui-input">
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.type eq '2'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">
+                                    <textarea class="layui-textarea" name="item[{$c}]" required="required" placeholder="请输入{$spec.title}">{$vo["item"]["$c"]|default=''}</textarea>
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.items and $spec.type eq '3'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">
+                                        {volist name="spec.items" id="sp" empty="未配置属性"}
+                                        <label class="think-radio">
+                                            {if isset($vo["item"]["$c"]) and $sp['id'] == $vo["item"]["$c"]}
+                                                <input type="radio" checked name="item[{$c}]" value="{$sp.id}" lay-verify="required" lay-ignore> {$sp.title}
+                                            {else /}
+                                                <input type="radio" name="item[{$c}]" value="{$sp.id}" lay-verify="required" lay-ignore> {$sp.title}
+                                            {/if}
+                                        </label>
+                                        {/volist}
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.type eq '4'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">
+                                    <textarea name="item[{$c}]" data-content="content" id="{$c}" data-c='{$vo["item"]["$c"]|default=""}'>{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.type eq '5'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">                        
+                                    <input type="hidden" data-img="img" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input">
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.type eq '6'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">                        
+                                    <input type="hidden" data-imgs="imgs" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input">
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.type eq '7'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">     
+                                    <div class="row">
+                                        <div class="col-sm-8 padding-right-0">
+                                            <input style="border-right:none" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input" title="请输入链接或上传视频展示文件" placeholder="请输入链接或上传视频展示文件">
+                                        </div>
+                                        <div class="col-sm-2 padding-left-0">
+                                            <button data-file="one" data-type="mp4" data-field="item[{$c}]" type="button" class="layui-btn layui-btn-sm" style="height:38px;line-height:38px;width:100%">上传视频文件</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {/if}
+                        {/if}
+                    {/foreach}
+                {/if}
+            </div>
+            <div class="layui-tab-item">
+                {if isset($specs)}
+                    {foreach $specs as $spec}
+                        {if $spec.sort eq '555'}
+                        <?php $c = $spec['mark'];?>
+                        {if $spec.type eq '1'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">                        
+                                    <input name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' required="required" title="请输入{$spec.title}" placeholder="请输入{$spec.title}" class="layui-input">
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.type eq '2'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">
+                                    <textarea class="layui-textarea" name="item[{$c}]" required="required" placeholder="请输入{$spec.title}">{$vo["item"]["$c"]|default=''}</textarea>
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.items and $spec.type eq '3'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">
+                                        {volist name="spec.items" id="sp" empty="未配置属性"}
+                                        <label class="think-radio">
+                                            {if isset($vo["item"]["$c"]) and $sp['id'] == $vo["item"]["$c"]}
+                                                <input type="radio" checked name="item[{$c}]" value="{$sp.id}" lay-verify="required" lay-ignore> {$sp.title}
+                                            {else /}
+                                                <input type="radio" name="item[{$c}]" value="{$sp.id}" lay-verify="required" lay-ignore> {$sp.title}
+                                            {/if}
+                                        </label>
+                                        {/volist}
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.type eq '4'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">
+                                    <textarea name="item[{$c}]" data-content="content" id="{$c}" data-c='{$vo["item"]["$c"]|default=""}'>{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.type eq '5'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">                        
+                                    <input type="hidden" data-img="img" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input">
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.type eq '6'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">                        
+                                    <input type="hidden" data-imgs="imgs" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input">
+                                </div>
+                            </div>
+                        {/if}
+                        {if $spec.type eq '7'}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$spec.title}</label>
+                                <div class="layui-input-block">     
+                                    <div class="row">
+                                        <div class="col-sm-8 padding-right-0">
+                                            <input style="border-right:none" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input" title="请输入链接或上传视频展示文件" placeholder="请输入链接或上传视频展示文件">
+                                        </div>
+                                        <div class="col-sm-2 padding-left-0">
+                                            <button data-file="one" data-type="mp4" data-field="item[{$c}]" type="button" class="layui-btn layui-btn-sm" style="height:38px;line-height:38px;width:100%">上传视频文件</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {/if}
+                        {/if}
+                    {/foreach}
+                {/if}
+            </div>
         </div>
     </div>
-    {if isset($specs)}
-        {foreach $specs as $spec}
-            <?php $c = $spec['mark'];?>
-            {if $spec.type eq '1'}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{$spec.title}</label>
-                    <div class="layui-input-block">                        
-                        <input name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' required="required" title="请输入{$spec.title}" placeholder="请输入{$spec.title}" class="layui-input">
-                    </div>
-                </div>
-            {/if}
-            {if $spec.type eq '2'}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{$spec.title}</label>
-                    <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="item[{$c}]" required="required" placeholder="请输入{$spec.title}">{$vo["item"]["$c"]|default=''}</textarea>
-                    </div>
-                </div>
-            {/if}
-            {if $spec.items and $spec.type eq '3'}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{$spec.title}</label>
-                    <div class="layui-input-block">
-                            {volist name="spec.items" id="sp" empty="未配置属性"}
-                            <label class="think-radio">
-                                {if isset($vo["item"]["$c"]) and $sp['id'] == $vo["item"]["$c"]}
-                                    <input type="radio" checked name="item[{$c}]" value="{$sp.id}" lay-verify="required" lay-ignore> {$sp.title}
-                                {else /}
-                                    <input type="radio" name="item[{$c}]" value="{$sp.id}" lay-verify="required" lay-ignore> {$sp.title}
-                                {/if}
-                            </label>
-                            {/volist}
-                    </div>
-                </div>
-            {/if}
-            {if $spec.type eq '4'}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{$spec.title}</label>
-                    <div class="layui-input-block">
-                        <textarea name="item[{$c}]" data-content="content" id="{$c}" data-c='{$vo["item"]["$c"]|default=""}'>{$vo["item"]["$c"]|default=''|htmlspecialchars_decode}</textarea>
-                    </div>
-                </div>
-            {/if}
-            {if $spec.type eq '5'}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{$spec.title}</label>
-                    <div class="layui-input-block">                        
-                        <input type="hidden" data-img="img" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input">
-                    </div>
-                </div>
-            {/if}
-            {if $spec.type eq '6'}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{$spec.title}</label>
-                    <div class="layui-input-block">                        
-                        <input type="hidden" data-imgs="imgs" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input">
-                    </div>
-                </div>
-            {/if}
-            {if $spec.type eq '7'}
-                <div class="layui-form-item">
-                    <label class="layui-form-label">{$spec.title}</label>
-                    <div class="layui-input-block">     
-                        <div class="row">
-                            <div class="col-sm-10 padding-right-0">
-                                <input style="border-right:none" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input" title="请输入链接或上传视频展示文件" placeholder="请输入链接或上传视频展示文件">
-                            </div>
-                            <div class="col-sm-2 padding-left-0">
-                                <button data-file="one" data-type="mp4" data-field="item[{$c}]" type="button" class="layui-btn layui-btn-sm" style="height:38px;line-height:38px;width:100%">上传视频文件</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {/if}
-        {/foreach}
-    {/if}
 
     <div class="hr-line-dashed"></div>
 
@@ -92,6 +184,11 @@
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
     </div>
     <!-- <script>window.form.render();</script> -->
+    <script>
+        $(function () {
+            $('.layui-tab ul.layui-tab-title li:first').trigger('click');
+        });
+    </script>
     <script type="text/javascript">
         require(['jquery', 'ckeditor', 'angular', 'ueditor.all', 'ueditor.config'], function () {
             window.form.render();
