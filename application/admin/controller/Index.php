@@ -45,7 +45,7 @@ class Index extends BasicAdmin
         if (empty($menus) && !session('user.id')) {
             $this->redirect('@admin/login');
         }
-        return $this->fetch('', ['title' => '系统管理', 'menus' => $menus]);
+        return $this->fetch('', ['title' => '平台管理', 'menus' => $menus]);
     }
 
     /**
