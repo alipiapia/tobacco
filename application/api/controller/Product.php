@@ -140,56 +140,53 @@ class Product extends BasicApi
                 // halt($item[$k]);
                 // halt($k);
                 
-                //防伪分组条盒
-                if($specInfo == 6 && strpos($k, 'fwtjth') !== false){
+                if($specInfo == 6 && strpos($k, 'fwtjth') !== false){//防伪分组条盒
                     // $item['fwtjth'][$k] = $item[$k];
                     if(in_array($k, ['fwtjthzm', 'fwtjthbm'])){
-                        $item['fwtjth']['fwtjthzmbm'][] = $itemExp;
+                        $item['fwtj']['th']['zmbm'][] = $itemExp;
                     }
                     if(in_array($k, ['fwtjthzc', 'fwtjthyc'])){
-                        $item['fwtjth']['fwtjthzcyc'][] = $itemExp;
+                        $item['fwtj']['th']['zcyc'][] = $itemExp;
                     }
                     if(in_array($k, ['fwtjthdb', 'fwtjthdb2'])){
-                        $item['fwtjth']['fwtjthdbdb2'][] = $itemExp;
+                        $item['fwtj']['th']['dbdb2'][] = $itemExp;
                     }
                     if($k == 'fwtjthqt'){
-                        $item['fwtjth']['fwtjthqt'][] = $itemExpQt1;
-                        $item['fwtjth']['fwtjthqt'][] = $itemExpQt2;
+                        $item['fwtj']['th']['qt'][] = $itemExpQt1;
+                        $item['fwtj']['th']['qt'][] = $itemExpQt2;
                     }
-                }elseif($specInfo == 6 && strpos($k, 'fwtjxh') !== false){
-                //防伪分组小盒
+                }elseif($specInfo == 6 && strpos($k, 'fwtjxh') !== false){//防伪分组小盒
                     // $item['fwtjxh'][$k] = $item[$k];
                     if(in_array($k, ['fwtjxhzm', 'fwtjxhbm'])){
-                        $item['fwtjxh']['fwtjxhzmbm'][] = $itemExp;
+                        $item['fwtj']['xh']['zmbm'][] = $itemExp;
                     }
                     if(in_array($k, ['fwtjxhzc', 'fwtjxhyc'])){
-                        $item['fwtjxh']['fwtjxhzcyc'][] = $itemExp;
+                        $item['fwtj']['xh']['zcyc'][] = $itemExp;
                     }
                     if(in_array($k, ['fwtjxhdb', 'fwtjxhdb2'])){
-                        $item['fwtjxh']['fwtjxhdbdb2'][] = $itemExp;
+                        $item['fwtj']['xh']['dbdb2'][] = $itemExp;
                     }
                     if($k == 'fwtjxhqt'){
-                        $item['fwtjxh']['fwtjxhqt'][] = $itemExpQt1;
-                        $item['fwtjxh']['fwtjxhqt'][] = $itemExpQt2;
+                        $item['fwtj']['xh']['qt'][] = $itemExpQt1;
+                        $item['fwtj']['xh']['qt'][] = $itemExpQt2;
                     }
-                }elseif($specInfo == 6 && strpos($k, 'fwtjyz') !== false){
-                //防伪分组烟支
+                }elseif($specInfo == 6 && strpos($k, 'fwtjyz') !== false){//防伪分组烟支
                     // $item['fwtjyz'][$k] = $item[$k];
                     if(in_array($k, ['fwtjyzzm', 'fwtjyzbm'])){
-                        $item['fwtjyz']['fwtjyzzmbm'][] = $itemExp;
+                        $item['fwtj']['yz']['zmbm'][] = $itemExp;
                     }
                     if(in_array($k, ['fwtjyzzc', 'fwtjyzyc'])){
-                        $item['fwtjyz']['fwtjyzzcyc'][] = $itemExp;
+                        $item['fwtj']['yz']['zcyc'][] = $itemExp;
                     }
                     if(in_array($k, ['fwtjyzdb', 'fwtjyzdb2'])){
-                        $item['fwtjyz']['fwtjyzdbdb2'][] = $itemExp;
+                        $item['fwtj']['yz']['dbdb2'][] = $itemExp;
                     }
                     if($k == 'fwtjyzqt'){
-                        $item['fwtjyz']['fwtjyzqt'][] = $itemExpQt1;
-                        $item['fwtjyz']['fwtjyzqt'][] = $itemExpQt2;
+                        $item['fwtj']['yz']['qt'][] = $itemExpQt1;
+                        $item['fwtj']['yz']['qt'][] = $itemExpQt2;
                     }
                 }else{
-                    $item['product_params'][$k] = $item[$k];
+                    $item['detail'][$k] = $item[$k];
                 }
                 // unset($item[$k]);
             // }
@@ -198,7 +195,7 @@ class Product extends BasicApi
             unset($item[$k]);
         }
         //机型参数
-        $item['machine_params'] = '';
+        $item['machine'] = '';
         return $item;
     }
 
