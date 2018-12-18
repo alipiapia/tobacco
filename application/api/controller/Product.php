@@ -99,7 +99,7 @@ class Product extends BasicApi
             $this->error('参数错误');
         }
         $map = ['id' => input('id')];
-        $info = $this->product->getOneDarry($map);
+        $info = $this->product->getOneDarry($map, 'id,title,item');
         $mItem = $this->formatItem($info['item']);
         $info = array_merge($info, $mItem);
         unset($info['item']);
@@ -109,76 +109,96 @@ class Product extends BasicApi
     //item
     private function formatItem($item, $title = 'title'){
         $item = json_decode($item, true);
+        // halt($item);
         foreach ($item as $k => $v) {
             $item[$k] = $v;
 
             //属性值
             $itemInfo = $this->productItem->getValue(['id' => $v], $title);
-            if($itemInfo){
-                $item[$k] = $itemInfo;
-            }
+            // if($itemInfo){
+                $item[$k] = $itemInfo ? $itemInfo : ($item[$k] ? $item[$k] : '');
+            // }
 
             //多图拆解
             $specInfo = $this->productSpec->getValue(['mark' => $k], 'type');
-            if($specInfo == 6 && $v){
-                $item[$k] = explode('|', $v);
-            }
+            // if($specInfo == 6){
+                //缩略图+实际图
+                $exp = explode('|', $v);
+                // unset($item[$k]);
+                // $item[$k] = $exp;
+                // halt($item[$k]);
+                $itemExp['thumb'] = !empty($exp[0]) ? $exp[0] : '';
+                $itemExp['image'] = !empty($exp[1]) ? $exp[1] : '';
 
-            //防伪分组条盒
-            if(strpos($k, 'fwtjth') !== false){
-                // $item['fwtjth'][$k] = $item[$k];
-                if(in_array($k, ['fwtjthzm', 'fwtjthbm'])){
-                    $item['fwtjth']['fwtjthzmbm'][] = $item[$k];
-                }
-                if(in_array($k, ['fwtjthzc', 'fwtjthyc'])){
-                    $item['fwtjth']['fwtjthzcyc'][] = $item[$k];
-                }
-                if(in_array($k, ['fwtjthdb', 'fwtjthdb2'])){
-                    $item['fwtjth']['fwtjthdbdb2'][] = $item[$k];
-                }
-                if($k == 'fwtjthqt'){
-                    $item['fwtjth']['fwtjthqt'][] = $item[$k];
-                }
-                unset($item[$k]);
+                //其它
+                $itemExpQt1['thumb'] = !empty($exp[0]) ? $exp[0] : '';
+                $itemExpQt1['image'] = !empty($exp[1]) ? $exp[1] : '';
+                $itemExpQt2['thumb'] = !empty($exp[2]) ? $exp[2] : '';
+                $itemExpQt2['image'] = !empty($exp[3]) ? $exp[3] : '';
+                // $itemExp['thumb'] = $exp[0];
+                // $itemExp['image'] = $exp[1];
+                // halt($item[$k]);
                 // halt($k);
-            }
-            //防伪分组小盒
-            if(strpos($k, 'fwtjxh') !== false){
-                // $item['fwtjxh'][$k] = $item[$k];
-                if(in_array($k, ['fwtjxhzm', 'fwtjxhbm'])){
-                    $item['fwtjxh']['fwtjxhzmbm'][] = $item[$k];
+                
+                //防伪分组条盒
+                if($specInfo == 6 && strpos($k, 'fwtjth') !== false){
+                    // $item['fwtjth'][$k] = $item[$k];
+                    if(in_array($k, ['fwtjthzm', 'fwtjthbm'])){
+                        $item['fwtjth']['fwtjthzmbm'][] = $itemExp;
+                    }
+                    if(in_array($k, ['fwtjthzc', 'fwtjthyc'])){
+                        $item['fwtjth']['fwtjthzcyc'][] = $itemExp;
+                    }
+                    if(in_array($k, ['fwtjthdb', 'fwtjthdb2'])){
+                        $item['fwtjth']['fwtjthdbdb2'][] = $itemExp;
+                    }
+                    if($k == 'fwtjthqt'){
+                        $item['fwtjth']['fwtjthqt'][] = $itemExpQt1;
+                        $item['fwtjth']['fwtjthqt'][] = $itemExpQt2;
+                    }
+                }elseif($specInfo == 6 && strpos($k, 'fwtjxh') !== false){
+                //防伪分组小盒
+                    // $item['fwtjxh'][$k] = $item[$k];
+                    if(in_array($k, ['fwtjxhzm', 'fwtjxhbm'])){
+                        $item['fwtjxh']['fwtjxhzmbm'][] = $itemExp;
+                    }
+                    if(in_array($k, ['fwtjxhzc', 'fwtjxhyc'])){
+                        $item['fwtjxh']['fwtjxhzcyc'][] = $itemExp;
+                    }
+                    if(in_array($k, ['fwtjxhdb', 'fwtjxhdb2'])){
+                        $item['fwtjxh']['fwtjxhdbdb2'][] = $itemExp;
+                    }
+                    if($k == 'fwtjxhqt'){
+                        $item['fwtjxh']['fwtjxhqt'][] = $itemExpQt1;
+                        $item['fwtjxh']['fwtjxhqt'][] = $itemExpQt2;
+                    }
+                }elseif($specInfo == 6 && strpos($k, 'fwtjyz') !== false){
+                //防伪分组烟支
+                    // $item['fwtjyz'][$k] = $item[$k];
+                    if(in_array($k, ['fwtjyzzm', 'fwtjyzbm'])){
+                        $item['fwtjyz']['fwtjyzzmbm'][] = $itemExp;
+                    }
+                    if(in_array($k, ['fwtjyzzc', 'fwtjyzyc'])){
+                        $item['fwtjyz']['fwtjyzzcyc'][] = $itemExp;
+                    }
+                    if(in_array($k, ['fwtjyzdb', 'fwtjyzdb2'])){
+                        $item['fwtjyz']['fwtjyzdbdb2'][] = $itemExp;
+                    }
+                    if($k == 'fwtjyzqt'){
+                        $item['fwtjyz']['fwtjyzqt'][] = $itemExpQt1;
+                        $item['fwtjyz']['fwtjyzqt'][] = $itemExpQt2;
+                    }
+                }else{
+                    $item['product_params'][$k] = $item[$k];
                 }
-                if(in_array($k, ['fwtjxhzc', 'fwtjxhyc'])){
-                    $item['fwtjxh']['fwtjxhzcyc'][] = $item[$k];
-                }
-                if(in_array($k, ['fwtjxhdb', 'fwtjxhdb2'])){
-                    $item['fwtjxh']['fwtjxhdbdb2'][] = $item[$k];
-                }
-                if($k == 'fwtjxhqt'){
-                    $item['fwtjxh']['fwtjxhqt'][] = $item[$k];
-                }
-                unset($item[$k]);
-                // halt($k);
-            }
-            //防伪分组烟支
-            if(strpos($k, 'fwtjyz') !== false){
-                // $item['fwtjyz'][$k] = $item[$k];
-                if(in_array($k, ['fwtjyzzm', 'fwtjyzbm'])){
-                    $item['fwtjyz']['fwtjyzzmbm'][] = $item[$k];
-                }
-                if(in_array($k, ['fwtjyzzc', 'fwtjyzyc'])){
-                    $item['fwtjyz']['fwtjyzzcyc'][] = $item[$k];
-                }
-                if(in_array($k, ['fwtjyzdb', 'fwtjyzdb2'])){
-                    $item['fwtjyz']['fwtjyzdbdb2'][] = $item[$k];
-                }
-                if($k == 'fwtjyzqt'){
-                    $item['fwtjyz']['fwtjyzqt'][] = $item[$k];
-                }
-                unset($item[$k]);
-                // halt($k);
-            }
+                // unset($item[$k]);
+            // }
+            //其他详细参数
+            // $item['product_params'][$k] = $item[$k];
+            unset($item[$k]);
         }
+        //机型参数
+        $item['machine_params'] = '';
         return $item;
     }
 
