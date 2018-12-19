@@ -110,14 +110,43 @@ class Product extends BasicApi
     private function formatItem($item, $title = 'title'){
         $item = json_decode($item, true);
         // halt($item);
+                    $ht = "<style>
+table.GeneratedTable {
+  width: 100%;
+  background-color: #ffffff;
+  border-collapse: collapse;
+  border-width: 1px;
+  border-color: #ff8000;
+  border-style: solid;
+  color: #000000;
+}
+
+table.GeneratedTable td, table.GeneratedTable th {
+  border-width: 1px;
+  border-color: #ff8000;
+  border-style: solid;
+  padding: 3px;
+}
+
+table.GeneratedTable thead {
+  background-color: #ff8000;
+}
+</style>
+
+<table class='GeneratedTable'>
+  <thead>
+    <tr>
+      <th>Header</th>
+      <th>Header</th>
+    </tr>
+  </thead>
+  <tbody>";
         foreach ($item as $k => $v) {
             $item[$k] = $v;
 
             //属性值
             $itemInfo = $this->productItem->getValue(['id' => $v], $title);
-            // if($itemInfo){
-                $item[$k] = $itemInfo ? $itemInfo : ($item[$k] ? $item[$k] : '');
-            // }
+            $item[$k] = $itemInfo ? $itemInfo : ($item[$k] ? $item[$k] : '');
 
             //多图拆解
             $specInfo = $this->productSpec->getValue(['mark' => $k], 'type');
@@ -185,8 +214,16 @@ class Product extends BasicApi
                         $item['fwtj']['yz']['qt'][] = $itemExpQt1;
                         $item['fwtj']['yz']['qt'][] = $itemExpQt2;
                     }
-                }else{
+                }else{//其他详细参数
                     $item['detail'][$k] = $item[$k];
+                    $ht .= '    <tr>
+      <td>'.$k.'</td>
+      <td>'.$item[$k].'</td>
+    </tr>';
+                    if($k == 'cpsp'){
+                        $cpsp = $item[$k];
+                        unset($item['detail'][$k]);
+                    }
                 }
                 // unset($item[$k]);
             // }
@@ -194,8 +231,12 @@ class Product extends BasicApi
             // $item['product_params'][$k] = $item[$k];
             unset($item[$k]);
         }
+        $ht .= '  </tbody>
+</table>';
+        $item['detail'] = $ht;
         //机型参数
         $item['machine'] = '';
+        $item['cpsp'] = $cpsp;
         return $item;
     }
 
