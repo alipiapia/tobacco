@@ -110,37 +110,7 @@ class Product extends BasicApi
     private function formatItem($item, $title = 'title'){
         $item = json_decode($item, true);
         // halt($item);
-                    $ht = "<style>
-table.GeneratedTable {
-  width: 100%;
-  background-color: #ffffff;
-  border-collapse: collapse;
-  border-width: 1px;
-  border-color: #ff8000;
-  border-style: solid;
-  color: #000000;
-}
-
-table.GeneratedTable td, table.GeneratedTable th {
-  border-width: 1px;
-  border-color: #ff8000;
-  border-style: solid;
-  padding: 3px;
-}
-
-table.GeneratedTable thead {
-  background-color: #ff8000;
-}
-</style>
-
-<table class='GeneratedTable'>
-  <thead>
-    <tr>
-      <th>Header</th>
-      <th>Header</th>
-    </tr>
-  </thead>
-  <tbody>";
+                    $ht = "<table class='GeneratedTable'<thead><tr><th>Header</th><th>Header</th></tr></thead><tbody>";
         foreach ($item as $k => $v) {
             $item[$k] = $v;
 
@@ -216,10 +186,7 @@ table.GeneratedTable thead {
                     }
                 }else{//其他详细参数
                     $item['detail'][$k] = $item[$k];
-                    $ht .= '    <tr>
-      <td>'.$k.'</td>
-      <td>'.$item[$k].'</td>
-    </tr>';
+                    $ht .= '<tr><td>'.$k.'</td><td>'.$item[$k].'</td></tr>';
                     if($k == 'cpsp'){
                         $cpsp = $item[$k];
                         unset($item['detail'][$k]);
@@ -231,8 +198,7 @@ table.GeneratedTable thead {
             // $item['product_params'][$k] = $item[$k];
             unset($item[$k]);
         }
-        $ht .= '  </tbody>
-</table>';
+        $ht .= '</tbody></table>';
         $item['detail'] = $ht;
         //机型参数
         $item['machine'] = '';
