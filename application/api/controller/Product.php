@@ -42,6 +42,9 @@ class Product extends BasicApi
         $this->product = model('common/Product');
         $this->productSpec = model('common/ProductSpec');
         $this->productItem = model('common/ProductItem');
+        $this->machine = model('common/Machine');
+        $this->machineSpec = model('common/MachineSpec');
+        $this->machineItem = model('common/MachineItem');
         // $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
         // foreach ($specs as $k => $v) {
         //     $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
@@ -100,17 +103,20 @@ class Product extends BasicApi
         }
         $map = ['id' => input('id')];
         $info = $this->product->getOneDarry($map, 'id,title,ttxm,htxm,brand,video,item');
-        $mItem = $this->formatItem($info['item']);
+        $machinInfo = $this->machine->getOneDarry($map, 'id,title,item');
+        $mItem = $this->formatItem($info['item'], $machinInfo['item']);
         $info = array_merge($info, $mItem);
         unset($info['item']);
         $this->success('请求成功', $info);
     }
 
     //item
-    private function formatItem($item, $title = 'title'){
+    private function formatItem($item, $mItem, $title = 'title'){
         $item = json_decode($item, true);
-        // halt($item);
-        $ht = "<table class='GeneratedTable'<thead><tr><th>Header</th><th>Header</th></tr></thead><tbody>";
+        $mItem = json_decode($mItem, true);
+        // halt($mItem);
+        // $ht = "<table class='GeneratedTable'<thead><tr><th>Header</th><th>Header</th></tr></thead><tbody>";
+        $ht = $ht1 = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"><title>烟草</title><meta name="keywords" content="烟草" /><meta name="description" content="烟草" /><style>body {margin:0 auto;padding:0;font-family:"微软雅黑", Arial, Helvetica, sans-serif;font-size:13px;color:#333;text-align:center;background:#FFF;background-size:100% 100%;-moz-background-size: cover;background-size: cover;}div, form, img, ul, ol, li, dl, dt, dd, p {margin: 0;padding: 0;border: 0;list-style:none;}table, td, tr, th, input, select, textarea {font-size:13px;font-family:"微软雅黑";}.productdiv{width:96%;overflow:hidden;padding: 2%;background:#FFF;}.product_table{border-top:1px solid #ffe6cc;border-left:1px solid #ffe6cc;}.product_table td{border-bottom:1px solid #ffe6cc;border-right:1px solid #ffe6cc;padding:5px 10px;line-height:18px;text-align:left;}.product_font{background:#ffe6cc; color:#fe8100;font-weight:bold;font-size:15px;}</style></head><body><div class="productdiv"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="product_table">';
         foreach ($item as $k => $v) {
             $item[$k] = $v;
 
@@ -186,8 +192,8 @@ class Product extends BasicApi
                     }
                 }else{//其他详细参数
                     // $item['detail'][$k] = $item[$k];
-                    $specNmae = $this->productSpec->getValue(['mark' => $k], 'title');
-                    $ht .= '<tr><td>'.$specNmae.'</td><td>'.$item[$k].'</td></tr>';
+                    $specName = $this->productSpec->getValue(['mark' => $k], 'title');
+                    $ht .= '<tr><td>'.$specName.'</td><td>'.$item[$k].'</td></tr>';
                     // if($k == 'cpsp'){
                     //     $cpsp = $item[$k];
                     //     unset($item['detail'][$k]);
@@ -199,11 +205,25 @@ class Product extends BasicApi
             // $item['product_params'][$k] = $item[$k];
             unset($item[$k]);
         }
-        $ht .= '</tbody></table>';
+        $ht .= '</table></div></body></html>';
         $item['detail'] = $ht;
+
         //机型参数
-        $item['machine'] = '';
-        // $item['cpsp'] = $cpsp;
+        foreach ($mItem as $k => $v) {
+            $mItem[$k] = $v;
+
+            //属性值
+            $mItemInfo = $this->machineItem->getValue(['id' => $v], 'title');
+            $mItem[$k] = $mItemInfo ? $mItemInfo : ($mItem[$k] ? $mItem[$k] : '');
+
+            //多图拆解
+            // $specInfo = $this->machineSpec->getValue(['mark' => $k], 'type');
+            $specName1 = $this->machineSpec->getValue(['mark' => $k], 'title');
+            $ht1 .= '<tr><td>'.$specName1.'</td><td>'.$mItem[$k].'</td></tr>';
+        }
+        $ht1 .= '</table></div></body></html>';
+        $item['machine'] = $ht1;
+        // halt($item);
         return $item;
     }
 
