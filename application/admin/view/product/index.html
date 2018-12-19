@@ -41,9 +41,16 @@
     <!--{/if}-->
 
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">描述</label>
+        <label class="layui-form-label">条条形码</label>
         <div class="layui-input-inline">
-            <input name="desc" value="{$Think.get.desc|default=''}" placeholder="请输入描述" class="layui-input">
+            <input name="ttxm" value="{$Think.get.ttxm|default=''}" placeholder="请输入条条形码" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">盒条形码</label>
+        <div class="layui-input-inline">
+            <input name="htxm" value="{$Think.get.htxm|default=''}" placeholder="请输入盒条形码" class="layui-input">
         </div>
     </div>
 
@@ -79,8 +86,9 @@
                 <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
             </th>
             <th class='text-left nowrap'>名 称</th>
-            <th class='text-left nowrap'>描 述</th>
-            <th class='text-left nowrap'>添 加 时 间</th>
+            <th class='text-left nowrap'>条条形码</th>
+            <th class='text-left nowrap'>盒条形码</th>
+            <th class='text-left nowrap'>添加时间</th>
             <th class='text-left nowrap'>状 态</th>
             <th class='text-left nowrap'>操 作</th>
         </tr>
@@ -98,7 +106,10 @@
                 {$vo.title|default=''}
             </td>
             <td class='text-left nowrap'>
-                {$vo.desc|default='<span class="color-desc">未设置描述</span>'|raw}
+                {$vo.ttxm|default='<span class="color-desc">未设置</span>'|raw}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.htxm|default='<span class="color-desc">未设置</span>'|raw}
             </td>
             <td class='text-left nowrap'>
                 {$vo.create_at|date='Y-m-d H:i:s'}

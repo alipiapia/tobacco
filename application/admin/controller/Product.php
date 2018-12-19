@@ -63,7 +63,7 @@ class Product extends BasicAdmin
     {
         $this->title = '产品管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'type', 'desc'] as $key) {
+        foreach (['title', 'htxm', 'ttxm'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
         }
         if (isset($get['date']) && $get['date'] !== '') {

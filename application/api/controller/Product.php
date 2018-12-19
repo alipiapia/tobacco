@@ -58,7 +58,7 @@ class Product extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        foreach (['title', 'type', 'desc'] as $key) {
+        foreach (['title', 'htxm', 'htxm'] as $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
                 $map['title'] = ['like', "%{$param[$key]}%"];
             }
@@ -99,7 +99,7 @@ class Product extends BasicApi
             $this->error('参数错误');
         }
         $map = ['id' => input('id')];
-        $info = $this->product->getOneDarry($map, 'id,title,item');
+        $info = $this->product->getOneDarry($map, 'id,title,ttxm,htxm,brand,video,item');
         $mItem = $this->formatItem($info['item']);
         $info = array_merge($info, $mItem);
         unset($info['item']);
@@ -110,7 +110,7 @@ class Product extends BasicApi
     private function formatItem($item, $title = 'title'){
         $item = json_decode($item, true);
         // halt($item);
-                    $ht = "<table class='GeneratedTable'<thead><tr><th>Header</th><th>Header</th></tr></thead><tbody>";
+        $ht = "<table class='GeneratedTable'<thead><tr><th>Header</th><th>Header</th></tr></thead><tbody>";
         foreach ($item as $k => $v) {
             $item[$k] = $v;
 
@@ -185,12 +185,13 @@ class Product extends BasicApi
                         $item['fwtj']['yz']['qt'][] = $itemExpQt2;
                     }
                 }else{//其他详细参数
-                    $item['detail'][$k] = $item[$k];
-                    $ht .= '<tr><td>'.$k.'</td><td>'.$item[$k].'</td></tr>';
-                    if($k == 'cpsp'){
-                        $cpsp = $item[$k];
-                        unset($item['detail'][$k]);
-                    }
+                    // $item['detail'][$k] = $item[$k];
+                    $specNmae = $this->productSpec->getValue(['mark' => $k], 'title');
+                    $ht .= '<tr><td>'.$specNmae.'</td><td>'.$item[$k].'</td></tr>';
+                    // if($k == 'cpsp'){
+                    //     $cpsp = $item[$k];
+                    //     unset($item['detail'][$k]);
+                    // }
                 }
                 // unset($item[$k]);
             // }
@@ -202,7 +203,7 @@ class Product extends BasicApi
         $item['detail'] = $ht;
         //机型参数
         $item['machine'] = '';
-        $item['cpsp'] = $cpsp;
+        // $item['cpsp'] = $cpsp;
         return $item;
     }
 
