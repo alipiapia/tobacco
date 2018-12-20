@@ -8,4 +8,3 @@
 /nbproject
 !composer.json
 /composer.lock
-/static/upload
