@@ -14,7 +14,25 @@
                         <input name="title" value='{$vo["title"]|default=""}' required="required" title="请输入名称" placeholder="请输入名称" class="layui-input">
                     </div>
                 </div>
-<!--                 <div class="layui-form-item">
+                <!--{if !empty($brands)}-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">品牌</label>
+                    <div class="layui-input-block">
+                        <select name="brand" lay-verify="required" lay-search>
+                            <option>请选择品牌</option>
+                            {foreach $brands as $brand}
+                            <!--{if $vo.brand eq $brand.id}-->
+                            <option selected="selected" value="{$brand.id}">{$brand.title}</option>
+                            <!--{else}-->
+                            <option value="{$brand.id}">{$brand.title}</option>
+                            <!--{/if}-->
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <!--{/if}-->
+
+                <!-- <div class="layui-form-item">
                     <label class="layui-form-label">条条形码</label>
                     <div class="layui-input-block">                        
                         <input name="ttxm" value='{$vo["ttxm"]|default=""}' required="required" title="请输入条条形码" placeholder="请输入条条形码" class="layui-input">
@@ -26,6 +44,7 @@
                         <input name="htxm" value='{$vo["htxm"]|default=""}' required="required" title="请输入盒条形码" placeholder="请输入盒条形码" class="layui-input">
                     </div>
                 </div> -->
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">视频</label>
                     <div class="layui-input-block">     

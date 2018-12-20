@@ -21,35 +21,23 @@ use think\Db;
 
 /**
  * 产品 控制器
- * Class Product
+ * Class Brand
  * @package app\admin\controller
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Product extends BasicAdmin
+class Brand extends BasicAdmin
 {
 
     /**
      * 指定当前数据表
      * @var string
      */
-    public $table = 'Product';
+    public $table = 'Brand';
     public $specs;
 
     public function __construct(){
         parent::__construct();
-        $this->brand = model('common/Brand');
-        $this->productSpec = model('common/ProductSpec');
-        $this->productItem = model('common/ProductItem');
-        $brands = $this->brand->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,sort',0);
-        $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark,sort',0);
-        foreach ($specs as $k => $v) {
-            $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
-        }
-        // halt($brands);
-        $this->specs = $specs;
-        $this->assign('specs',$this->specs);
-        $this->assign('brands',$brands);
     }
 
     /**
@@ -62,9 +50,9 @@ class Product extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '产品管理';
+        $this->title = '品牌管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'htxm', 'ttxm'] as $key) {
+        foreach (['title', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
         }
         if (isset($get['date']) && $get['date'] !== '') {
@@ -85,7 +73,7 @@ class Product extends BasicAdmin
         foreach ($data as &$vo) {
             // halt(strlen($vo['item']));
             // $vo['item'] = unserialize(base64_decode($vo['item']));
-            $vo['item'] = json_decode($vo['item'], true);
+            // $vo['item'] = json_decode($vo['item'], true);
         }
         // halt($data);
         // $data = ToolsService::arr2table($data);
@@ -128,20 +116,6 @@ class Product extends BasicAdmin
     {
         if ($this->request->isPost()) {
             // halt($data);
-            if (isset($data['item']) && is_array($data['item'])) {
-                if(isset($data['item']['ttxm'])){
-                    $data['ttxm'] = $data['item']['ttxm'];
-                    // array_unshift($data['item'], ['ttxm' => $data['ttxm']]);
-                }
-                if(isset($data['item']['htxm'])){
-                    $data['htxm'] = $data['item']['htxm'];
-                    // array_unshift($data['item'], ['htxm' => $data['htxm']]);
-                }
-                // $data['item'] = base64_encode(serialize($data['item']));
-                $data['item'] = json_encode($data['item']);
-            } else {
-                $data['item'] = '';
-            }
             // halt($data);
             if (isset($data['id'])) {
                 // unset($data['title']);
@@ -153,9 +127,6 @@ class Product extends BasicAdmin
             //     $this->error('名称已经存在，请使用其它名称！');
             // }
         } else {
-            // halt($data);
-            // $data['item'] = unserialize(base64_decode(isset($data['item']) ? $data['item'] : ''));
-            $data['item'] = json_decode(isset($data['item']) ? $data['item'] : '', true);
             // halt($data);
         }
     }
