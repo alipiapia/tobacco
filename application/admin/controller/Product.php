@@ -128,6 +128,14 @@ class Product extends BasicAdmin
         if ($this->request->isPost()) {
             // halt($data);
             if (isset($data['item']) && is_array($data['item'])) {
+                if(isset($data['item']['ttxm'])){
+                    $data['ttxm'] = $data['item']['ttxm'];
+                    // array_unshift($data['item'], ['ttxm' => $data['ttxm']]);
+                }
+                if(isset($data['item']['htxm'])){
+                    $data['htxm'] = $data['item']['htxm'];
+                    // array_unshift($data['item'], ['htxm' => $data['htxm']]);
+                }
                 // $data['item'] = base64_encode(serialize($data['item']));
                 $data['item'] = json_encode($data['item']);
             } else {
