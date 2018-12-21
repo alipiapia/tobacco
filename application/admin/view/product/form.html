@@ -21,7 +21,7 @@
                         <select name="brand" lay-verify="required" lay-search>
                             <option>请选择品牌</option>
                             {foreach $brands as $brand}
-                            <!--{if $vo.brand eq $brand.id}-->
+                            <!--{if isset($vo.brand) && $vo.brand eq $brand.id}-->
                             <option selected="selected" value="{$brand.id}">{$brand.title}</option>
                             <!--{else}-->
                             <option value="{$brand.id}">{$brand.title}</option>
