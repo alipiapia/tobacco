@@ -102,7 +102,7 @@ class Product extends BasicApi
             $this->error('参数错误');
         }
         $map = ['id' => input('id')];
-        $info = $this->product->getOneDarry($map, 'id,title,ttxm,htxm,brand,video,item');
+        $info = $this->product->getOneDarry($map, 'id,title,ttxm,htxm,brand,video,video_thumb,item');
         $machinInfo = $this->machine->getOneDarry($map, 'id,title,item');
         $mItem = $this->formatItem($info['item'], $machinInfo['item']);
         $info = array_merge($info, $mItem);
