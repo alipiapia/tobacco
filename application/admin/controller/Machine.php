@@ -20,7 +20,7 @@ use service\ToolsService;
 use think\Db;
 
 /**
- * 机器 控制器
+ * 机型 控制器
  * Class Machine
  * @package app\admin\controller
  * @author Anyon <zoujingli@qq.com>
@@ -52,7 +52,7 @@ class Machine extends BasicAdmin
     }
 
     /**
-     * 机器列表
+     * 机型列表
      * @return array|string
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -61,7 +61,7 @@ class Machine extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '机器管理';
+        $this->title = '机型管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['title', 'type', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
@@ -127,6 +127,9 @@ class Machine extends BasicAdmin
         if ($this->request->isPost()) {
             // halt($data);
             if (isset($data['item']) && is_array($data['item'])) {
+                // if(isset($data['item']['cj'])){
+                //     $data['cj'] = $data['item']['cj'];
+                // }
                 // $data['item'] = base64_encode(serialize($data['item']));
                 $data['item'] = json_encode($data['item']);
             } else {

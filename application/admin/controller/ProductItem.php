@@ -39,7 +39,8 @@ class ProductItem extends BasicAdmin
     function __construct(){
         parent::__construct();
         $this->productSpec = model('common/ProductSpec');
-        $this->specs = $this->productSpec->getColumn(['status' => 0, 'is_deleted' => 0], 'id,title,desc');
+        // $this->specs = $this->productSpec->getColumn(['status' => 0, 'is_deleted' => 0], 'id,title,desc');
+        $this->specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
         $this->assign('specs',$this->specs);
         // halt($this->specs);
     }

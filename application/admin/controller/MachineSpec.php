@@ -53,7 +53,7 @@ class machineSpec extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '机器规格管理';
+        $this->title = '机型规格管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['title', 'type', 'mark', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");

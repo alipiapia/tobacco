@@ -87,7 +87,7 @@
         </thead>
         <tbody>
         <!--{foreach $list as $key=>$vo}-->
-        <tr title="{$vo.item.jx|default=''}">
+        <tr title="{$vo.title|default=''}">
             <td class='list-table-check-td think-checkbox'>
                 <input class="list-check-box" value='{$vo.id}' type='checkbox'>
             </td>
@@ -95,7 +95,7 @@
                 <input name="_{$vo.id}" value="{$vo.sort}" class="list-sort-input">
             </td>
             <td class='text-left nowrap'>
-                {$vo.item.jx|default=''}
+                {$vo.title|default=''}
             </td>
             <td class='text-left nowrap'>
                 {$vo.desc|default='<span class="color-desc">未设置描述</span>'|raw}

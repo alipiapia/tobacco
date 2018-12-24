@@ -39,7 +39,8 @@ class MachineItem extends BasicAdmin
     function __construct(){
         parent::__construct();
         $this->machineSpec = model('common/MachineSpec');
-        $this->specs = $this->machineSpec->getColumn(['status' => 0, 'is_deleted' => 0], 'id,title,desc');
+        // $this->specs = $this->machineSpec->getColumn(['status' => 0, 'is_deleted' => 0], 'id,title,desc');
+        $this->specs = $this->machineSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
         $this->assign('specs',$this->specs);
         // halt($this->specs);
     }
@@ -54,7 +55,7 @@ class MachineItem extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '机器规格属性管理';
+        $this->title = '机型规格属性管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['title', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
