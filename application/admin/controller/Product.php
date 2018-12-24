@@ -72,6 +72,7 @@ class Product extends BasicAdmin
             // $db->whereBetween('login_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
             $db->whereBetween('create_at', [strtotime("{$start} 00:00:00"), strtotime("{$end} 23:59:59")]);
         }
+        // halt($db);
         return parent::_list($db->where(['is_deleted' => '0']));
     }
 
@@ -129,14 +130,10 @@ class Product extends BasicAdmin
         if ($this->request->isPost()) {
             // halt($data);
             if (isset($data['item']) && is_array($data['item'])) {
-                if(isset($data['item']['ttxm'])){
-                    $data['ttxm'] = $data['item']['ttxm'];
-                    // array_unshift($data['item'], ['ttxm' => $data['ttxm']]);
-                }
-                if(isset($data['item']['htxm'])){
-                    $data['htxm'] = $data['item']['htxm'];
-                    // array_unshift($data['item'], ['htxm' => $data['htxm']]);
-                }
+                // if(isset($data['item']['ttxm'])){
+                //     $data['ttxm'] = $data['item']['ttxm'];
+                //     // array_unshift($data['item'], ['ttxm' => $data['ttxm']]);
+                // }
                 // $data['item'] = base64_encode(serialize($data['item']));
                 $data['item'] = json_encode($data['item']);
             } else {

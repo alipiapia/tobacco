@@ -33,6 +33,13 @@
                 <!--{/if}-->
 
                 <div class="layui-form-item">
+                    <label class="layui-form-label">产品Logo</label>
+                    <div class="layui-input-block">                        
+                        <input type="hidden" data-img="img" name="logo" value='{$vo["logo"]|default=""}' class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
                     <label class="layui-form-label">视频封面</label>
                     <div class="layui-input-block">                        
                         <input type="hidden" data-img="img" name="video_thumb" value='{$vo["video_thumb"]|default=""}' class="layui-input">

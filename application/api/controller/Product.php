@@ -18,6 +18,7 @@ use controller\BasicApi;
 use service\DataService;
 // use service\ToolsService;
 use think\Db;
+use think\db\Where;
 
 /**
  * 产品 控制器
@@ -61,37 +62,26 @@ class Product extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        foreach (['title', 'htxm', 'htxm'] as $key) {
+        foreach (['title', 'brand', 'ttxm', 'htxm'] as $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
-                $map['title'] = ['like', "%{$param[$key]}%"];
+                // halt($key);
+                if($key == 'brand'){
+                    $map[$key] = $param[$key];
+                }else{
+                    $map[$key] = ['like', "%{$param[$key]}%"];                    
+                }
             }
         }
-        $list = $this->product->getLists($map, '', 'id,title');
+        $map = new Where($map);
         // halt($map);
-        $this->success('请求成功', $list);
-    }
-
-    //列表
-    public function list()
-    {
-        list($get, $db) = [$this->request->get(), $this->product];
-        // halt($get);
-        $db->where(['status' => 0, 'is_deleted' => '0']);
-        foreach (['title', 'type', 'desc'] as $key) {
-            (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
-        }
-        if (isset($get['date']) && $get['date'] !== '') {
-            list($start, $end) = explode(' - ', $get['date']);
-            // $db->whereBetween('login_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
-            $db->whereBetween('create_at', [strtotime("{$start} 00:00:00"), strtotime("{$end} 23:59:59")]);
-        }
-        $list = $db->getLists();
-        // halt($db);
-        foreach ($list as $k => $v) {
-            $mItem = $this->formatItem($v['item']);
-            $list[$k] = array_merge($list[$k], $mItem);
-            unset($list[$k]['item']);
-        }
+        $list = $this->product->getLists($map, '', 'id,title,logo');
+        // foreach ($list as $k => $v) {
+        //     $map = ['id' => $v['id']];
+        //     $machinInfo = $this->machine->getOneDarry($map, 'id,title,item');
+        //     $mItem = $this->formatItem($v['item'], $machinInfo['item']);
+        //     $list[$k] = array_merge($list[$k], $mItem);
+        //     unset($list[$k]['item']);
+        // }
         // halt($list);
         $this->success('请求成功', $list);
     }
@@ -99,11 +89,15 @@ class Product extends BasicApi
     //详情
     public function info(){
         if(!input('id')){
-            $this->error('参数错误');
+            $this->error('产品参数错误');
         }
-        $map = ['id' => input('id')];
-        $info = $this->product->getOneDarry($map, 'id,title,ttxm,htxm,brand,video,video_thumb,item');
-        $machinInfo = $this->machine->getOneDarry($map, 'id,title,item');
+        if(!input('mid')){
+            $this->error('机型参数错误');
+        }
+        $pMap = ['id' => input('id')];
+        $mMap = ['id' => input('mid')];
+        $info = $this->product->getOneDarry($pMap, 'id,title,ttxm,htxm,brand,video,video_thumb,item');
+        $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
         $mItem = $this->formatItem($info['item'], $machinInfo['item']);
         $info = array_merge($info, $mItem);
         unset($info['item']);

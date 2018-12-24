@@ -18,6 +18,7 @@ use controller\BasicApi;
 use service\DataService;
 // use service\ToolsService;
 use think\Db;
+use think\db\Where;
 
 /**
  * 产品 控制器
@@ -46,7 +47,8 @@ class Brand extends BasicApi
                 $map['title'] = ['like', "%{$param[$key]}%"];
             }
         }
-        $list = $this->brand->getLists($map, '', 'id,title,logo');
+        $map = new Where($map);
+        $list = $this->brand->getLists($map, '', 'id,title,logo,desc');
         // halt($map);
         $this->success('请求成功', $list);
     }

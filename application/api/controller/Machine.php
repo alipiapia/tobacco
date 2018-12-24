@@ -21,17 +21,17 @@ use think\Db;
 use think\db\Where;
 
 /**
- * 通知公告 控制器
- * Class Notice
+ * 机型 控制器
+ * Class Machine
  * @package app\api\controller
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Notice extends BasicApi
+class Machine extends BasicApi
 {
     public function __construct(){
         parent::__construct();
-        $this->notice = model('common/Notice');
+        $this->machine = model('common/Machine');
     }
 
     //列表
@@ -42,13 +42,13 @@ class Notice extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        foreach (['title', 'desc', 'content'] as $key) {
+        foreach (['title', 'desc'] as $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
                 $map['title'] = ['like', "%{$param[$key]}%"];
             }
         }
         $map = new Where($map);
-        $list = $this->notice->getLists($map, '', 'id,title,desc,content');
+        $list = $this->machine->getLists($map, '', 'id,title');
         // halt($map);
         $this->success('请求成功', $list);
     }

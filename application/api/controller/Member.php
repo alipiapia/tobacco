@@ -18,6 +18,7 @@ use controller\BasicApi;
 use service\DataService;
 // use service\ToolsService;
 use think\Db;
+use think\db\Where;
 
 /**
  * 通知公告 控制器
@@ -46,6 +47,7 @@ class Member extends BasicApi
                 $map['username'] = ['like', "%{$param[$key]}%"];
             }
         }
+        $map = new Where($map);
         $list = $this->member->getLists($map, '', 'id,username,phone');
         // halt($map);
         $this->success('请求成功', $list);
