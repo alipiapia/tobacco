@@ -61,8 +61,6 @@ class Machine extends BasicAdmin
      */
     public function index()
     {
-        $pattern = '/^11[1-4]([1-5][A-B])(0[1-9]|[10-12])/';
-        halt(preg_match($pattern, '1123B01'));
         $this->title = '机型管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['title', 'type', 'desc'] as $key) {
