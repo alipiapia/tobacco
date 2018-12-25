@@ -2,7 +2,7 @@
 
 		
 	1	公告
-			1-1	公告列表
+			1-1	产品列表
 						地址:1.ynncp.com/product/index
 						请求方式:GET
 						参数：title		(名称		类型：string		是否必填：非必填)
@@ -11,7 +11,7 @@
 						参数：sn		(钢印号		类型：string		是否必填：非必填)
 						参数：brand		(品牌id		类型：int		是否必填：非必填)
 						
-			1-2	公告详情
+			1-2	产品详情
 						地址:1.ynncp.com/product/info
 						请求方式:GET
 						参数：id		(产品id		类型：int		是否必填：必填)
