@@ -52,4 +52,15 @@ class Notice extends BasicApi
         // halt($map);
         $this->success('请求成功', $list);
     }
+
+    //详情
+    public function info(){
+        $id = input('id');
+        if(!$id){
+            $this->error('参数错误');
+        }
+        $info = $this->notice->getOneDarry(['id' => $id], 'id,title,desc,content');
+        // halt($info);
+        $this->success('', $info);
+    }
 }

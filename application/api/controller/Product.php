@@ -62,11 +62,16 @@ class Product extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        foreach (['title', 'brand', 'ttxm', 'htxm'] as $key) {
+        foreach (['title', 'brand', 'ttxm', 'htxm', 'sn'] as $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
                 // halt($key);
                 if($key == 'brand'){
                     $map[$key] = $param[$key];
+                }elseif($key == 'sn'){
+                    $mids = $this->getMids($param[$key]);
+                    if($mids){
+                        $map['mid'] = ['in', $mids];
+                    }
                 }else{
                     $map[$key] = ['like', "%{$param[$key]}%"];                    
                 }
@@ -102,6 +107,30 @@ class Product extends BasicApi
         $info = array_merge($info, $mItem);
         unset($info['item']);
         $this->success('请求成功', $info);
+    }
+
+    //根据钢印号查询机型
+    public function getMids(){
+        $sn = input('sn');
+        $map = [
+            'status' => 0,
+            'is_deleted' => '0',
+        ];
+        $mids = [];
+        $mPatterns = $this->machine->getColumn($map, 'id,title,pattern');
+        // halt($mPatterns);
+        foreach ($mPatterns as $k => $v) {
+            if($v['pattern']){
+                $match = preg_match($v['pattern'], $sn, $matches);
+                // halt($match);
+                if($match){
+                    $mids[] = $v['id'];
+                }
+                
+            }
+        }
+        // halt($mids);
+        return $mids;
     }
 
     //item

@@ -1,0 +1,44 @@
+
+
+		
+	1	公告
+			1-1	公告列表
+						地址:1.ynncp.com/product/index
+						请求方式:GET
+						参数：title		(名称		类型：string		是否必填：非必填)
+						参数：ttxm		(条条形码		类型：string		是否必填：非必填)
+						参数：htxm		(盒条形码		类型：string		是否必填：非必填)
+						参数：sn		(钢印号		类型：string		是否必填：非必填)
+						参数：brand		(品牌id		类型：int		是否必填：非必填)
+						
+			1-2	公告详情
+						地址:1.ynncp.com/product/info
+						请求方式:GET
+						参数：id		(产品id		类型：int		是否必填：必填)
+						参数：mid		(机型id		类型：int		是否必填：必填)
+		
+	2	公告
+			2-1	公告列表
+						地址:1.ynncp.com/notice/index
+						请求方式:GET
+						参数：title		(名称		类型：string		是否必填：非必填)
+						参数：desc		(描述		类型：string		是否必填：非必填)
+						
+			2-2	公告详情
+						地址:1.ynncp.com/notice/info
+						请求方式:GET
+						参数：id		(公告id		类型：int		是否必填：必填)
+						
+	3	品牌
+			3-1	品牌列表
+						地址:1.ynncp.com/brand/index
+						请求方式:GET
+						参数：title		(名称		类型：string		是否必填：非必填)
+						参数：desc		(描述		类型：string		是否必填：非必填)
+						
+	4	机型
+			4-1	机型列表
+						地址:1.ynncp.com/machine/index
+						请求方式:GET
+						参数：title		(名称		类型：string		是否必填：非必填)
+						参数：desc		(描述		类型：string		是否必填：非必填)

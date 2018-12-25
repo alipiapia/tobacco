@@ -41,15 +41,18 @@ class Product extends BasicAdmin
         $this->brand = model('common/Brand');
         $this->productSpec = model('common/ProductSpec');
         $this->productItem = model('common/ProductItem');
+        $this->machine = model('common/Machine');
         $brands = $this->brand->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,sort',0);
+        $machines = $this->machine->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,sort',0);
         $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark,sort',0);
         foreach ($specs as $k => $v) {
             $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
         }
-        // halt($brands);
+        // halt($machines);
         $this->specs = $specs;
         $this->assign('specs',$this->specs);
         $this->assign('brands',$brands);
+        $this->assign('machines',$machines);
     }
 
     /**
@@ -129,6 +132,11 @@ class Product extends BasicAdmin
     {
         if ($this->request->isPost()) {
             // halt($data);
+            if (isset($data['mid']) && is_array($data['mid'])) {
+                $data['mid'] = join(',', $data['mid']);
+            } else {
+                $data['mid'] = '';
+            }
             if (isset($data['item']) && is_array($data['item'])) {
                 if(isset($data['item']['ttxm'])){
                     $data['ttxm'] = $data['item']['ttxm'];
@@ -156,6 +164,7 @@ class Product extends BasicAdmin
         } else {
             // halt($data);
             // $data['item'] = unserialize(base64_decode(isset($data['item']) ? $data['item'] : ''));
+            $data['mid'] = explode(',', isset($data['mid']) ? $data['mid'] : '');
             $data['item'] = json_decode(isset($data['item']) ? $data['item'] : '', true);
             // halt($data);
         }

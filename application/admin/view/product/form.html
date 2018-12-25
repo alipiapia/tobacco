@@ -8,12 +8,14 @@
         </ul>
         <div class="layui-tab-content">
             <div class="layui-tab-item">
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">名称</label>
                     <div class="layui-input-block">                        
                         <input name="title" value='{$vo["title"]|default=""}' required="required" title="请输入名称" placeholder="请输入名称" class="layui-input">
                     </div>
                 </div>
+
                 <!--{if !empty($brands)}-->
                 <div class="layui-form-item">
                     <label class="layui-form-label">品牌</label>
@@ -31,6 +33,24 @@
                     </div>
                 </div>
                 <!--{/if}-->
+
+                {if isset($machines)}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">机型</label>
+                        <div class="layui-input-block">
+                            {foreach $machines as $machine}
+                            <label class="think-checkbox">
+                                <!--{if in_array($machine['id'],$vo['mid'])}-->
+                                <input type="checkbox" checked name="mid[]" value="{$machine.id}" lay-ignore> {$machine.title}
+                                <!--{else}-->
+                                <input type="checkbox" name="mid[]" value="{$machine.id}" lay-ignore> {$machine.title}
+                                <!--{/if}-->
+                            </label>
+                            {/foreach}
+                            {if empty($machines)}<span class="color-desc" style="line-height:36px">未配置权限</span>{/if}
+                        </div>
+                    </div>
+                {/if}
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">产品Logo</label>
