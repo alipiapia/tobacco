@@ -1,7 +1,7 @@
 
 
 		
-	1	公告
+	1	产品
 			1-1	产品列表
 						地址:1.ynncp.com/product/index
 						请求方式:GET
