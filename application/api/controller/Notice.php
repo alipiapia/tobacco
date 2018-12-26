@@ -48,7 +48,10 @@ class Notice extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->notice->getLists($map, '', 'id,title,desc,content');
+        $list = $this->notice->getLists($map, '', 'id,title,desc,content,create_at');
+        foreach ($list as $k => $v) {
+            $list[$k]['create_at'] = date('Y-m-d', $v['create_at']);
+        }
         // halt($map);
         $this->success('请求成功', $list);
     }
@@ -59,7 +62,8 @@ class Notice extends BasicApi
         if(!$id){
             $this->error('参数错误');
         }
-        $info = $this->notice->getOneDarry(['id' => $id], 'id,title,desc,content');
+        $info = $this->notice->getOneDarry(['id' => $id], 'id,title,desc,content,create_at');
+        $info['create_at'] = date('Y-m-d', $info['create_at']);
         // halt($info);
         $this->success('', $info);
     }

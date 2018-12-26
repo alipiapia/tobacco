@@ -79,7 +79,7 @@
                 <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
             </th>
             <th class='text-left nowrap'>机 型</th>
-            <th class='text-left nowrap'>描 述</th>
+            <th class='text-left nowrap'>厂 家</th>
             <th class='text-left nowrap'>添 加 时 间</th>
             <th class='text-left nowrap'>状 态</th>
             <th class='text-left nowrap'>操 作</th>
@@ -98,7 +98,7 @@
                 {$vo.title|default=''}
             </td>
             <td class='text-left nowrap'>
-                {$vo.desc|default='<span class="color-desc">未设置描述</span>'|raw}
+                {$vo.item.cj|default='<span class="color-desc">未设置</span>'|raw|get_model_value='MachineItem','title'}
             </td>
             <td class='text-left nowrap'>
                 {$vo.create_at|date='Y-m-d H:i:s'}

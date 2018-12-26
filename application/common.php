@@ -109,6 +109,34 @@ function local_image($url)
     return \service\FileService::download($url)['url'];
 }
 
+//快捷访问某字段
+function get_model_value($where, $m, $field){
+    $maps = [];
+    if(is_array($where)){
+        $maps = $where;
+    }else{
+        $maps['id'] = (int)$where;
+        // if(strtolower($m) == "area"){
+        //     $maps = ['area_id' => $where];
+        // }elseif(strtolower($m) == "businesscompany"){
+        //     if((int)$where == 0){
+        //         return '';                
+        //     }
+        // }
+    }
+    $db = db($m);
+
+    // if(strtolower($m) == "systemuser"){
+    //     $db = Db::connect(config('dbx.SU'))->name($m);       
+    // }
+
+    // if(strtolower($m) == "area"){
+    //     $db = Db::connect(config('dbx.SU'))->name($m);       
+    // }
+
+    return $db->where($maps)->value($field);
+}
+
 //根据id获取规格属性
 function get_p_item($id)
 {

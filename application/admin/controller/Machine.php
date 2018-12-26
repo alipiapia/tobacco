@@ -61,9 +61,25 @@ class Machine extends BasicAdmin
      */
     public function index()
     {
-        // $pattern = '/11[1-4]1A|B(0[1-9]|[10-12])/';
-        // $m = preg_match($pattern, '1323B01');
-        // halt($m);
+        // $pattern = '/^11[1-4]{1}1[A-B]{1}(0[1-9]|1[0-2]){1}$/';//FK700(1)
+        // $m = preg_match($pattern, '1141A12', $matches);
+        
+        // $pattern = '/^11[1-4]{1}06(0[1-9]|1[0-2]){1}$/';//GDX2000(6)
+        // $m = preg_match($pattern, '1140601', $matches);
+        
+        // $pattern = '/^06[1-4]{1}6[A-B]{1}(0[1-9]|1[0-2]){1}$/';//FX(16)
+        // $m = preg_match($pattern, '0646A01', $matches);
+        
+        // $pattern = '/^06[1-4]{1}21(0[1-9]|1[0-2]){1}$/';//FK350(21)
+        // $m = preg_match($pattern, '0642101', $matches);
+        
+        // $pattern = '/^06[1-4]{1}56(0[1-9]|1[0-2]){1}$/';//ZB48(56)
+        // $m = preg_match($pattern, '0645601', $matches);
+        
+        $pattern = '/^[1-4]{1}11(0[1-9]|1[0-2]){1}(0[1-9]|1[0-9]|2[0-9]|3[0-1]){1}$/';//GDX2000(11)
+        $m = preg_match($pattern, '4110131', $matches);
+        // halt($matches);
+        
         $this->title = '机型管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['title', 'type', 'desc'] as $key) {
