@@ -96,11 +96,11 @@ class Product extends BasicApi
         if(!input('id')){
             $this->error('产品参数错误');
         }
-        if(!input('mid')){
-            $this->error('机型参数错误');
-        }
+        // if(!input('mid')){
+        //     $this->error('机型参数错误');
+        // }
         $pMap = ['id' => input('id')];
-        $mMap = ['id' => input('mid')];
+        $mMap = ['id' => 1];
         $info = $this->product->getOneDarry($pMap, 'id,title,ttxm,htxm,brand,video,video_thumb,item');
         $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
         $mItem = $this->formatItem($info['item'], $machinInfo['item']);
