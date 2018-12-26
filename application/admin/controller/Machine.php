@@ -76,10 +76,15 @@ class Machine extends BasicAdmin
         // $pattern = '/^06[1-4]{1}56(0[1-9]|1[0-2]){1}$/';//ZB48(56)
         // $m = preg_match($pattern, '0645601', $matches);
         
-        $pattern = '/^[1-4]{1}11(0[1-9]|1[0-2]){1}(0[1-9]|1[0-9]|2[0-9]|3[0-1]){1}$/';//GDX2000(11)
-        $m = preg_match($pattern, '4110131', $matches);
+        // $pattern = '/^[1-4]{1}11(0[1-9]|1[0-2]){1}(0[1-9]|1[0-9]|2[0-9]|3[0-1]){1}$/';//GDX2000(11)
+        // $m = preg_match($pattern, '4110131', $matches);
         // halt($matches);
         
+        // $d = Db::name('machine')->select();
+        // foreach ($d as $k => $v) {
+        //     Db::name('machine')->where(['id' => $v['id']])->update(['pattern' => '/'.$v['pattern'].'/']);
+        // }
+        // halt($d);
         $this->title = '机型管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['title', 'type', 'desc'] as $key) {
