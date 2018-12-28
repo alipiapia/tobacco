@@ -34,23 +34,23 @@
                 </div>
                 <!--{/if}-->
 
-                {if isset($machines)}
+                <!-- {if isset($machines)}
                     <div class="layui-form-item">
                         <label class="layui-form-label">机型</label>
                         <div class="layui-input-block">
                             {foreach $machines as $machine}
                             <label class="think-checkbox">
-                                <!--{if in_array($machine['id'],$vo['mid'])}-->
+                                {if in_array($machine['id'],$vo['mid'])}
                                 <input type="checkbox" checked name="mid[]" value="{$machine.id}" lay-ignore> {$machine.title}
-                                <!--{else}-->
+                                {else}
                                 <input type="checkbox" name="mid[]" value="{$machine.id}" lay-ignore> {$machine.title}
-                                <!--{/if}-->
+                                {/if}
                             </label>
                             {/foreach}
-                            {if empty($machines)}<span class="color-desc" style="line-height:36px">未配置权限</span>{/if}
+                            {if empty($machines)}<span class="color-desc" style="line-height:36px">未配置</span>{/if}
                         </div>
                     </div>
-                {/if}
+                {/if} -->
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">产品Logo</label>

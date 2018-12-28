@@ -20,6 +20,25 @@
                         <input name="pattern" value='{$vo["pattern"]|default=""}' title="请输入钢印号匹配规则" placeholder="请输入钢印号匹配规则" class="layui-input">
                     </div>
                 </div>
+
+                {if isset($products)}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">产品</label>
+                        <div class="layui-input-block">
+                            {foreach $products as $product}
+                            <label class="think-checkbox">
+                                <!--{if in_array($product['id'],$vo['pid'])}-->
+                                <input type="checkbox" checked name="pid[]" value="{$product.id}" lay-ignore> {$product.title}
+                                <!--{else}-->
+                                <input type="checkbox" name="pid[]" value="{$product.id}" lay-ignore> {$product.title}
+                                <!--{/if}-->
+                            </label>
+                            {/foreach}
+                            {if empty($products)}<span class="color-desc" style="line-height:36px">未配置</span>{/if}
+                        </div>
+                    </div>
+                {/if}
+
                 {if isset($specs)}
                     {foreach $specs as $spec}
                         <?php $c = $spec['mark'];?>

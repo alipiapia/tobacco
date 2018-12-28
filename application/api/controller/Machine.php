@@ -37,18 +37,24 @@ class Machine extends BasicApi
     //列表
     public function index()
     {
+        if(!input('pid')){
+            $this->error('产品参数错误');
+        }
         $map = [
             'status' => 0,
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        foreach (['title', 'desc'] as $key) {
+        foreach (['title', 'pid'] as $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
-                $map['title'] = ['like', "%{$param[$key]}%"];
+                $map[$key] = ['like', "%{$param[$key]}%"];
             }
         }
         $map = new Where($map);
-        $list = $this->machine->getLists($map, '', 'id,title');
+        $list = $this->machine->getLists($map, '', 'id as mid,title');
+        foreach ($list as $k => $v) {
+            $list[$k]['pid'] = input('pid');
+        }
         // halt($map);
         $this->success('请求成功', $list);
     }

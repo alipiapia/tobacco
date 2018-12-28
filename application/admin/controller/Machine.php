@@ -42,13 +42,16 @@ class Machine extends BasicAdmin
         // halt($e);
         $this->machineSpec = model('common/MachineSpec');
         $this->machineItem = model('common/MachineItem');
+        $this->product = model('common/Product');
+        $products = $this->product->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,sort',0);
         $specs = $this->machineSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
         foreach ($specs as $k => $v) {
             $specs[$k]['items'] = $this->machineItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
         }
-        // halt($specs);
+        // halt($products);
         $this->specs = $specs;
         $this->assign('specs',$this->specs);
+        $this->assign('products',$products);
     }
 
     /**
@@ -150,6 +153,11 @@ class Machine extends BasicAdmin
     {
         if ($this->request->isPost()) {
             // halt($data);
+            if (isset($data['pid']) && is_array($data['pid'])) {
+                $data['pid'] = join(',', $data['pid']);
+            } else {
+                $data['pid'] = '';
+            }
             if (isset($data['item']) && is_array($data['item'])) {
                 // if(isset($data['item']['cj'])){
                 //     $data['cj'] = $data['item']['cj'];
@@ -172,6 +180,7 @@ class Machine extends BasicAdmin
         } else {
             // halt($data);
             // $data['item'] = unserialize(base64_decode(isset($data['item']) ? $data['item'] : ''));
+            $data['pid'] = explode(',', isset($data['pid']) ? $data['pid'] : '');
             $data['item'] = json_decode(isset($data['item']) ? $data['item'] : '', true);
             // halt($data);
         }

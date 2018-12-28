@@ -54,7 +54,7 @@ class Product extends BasicApi
         // $this->success('请求成功',$specs);
     }
 
-    //列表
+    //列表+搜索1
     public function index()
     {
         $map = [
@@ -68,10 +68,10 @@ class Product extends BasicApi
                 if($key == 'brand'){
                     $map[$key] = $param[$key];
                 }elseif($key == 'sn'){
-                    $mids = $this->getMids($param[$key]);
-                    if($mids){
-                        $map['mid'] = ['in', $mids];
-                    }
+                    // $mids = $this->getMids($param[$key]);
+                    // if($mids){
+                    //     $map['mid'] = ['in', $mids];
+                    // }
                 }else{
                     $map[$key] = ['like', "%{$param[$key]}%"];                    
                 }
@@ -91,15 +91,52 @@ class Product extends BasicApi
         $this->success('请求成功', $list);
     }
 
+    //条码+钢印号搜索
+    public function check()
+    {
+        $txm = input('txm');
+        $sn = input('sn');
+        if(!$txm){
+            $this->error('条码参数错误');
+        }
+        if(!$sn){
+            $this->error('钢印号参数错误');
+        }
+        $map = [
+            'status' => 0,
+            'is_deleted' => '0',
+        ];        
+        $mids = $this->getMids($sn);
+        $map22 = ['id' => ['in', $mids]];
+        $map22 = new Where($map22);
+        $pids = $this->machine->getColumn($map22, 'pid');
+        $newPids  =[];
+        foreach ($pids as $k => $v) {
+            if($v){
+                $newPids = array_unique(array_merge($newPids, explode(',', $v)));
+            }
+        }
+        // halt($newPids);
+        // if($mids){
+            $map['id'] = ['in', $newPids];
+        // }
+        $map['htxm|ttxm'] = ['like', "%{$txm}%"];
+        $map = new Where($map);
+        // halt($map);
+        $list = $this->product->getLists($map, '', 'id,title,logo');
+        // halt($list);
+        $this->success('请求成功', $list);
+    }
+
     //详情
     public function info(){
-        if(!input('id')){
+        if(!input('pid')){
             $this->error('产品参数错误');
         }
         if(!input('mid')){
             $this->error('机型参数错误');
         }
-        $pMap = ['id' => input('id')];
+        $pMap = ['id' => input('pid')];
         $mMap = ['id' => input('mid')];
         $info = $this->product->getOneDarry($pMap, 'id,title,ttxm,htxm,brand,video,video_thumb,item');
         $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
