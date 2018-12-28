@@ -16,6 +16,7 @@ namespace app\admin\controller;
 
 use controller\BasicAdmin;
 use service\DataService;
+use service\HxService;
 use think\Db;
 
 /**
@@ -79,6 +80,10 @@ class Member extends BasicAdmin
      */
     public function add()
     {
+        // $hx = new HxService();
+        // $rs = $hx->hx_register("pp".mt_rand(10000,99999), '111111', '123');
+        // $ret  = json_decode($rs, true);
+        // halt($ret);
         return $this->_form($this->table, 'form');
     }
 
@@ -141,9 +146,37 @@ class Member extends BasicAdmin
             } elseif (Db::name($this->table)->where(['username' => $data['username']])->count() > 0) {
                 $this->error('用户账号已经存在，请使用其它账号！');
             }
+
+            if(!isset($data['id'])){
+                //环信注册验证
+                // $this->hxReg();
+                // halt($data);
+                $hx = new HxService();
+                $rs = $hx->hx_register($data['username'], $data['password'], $data['nickname'] );
+                $ret  = json_decode($rs, true);
+                // halt($ret);
+                if(!isset($ret['error'])){
+                    $data['uuid'] = $ret['entities'][0]['uuid'];
+                }else{
+                    $this->error($ret['error']);
+                }
+            }
         } else {
             $data['authorize'] = explode(',', isset($data['authorize']) ? $data['authorize'] : '');
             $this->assign('authorizes', Db::name('SystemAuth')->where(['status' => '1'])->select());
+        }
+    }
+
+    //环信注册验证
+    private function hxReg(){
+        halt($data);
+        $hx = new HxService();
+        $rs = $hx->hx_register($data['username'], $data['password'], $data['nickname'] );
+        $ret  = json_decode($rs, true);
+        if(!$ret['error']){
+            $data['uuid'] = $ret['entities'][0]['uuid'];
+        }else{
+            $this->error($ret['error']);
         }
     }
 

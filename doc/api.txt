@@ -8,8 +8,7 @@
 						参数：title		(名称		类型：string		是否必填：非必填)
 						参数：ttxm		(条条形码		类型：string		是否必填：非必填)
 						参数：htxm		(盒条形码		类型：string		是否必填：非必填)
-						参数：sn		(钢印号		类型：string		是否必填：非必填)
-						参数：brand		(品牌id		类型：int		是否必填：非必填)
+						参数：brand		(品牌名称		类型：string		是否必填：非必填)
 						
 			1-2	产品详情
 						地址:1.ynncp.com/api/product/info
