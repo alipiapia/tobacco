@@ -43,6 +43,7 @@ class Product extends BasicApi
         $this->product = model('common/Product');
         $this->productSpec = model('common/ProductSpec');
         $this->productItem = model('common/ProductItem');
+        $this->brand = model('common/Brand');
         $this->machine = model('common/Machine');
         $this->machineSpec = model('common/MachineSpec');
         $this->machineItem = model('common/MachineItem');
@@ -62,11 +63,18 @@ class Product extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        foreach (['title', 'brand', 'ttxm', 'htxm', 'sn'] as $key) {
+        foreach (['title', 'ttxm', 'htxm', 'brand', 'sn'] as $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
                 // halt($key);
                 if($key == 'brand'){
-                    $map[$key] = $param[$key];
+                    $bMap = [
+                        'status' => 0,
+                        'is_deleted' => '0',
+                        'title' => ['like', "%{$param[$key]}%"]
+                    ];
+                    $bMap = new Where($bMap);
+                    $bids = $this->brand->getColumn($bMap, 'id');
+                    $map[$key] = ['in', $bids];
                 }elseif($key == 'sn'){
                     // $mids = $this->getMids($param[$key]);
                     // if($mids){
@@ -120,7 +128,8 @@ class Product extends BasicApi
         // if($mids){
             $map['id'] = ['in', $newPids];
         // }
-        $map['htxm|ttxm'] = ['like', "%{$txm}%"];
+        // $map['htxm|ttxm'] = ['like', "%{$txm}%"];
+        $map['htxm|ttxm'] = ['eq', $txm];
         $map = new Where($map);
         // halt($map);
         $list = $this->product->getLists($map, '', 'id,title,logo');
