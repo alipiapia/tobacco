@@ -73,7 +73,8 @@ class Login extends BasicAdmin
         // 用户信息验证
         $user = Db::name('SystemUser')->where(['username' => $data['username'], 'is_deleted' => '0'])->find();
         empty($user) && $this->error('登录账号不存在，请重新输入!');
-        empty($user['status']) && $this->error('账号已经被禁用，请联系管理员!');
+        // empty($user['status']) && $this->error('账号已经被禁用，请联系管理员!');
+        ($user['status'] == 1) && $this->error('账号已经被禁用，请联系管理员!');
         $user['password'] !== md5($data['password']) && $this->error('登录密码错误，请重新输入!');
         // 更新登录信息
         Db::name('SystemUser')->where(['id' => $user['id']])->update([
