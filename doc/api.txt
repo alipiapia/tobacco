@@ -47,3 +47,18 @@
 						请求方式:GET
 						参数：pid		(产品id		类型：int		是否必填：必填)
 						参数：title		(名称		类型：string		是否必填：非必填)
+						
+	5	会员
+			5-1	会员列表【在线咨询列表：role=1】
+						地址:1.ynncp.com/api/member/index
+						请求方式:GET
+						参数：username		(用户username		类型：string		是否必填：非必填)
+						参数：nickname		(用户nickname		类型：string		是否必填：非必填)
+						参数：role		(用户role		类型：string		是否必填：非必填)
+						参数：phone		(用户phone		类型：string		是否必填：非必填)
+						
+			5-2	会员登录
+						地址:1.ynncp.com/api/member/login
+						请求方式:GET
+						参数：username		(用户username|phone		类型：string		是否必填：必填)
+						参数：password		(用户password		类型：string		是否必填：必填)

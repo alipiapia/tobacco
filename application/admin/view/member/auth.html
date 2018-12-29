@@ -11,21 +11,23 @@
         </div>
     </div>
 
+    {if isset($roles)}
     <div class="layui-form-item">
-        <label class="layui-form-label">访问授权</label>
+        <label class="layui-form-label">角色</label>
         <div class="layui-input-block">
-            {foreach $authorizes as $authorize}
+            {foreach $roles as $role}
             <label class="think-checkbox">
-                <!--{if in_array($authorize['id'],$vo['authorize'])}-->
-                <input type="checkbox" checked name="authorize[]" value="{$authorize.id}" lay-ignore> {$authorize.title}
+                <!--{if isset($vo['role']) and ($role['id'] eq $vo['role'])}-->
+                <input type="radio" checked name="role" value="{$role.id}" lay-ignore> {$role.title}
                 <!--{else}-->
-                <input type="checkbox" name="authorize[]" value="{$authorize.id}" lay-ignore> {$authorize.title}
+                <input type="radio" name="role" value="{$role.id}" lay-ignore> {$role.title}
                 <!--{/if}-->
             </label>
             {/foreach}
-            {if empty($authorizes)}<span class="color-desc" style="line-height:36px">未配置权限</span>{/if}
+            {if empty($roles)}<span class="color-desc" style="line-height:36px">未配置角色</span>{/if}
         </div>
     </div>
+    {/if}
 
     <div class="hr-line-dashed"></div>
 

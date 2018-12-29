@@ -29,6 +29,7 @@ class HxService
         );
         $rs = json_decode($this->curl($url, $data), true);
         $this->token = $rs['access_token'];
+        // halt($this->token);
     }
     /*
      * 注册IM用户(授权注册)
@@ -172,6 +173,28 @@ class HxService
         );
         $data['nickname'] = $nickname;
         return $this->curl($url, $data, $header, "PUT");
+    }
+    /*
+     * 账号禁用
+     */
+    public function hx_user_deactivate($username)
+    {
+        $url = $this->url . "/users/${username}/deactivate";
+        $header = array(
+            'Authorization: Bearer ' . $this->token
+        );
+        return $this->curl($url, "", $header, "POST");
+    }
+    /*
+     * 账号解禁
+     */
+    public function hx_user_activate($username)
+    {
+        $url = $this->url . "/users/${username}/activate";
+        $header = array(
+            'Authorization: Bearer ' . $this->token
+        );
+        return $this->curl($url, "", $header, "POST");
     }
     /*
      *

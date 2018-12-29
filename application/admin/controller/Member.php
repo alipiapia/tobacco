@@ -18,6 +18,7 @@ use controller\BasicAdmin;
 use service\DataService;
 use service\HxService;
 use think\Db;
+use think\db\Where;
 
 /**
  * 前台用户管理控制器
@@ -34,6 +35,15 @@ class Member extends BasicAdmin
      * @var string
      */
     public $table = 'Member';
+    public $member;
+    public $hx;
+
+    public function __construct(){
+        parent::__construct();
+        $this->member = model('common/Member');
+        $this->hx = new HxService();
+        $this->assign('roles', config('pp.role_type'));
+    }
 
     /**
      * 用户列表
@@ -45,11 +55,17 @@ class Member extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '系统用户管理';
+        $this->title = '用户管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['username', 'phone', 'mail'] as $key) {
-            (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
-        }
+        foreach (['username', 'nickname', 'role', 'phone', 'mail'] as $key) {
+            if(isset($get[$key]) && $get[$key] !== ''){
+                if($key == 'role'){
+                        $db->where($key, $get[$key]);
+                    }else{
+                        $db->whereLike($key, "%{$get[$key]}%");
+                    }
+                }
+            }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode(' - ', $get['date']);
             $db->whereBetween('login_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
@@ -67,7 +83,19 @@ class Member extends BasicAdmin
      */
     public function auth()
     {
-        return $this->_form($this->table, 'auth');
+        if ($this->request->isGet()) {
+            // $this->assign('roles', config('pp.role_type'));
+            return $this->_form($this->table, 'auth');
+        }
+        $post = $this->request->post();
+        if(!isset($post['role'])){
+            $this->error('请选择角色');                
+        }
+        $data = ['id' => $post['id'], 'role' => $post['role']];
+        if (DataService::save($this->table, $data, 'id')) {
+            $this->success('修改成功');
+        }
+        $this->error('修改失败！');
     }
 
     /**
@@ -80,8 +108,7 @@ class Member extends BasicAdmin
      */
     public function add()
     {
-        // $hx = new HxService();
-        // $rs = $hx->hx_register("pp".mt_rand(10000,99999), '111111', '123');
+        // $rs = $this->hx->hx_register("pp".mt_rand(10000,99999), '111111', '123');
         // $ret  = json_decode($rs, true);
         // halt($ret);
         return $this->_form($this->table, 'form');
@@ -97,6 +124,12 @@ class Member extends BasicAdmin
      */
     public function edit()
     {
+        // $rs = $this->hx->hx_user_info($this->request->post('id'));
+        // $ret  = json_decode($rs, true);
+        // halt($ret);
+        // if($ret['error'] == 'service_resource_not_found'){
+        //     $this->error('找不到用户信息');
+        // }
         return $this->_form($this->table, 'form');
     }
 
@@ -119,8 +152,24 @@ class Member extends BasicAdmin
         if ($post['password'] !== $post['repassword']) {
             $this->error('两次输入的密码不一致！');
         }
-        $data = ['id' => $post['id'], 'password' => md5($post['password'])];
+        $username = get_model_value($post['id'], 'Member','username');
+        $data = ['id' => $post['id'], 'password' => $post['password']];
         if (DataService::save($this->table, $data, 'id')) {
+            $rs = $this->hx->hx_user_update_password($username, $data['password']);
+            $ret  = json_decode($rs, true);
+            // halt($ret);
+            if(isset($ret['error'])){
+                if($ret['error'] == 'duplicate_unique_property_exists'){
+                    $this->error("用户已存在");
+                }else{
+                    $this->error($ret['error']);
+                }
+            }else{
+                // $data['uuid'] = $ret['entities'][0]['uuid'];
+                // if($ret['entities'][0]['activated'] === false){
+                //     $data['status'] = 1;
+                // }
+            }
             $this->success('密码修改成功，下次请使用新密码登录！', '');
         }
         $this->error('密码修改失败，请稍候再试！');
@@ -136,47 +185,84 @@ class Member extends BasicAdmin
     public function _form_filter(&$data)
     {
         if ($this->request->isPost()) {
-            if (isset($data['authorize']) && is_array($data['authorize'])) {
-                $data['authorize'] = join(',', $data['authorize']);
-            } else {
-                $data['authorize'] = '';
-            }
+            // if (isset($data['authorize']) && is_array($data['authorize'])) {
+            //     $data['authorize'] = join(',', $data['authorize']);
+            // } else {
+            //     $data['authorize'] = '';
+            // }
+            
+            // if(!isset($data['role'])){
+            //     $this->error('请选择角色');                
+            // }
+
             if (isset($data['id'])) {
+                // halt($data);
+                $data['update_at'] = time();
+                $oldNickname = Db::name($this->table)->where('id', 'eq', $data['id'])->value('nickname');
+                // halt($oldNickname);
+                if(isset($data['nickname']) && $oldNickname != $data['nickname']){
+                    $rs = $this->hx->hx_user_update_nickname($data['username'], $data['nickname']);
+                    $ret  = json_decode($rs, true);
+                    // halt($ret);
+                    if(isset($ret['error'])){
+                        if($ret['error'] == 'duplicate_unique_property_exists'){
+                            $this->error("用户已存在");
+                        }else{
+                            $this->error($ret['error']);
+                        }
+                    }else{
+                        // $data['uuid'] = $ret['entities'][0]['uuid'];
+                        // if($ret['entities'][0]['activated'] === false){
+                        //     $data['status'] = 1;
+                        // }
+                    }
+                }
+
+                if(isset($data['phone'])){
+                    $editMap = ['phone' => $data['phone'], 'id' => ['neq', $data['id']]];
+                    $editMap = new Where($editMap);
+                    if (Db::name($this->table)->where($editMap)->count() > 0) {
+                        $this->error('手机号码已经存在，请使用其它手机号码！');
+                    }                    
+                }
                 unset($data['username']);
             } elseif (Db::name($this->table)->where(['username' => $data['username']])->count() > 0) {
                 $this->error('用户账号已经存在，请使用其它账号！');
+            } elseif (Db::name($this->table)->where(['phone' => $data['phone']])->count() > 0) {
+                $this->error('手机号码已经存在，请使用其它手机号码！');
             }
-
+            // halt($data);
             if(!isset($data['id'])){
                 //环信注册验证
-                // $this->hxReg();
+                $data['password'] = '111111';//默认密码
+                $this->hxReg($data);
                 // halt($data);
-                $hx = new HxService();
-                $rs = $hx->hx_register($data['username'], $data['password'], $data['nickname'] );
-                $ret  = json_decode($rs, true);
-                // halt($ret);
-                if(!isset($ret['error'])){
-                    $data['uuid'] = $ret['entities'][0]['uuid'];
-                }else{
-                    $this->error($ret['error']);
-                }
+                $data['create_at'] = time();
             }
         } else {
-            $data['authorize'] = explode(',', isset($data['authorize']) ? $data['authorize'] : '');
-            $this->assign('authorizes', Db::name('SystemAuth')->where(['status' => '1'])->select());
+            // $data['authorize'] = explode(',', isset($data['authorize']) ? $data['authorize'] : '');
+            // $this->assign('authorizes', Db::name('SystemAuth')->where(['status' => '1'])->select());
+            // $this->assign('roles', config('pp.role_type'));
         }
     }
 
     //环信注册验证
-    private function hxReg(){
-        halt($data);
-        $hx = new HxService();
-        $rs = $hx->hx_register($data['username'], $data['password'], $data['nickname'] );
+    private function hxReg($data){
+        // halt($data);
+        $rs = $this->hx->hx_register($data['username'], $data['password'], $data['nickname'] );
         $ret  = json_decode($rs, true);
-        if(!$ret['error']){
-            $data['uuid'] = $ret['entities'][0]['uuid'];
+        // halt($ret);
+        if(isset($ret['error'])){
+            if($ret['error'] == 'duplicate_unique_property_exists'){
+                $this->error("用户已存在");
+            }else{
+                $this->error($ret['error']);
+            }
         }else{
-            $this->error($ret['error']);
+            // $data['uuid'] = $ret['entities'][0]['uuid'];
+            if($ret['entities'][0]['activated'] === false){
+                $data['status'] = 1;
+            }
         }
     }
 
@@ -187,11 +273,21 @@ class Member extends BasicAdmin
      */
     public function del()
     {
-        if (in_array('10000', explode(',', $this->request->post('id')))) {
-            $this->error('系统超级账号禁止删除！');
-        }
-        if (DataService::update($this->table)) {
-            $this->success("用户删除成功！", '');
+        // if (in_array('10000', explode(',', $this->request->post('id')))) {
+        //     $this->error('系统超级账号禁止删除！');
+        // }
+        
+        // halt($this->hx->hx_user_delete('pp0005'));
+        // halt($this->member::get($this->request->post('id'))->delete());
+        
+        $username = get_model_value($this->request->post('id'), 'Member','username');
+        // if (DataService::update($this->table)) {
+        if ($this->member::get($this->request->post('id'))->delete()) {
+            $hx_delete = $this->hx->hx_user_delete($username);
+            // halt($hx_delete);
+            if($hx_delete){
+                $this->success("用户删除成功！", '');
+            }
         }
         $this->error("用户删除失败，请稍候再试！");
     }
@@ -203,11 +299,16 @@ class Member extends BasicAdmin
      */
     public function forbid()
     {
-        if (in_array('10000', explode(',', $this->request->post('id')))) {
-            $this->error('系统超级账号禁止操作！');
-        }
+        // if (in_array('10000', explode(',', $this->request->post('id')))) {
+        //     $this->error('系统超级账号禁止操作！');
+        // }
+        $username = get_model_value($this->request->post('id'), 'Member','username');
         if (DataService::update($this->table)) {
-            $this->success("用户禁用成功！", '');
+            $hx_deactivate = $this->hx->hx_user_deactivate($username);
+            // halt($hx_deactivate);
+            if($hx_deactivate){
+                $this->success("用户禁用成功！", '');
+            }
         }
         $this->error("用户禁用失败，请稍候再试！");
     }
@@ -219,8 +320,13 @@ class Member extends BasicAdmin
      */
     public function resume()
     {
+        $username = get_model_value($this->request->post('id'), 'Member','username');
         if (DataService::update($this->table)) {
-            $this->success("用户启用成功！", '');
+            $hx_activate = $this->hx->hx_user_activate($username);
+            // halt($hx_activate);
+            if($hx_activate){
+                $this->success("用户启用成功！", '');
+            }
         }
         $this->error("用户启用失败，请稍候再试！");
     }

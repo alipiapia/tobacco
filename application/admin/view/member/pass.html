@@ -4,7 +4,7 @@
         <label class="layui-form-label">用户账号</label>
         <div class="layui-input-block">
             {if $vo and $vo.username}
-            <input readonly="readonly" disabled="disabled" name="username" value='{$vo.username|default=""}' required="required" title="请输入用户名称" placeholder="请输入用户名称" class="layui-input layui-bg-gray">
+            <input readonly="readonly" name="username" value='{$vo.username|default=""}' required="required" title="请输入用户名称" placeholder="请输入用户名称" class="layui-input layui-bg-gray">
             {else}
             <input name="username" value='{$vo.username|default=""}' required="required" title="请输入用户名称" placeholder="请输入用户名称" class="layui-input">
             {/if}
