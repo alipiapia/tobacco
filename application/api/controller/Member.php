@@ -32,6 +32,9 @@ class Member extends BasicApi
     public function __construct(){
         parent::__construct();
         $this->member = model('common/Member');
+        $this->product = model('common/Product');
+        $this->memberMessage = model('common/MemberMessage');
+        $this->memberCollection = model('common/MemberCollection');
     }
 
     //列表
@@ -88,6 +91,44 @@ class Member extends BasicApi
         ]);
         if($up){
             $this->success('登录成功', $mem);
+        }
+    }
+
+    //我的收藏
+    public function clist(){
+        $uid = input('uid');
+        if(!$uid){
+            $this->error('用户参数错误');
+        }
+        $map = [
+            'mid' => $uid,
+        ];
+        $map = new Where($map);
+        $list = $this->memberCollection->getLists($map);
+        // halt($map);
+        $this->success('请求成功', $list);
+    }
+
+    //添加收藏
+    public function addc(){        
+        $uid = input('uid');
+        $pid = input('pid');
+        if(!$uid){
+            $this->error('用户参数错误');
+        }
+        if(!$pid){
+            $this->error('产品参数错误');
+        }
+        $data = [
+            'mid' => $uid,
+            'pid' => $pid,
+            'create_at' => time(),
+        ];
+        $insert = $this->memberCollection->insert($data);
+        if($insert){
+            $this->success('收藏成功');
+        }else{
+            $this->error('收藏失败');
         }
     }
 }
