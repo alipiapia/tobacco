@@ -31,6 +31,7 @@ class Member extends BasicApi
 {
     public function __construct(){
         parent::__construct();
+        $this->table = 'Member';
         $this->member = model('common/Member');
         $this->product = model('common/Product');
         $this->memberMessage = model('common/MemberMessage');
@@ -58,6 +59,41 @@ class Member extends BasicApi
         $list = $this->member->getLists($map, '', 'id,username,nickname,password,role,phone,status,avatar');
         // halt($map);
         $this->success('请求成功', $list);
+    }
+
+    //用户详情
+    public function info(){
+        $id = input('id');
+        if(!$id){
+            $this->error('用户参数错误');
+        }
+        $map = [
+            'id' => $id,
+        ];
+        $map = new Where($map);
+        $info = $this->member->getOneDarry($map);
+        // halt($map);
+        $this->success('请求成功', $info);
+    }
+
+    //修改信息
+    public function upinfo(){
+        $param = $this->request->param();
+        array_shift($param);
+        if(!$param['id']){
+            $this->error('用户参数错误');
+        }
+        // halt($param);
+        // $parry = ['id', 'username', 'nickname', 'role', 'phone', 'mail'];
+        // foreach ($param as $key => $v) {
+        //     if(!in_array($key, $parry)){
+        //         unset($param[$key]);
+        //     }
+        // }
+        // halt($param);
+        $info = $this->member->allowField(true)->isUpdate(true)->save($param);
+        // halt($info);
+        $this->success('请求成功', $info);
     }
 
     //登录
@@ -101,7 +137,7 @@ class Member extends BasicApi
             $this->error('用户参数错误');
         }
         $map = [
-            'mid' => $uid,
+            'uid' => $uid,
         ];
         $map = new Where($map);
         $list = $this->memberCollection->getLists($map);
@@ -120,7 +156,7 @@ class Member extends BasicApi
             $this->error('产品参数错误');
         }
         $data = [
-            'mid' => $uid,
+            'uid' => $uid,
             'pid' => $pid,
             'create_at' => time(),
         ];
@@ -130,5 +166,20 @@ class Member extends BasicApi
         }else{
             $this->error('收藏失败');
         }
+    }
+
+    //我的消息
+    public function mlist(){
+        $uid = input('uid');
+        if(!$uid){
+            $this->error('用户参数错误');
+        }
+        $map = [
+            'uid' => $uid,
+        ];
+        $map = new Where($map);
+        $list = $this->memberMessage->getLists($map);
+        // halt($map);
+        $this->success('请求成功', $list);
     }
 }
