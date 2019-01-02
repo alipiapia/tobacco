@@ -80,7 +80,9 @@ Apis For Tobacco.		20th Dec. 2018		By pp
 			5-6	用户信息修改
 						地址:1.ynncp.com/api/member/upinfo
 						请求方式:GET/POST
-						参数：username		(用户username		类型：string		是否必填：非必填)
+						参数：id		(用户id		类型：int		是否必填：必填)
 						参数：nickname		(用户nickname		类型：string		是否必填：非必填)
-						参数：role		(用户role		类型：string		是否必填：非必填)
+						参数：password		(用户password		类型：string		是否必填：非必填)
 						参数：phone		(用户phone		类型：string		是否必填：非必填)
+						参数：role		(用户角色role		类型：string		是否必填：非必填)
+						参数：avatar		(用户头像		类型：string		是否必填：非必填)
