@@ -16,7 +16,7 @@ namespace app\api\controller;
 
 use controller\BasicApi;
 use service\DataService;
-// use service\ToolsService;
+use service\FileService;
 use think\Db;
 use think\db\Where;
 use service\HxService;
@@ -185,6 +185,37 @@ class Member extends BasicApi
                 $this->error($send['message']);
              }
         }
+    }
+
+    //图片上传
+    public function upfile()
+    {
+        $file = $this->request->file('avatar');
+        $uid = $this->request->param('uid');
+        if(!$uid){
+            $this->error('用户参数错误');
+        }
+        if (!$file->checkExt(strtolower(sysconf('storage_local_exts')))) {
+            $this->error('文件上传类型受限');
+        }
+        $names = ['avatar', $uid];
+        $ext = strtolower(pathinfo($file->getInfo('name'), 4));
+        $ext = $ext ? $ext : 'tmp';
+        $filename = "{$names[0]}/{$names[1]}.{$ext}";
+        // 文件上传处理
+        if (($info = $file->move("static/upload/{$names[0]}", "{$names[1]}.{$ext}", true))) {
+            if (($site_url = FileService::getFileUrl($filename, 'local'))) {
+                $map = [
+                    'id' => ['eq', $uid],
+                ];
+                $map = new Where($map);
+                $up = $this->member->where($map)->update([
+                    'avatar'  => $site_url,
+                ]);
+                $this->success('上传成功',$site_url);
+            }
+        }
+        $this->error('上传失败');
     }
 
     //修改信息

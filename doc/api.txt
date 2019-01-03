@@ -73,23 +73,30 @@
 						参数：code		(验证码code		类型：string		是否必填：必填)
 						参数：role		(用户角色role		类型：int		是否必填：必填)
 						
-			5-3	我的收藏
+						测试账号
+						{
+							用户名	手机号	密码	验证码	角色id
+							pp0001 15888888888 111111 111111 1
+							pp0002 15999999999 111111 111111 2
+						}
+						
+			5-4	我的收藏
 						地址:/api/member/clist
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						
-			5-4	添加收藏
+			5-5	添加收藏
 						地址:/api/member/addc
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						参数：pid		(用户pid		类型：int		是否必填：必填)
 						
-			5-5	我的消息
+			5-6	我的消息
 						地址:/api/member/mlist
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						
-			5-6	用户信息修改
+			5-7	用户信息修改
 						地址:/api/member/upinfo
 						请求方式:GET/POST
 						参数：id		(用户id		类型：int		是否必填：必填)
@@ -98,3 +105,9 @@
 						参数：phone		(用户phone		类型：string		是否必填：非必填)
 						参数：role		(用户角色role		类型：string		是否必填：非必填)
 						参数：avatar		(用户头像		类型：string		是否必填：非必填)
+						
+			5-8	头像上传
+						地址:/api/member/upfile
+						请求方式:GET/POST
+						参数：uid		(用户uid		类型：int		是否必填：必填)
+						参数：avatar		(用户头像		类型：FILE		是否必填：必填)
