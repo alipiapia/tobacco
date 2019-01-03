@@ -20,6 +20,7 @@ use service\DataService;
 use think\Db;
 use think\db\Where;
 use service\HxService;
+use service\SmsService;
 
 /**
  * 通知公告 控制器
@@ -38,6 +39,7 @@ class Member extends BasicApi
         $this->product = model('common/Product');
         $this->memberMessage = model('common/MemberMessage');
         $this->memberCollection = model('common/MemberCollection');
+        $this->SmsLog = model('common/SmsLog');
     }
 
     //列表
@@ -58,7 +60,7 @@ class Member extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->member->getLists($map, '', 'id,username,nickname,password,role,phone,status,avatar');
+        $list = $this->member->getLists($map, '', 'id,username,nickname,role,phone,status,avatar');
         // halt($map);
         $this->success('请求成功', $list);
     }
@@ -76,6 +78,113 @@ class Member extends BasicApi
         $info = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
         // halt($map);
         $this->success('请求成功', $info);
+    }
+
+    //登录
+    public function login(){
+        // halt(time());
+        $phone = input('phone');
+        $password = input('password');
+        $code = input('code');
+        $role = input('role');
+
+        if(!$phone || !is_mobile($phone)){
+            $this->error('请输入正确手机号码');
+        }
+        if(!$password){
+            $this->error('请输入密码');
+        }
+        if(!$code){
+            $this->error('请输入验证码');
+        }
+        if(!$role){
+            $this->error('请选择用户角色');
+        }
+
+        $map = [
+            'phone' => ['eq', $phone],
+        ];
+        $map = new Where($map);
+        $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
+        if(!$mem){
+            $this->error('登录账号不存在，请重新输入');            
+        }
+        if($mem['status'] == 1){
+            $this->error('账号已经被禁用，请联系管理员');            
+        }
+        if($mem['role'] != $role){
+            $this->error('账号角色不匹配，请重试');            
+        }
+        if($mem['password'] != $password){
+            $this->error('登录密码错误，请重新输入');            
+        }
+
+        $codeInfo = $this->SmsLog->getOneDarry($map, 'code,create_at');
+        if(!$codeInfo){
+            $this->error('找不到验证码');
+        }
+        $timeDiff = floor(time() - $codeInfo['create_at']);
+        if(($timeDiff / 60) >= 5){
+            $this->error('验证码超时');
+        }
+        if($codeInfo['code'] != $code){
+            $this->error('验证码错误');
+        }
+        // halt($code);
+
+        // 更新登录信息
+        $up = $this->member->where($map)->update([
+            'login_at'  => Db::raw('now()'),
+            'login_num' => Db::raw('login_num+1'),
+        ]);
+        if($up){
+            $this->success('登录成功', $mem);
+        }
+    }
+
+    //发送验证码
+    public function send_code(){
+        $phone = input('phone');
+        if(!is_mobile($phone)){
+            $this->error('请输入正确手机号码');
+        }
+        $code = create_code();
+        // $send = send_sms($phone, $code);
+        // halt($send);
+
+        $map = [
+            'phone' => ['eq', $phone],
+        ];
+        $map = new Where($map);
+        $isE = $this->SmsLog->getOneDarry($map);
+
+        if($isE){
+            if(floor(time()-intval($isE['create_at'])) <= 60){
+                $this->error("一分钟内只允许发送一条短信");
+            }
+            $send = send_sms($phone, $code);
+            if($send['code'] == 0){
+                $isE['code'] = $code;
+                $isE['create_at'] = time();
+                $this->SmsLog->allowField(true)->isUpdate(true)->save($isE);    
+                $this->success('发送成功');            
+            }else{
+                $this->error($send['message']);
+            }
+        }else{
+            $send = send_sms($phone, $code);
+            if($send['code'] == 0){
+                $data = [
+                    'phone' => $phone,
+                    'code' => $code,
+                    'create_at' => time()
+                ];
+                 $this->SmsLog->insert($data);
+                 $this->success('发送成功');
+             }else{
+                $this->error($send['message']);
+             }
+        }
     }
 
     //修改信息
@@ -129,65 +238,6 @@ class Member extends BasicApi
         $info = $this->member->allowField(true)->isUpdate(true)->save($param);
         // halt($info);
         $this->success('请求成功', $info);
-    }
-
-    //修改密码
-    public function uppass(){        
-            $param = $this->request->param();
-            array_shift($param);
-            if(!$param['id']){
-                $this->error('用户参数错误');
-            }
-            if(empty($param['password'])){
-                $this->error('昵称不能为空');
-            }
-            $map = [
-                'id' => $param['id'],
-            ];
-            $map = new Where($map);
-            $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
-            if(empty($mem['username'])){
-                $this->error('用户名不能为空');
-            }
-            $rs = $this->hx->hx_user_update_password($mem['username'], $param['password']);
-            $ret  = json_decode($rs, true);
-            if(isset($ret['error'])){
-                $this->error($ret['error']);
-            }
-    }
-
-    //登录
-    public function login(){
-        $username = input('username');
-        $password = input('password');
-        if(!$username){
-            $this->error('请输入账号');
-        }
-        if(!$password){
-            $this->error('请输入密码');
-        }
-        $map = [
-            'username|phone' => ['eq', $username],
-        ];
-        $map = new Where($map);
-        $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
-        if(!$mem){
-            $this->error('登录账号不存在，请重新输入');            
-        }
-        if($mem['status'] == 1){
-            $this->error('账号已经被禁用，请联系管理员');            
-        }
-        if($mem['password'] != $password){
-            $this->error('登录密码错误，请重新输入');            
-        }
-        // 更新登录信息
-        $up = $this->member->where($map)->update([
-            'login_at'  => Db::raw('now()'),
-            'login_num' => Db::raw('login_num+1'),
-        ]);
-        if($up){
-            $this->success('登录成功', $mem);
-        }
     }
 
     //我的收藏

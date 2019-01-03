@@ -1,7 +1,11 @@
-Apis For Tobacco.		20th Dec. 2018		By pp
+	#	Apis For Tobacco.
+	#	20th Dec. 2018
+	#	By pp
+	#	Domain:1.ynncp.com
+
 	1	产品
 			1-1	产品列表
-						地址:1.ynncp.com/api/product/index
+						地址:/api/product/index
 						请求方式:GET
 						参数：title		(名称		类型：string		是否必填：非必填)
 						参数：ttxm		(条条形码		类型：string		是否必填：非必填)
@@ -9,76 +13,84 @@ Apis For Tobacco.		20th Dec. 2018		By pp
 						参数：brand		(品牌名称		类型：string		是否必填：非必填)
 						
 			1-2	产品详情
-						地址:1.ynncp.com/api/product/info
+						地址:/api/product/info
 						请求方式:GET
 						参数：pid		(产品id		类型：int		是否必填：必填)
 						参数：mid		(机型id		类型：int		是否必填：必填)
 						
 			1-2	产品搜索:[条码+钢印号]
-						地址:1.ynncp.com/api/product/check
+						地址:/api/product/check
 						请求方式:GET
 						参数：txm		(条码txm		类型：string		是否必填：必填)
 						参数：sn		(钢印号		类型：string		是否必填：必填)
 		
 	2	公告
 			2-1	公告列表
-						地址:1.ynncp.com/api/notice/index
+						地址:/api/notice/index
 						请求方式:GET
 						参数：title		(名称		类型：string		是否必填：非必填)
 						参数：desc		(描述		类型：string		是否必填：非必填)
 						
 			2-2	公告详情
-						地址:1.ynncp.com/api/notice/info
+						地址:/api/notice/info
 						请求方式:GET
 						参数：id		(公告id		类型：int		是否必填：必填)
 						
 	3	品牌
 			3-1	品牌列表
-						地址:1.ynncp.com/api/brand/index
+						地址:/api/brand/index
 						请求方式:GET
 						参数：title		(名称		类型：string		是否必填：非必填)
 						参数：desc		(描述		类型：string		是否必填：非必填)
 						
 	4	机型
 			4-1	机型列表
-						地址:1.ynncp.com/api/machine/index
+						地址:/api/machine/index
 						请求方式:GET
 						参数：pid		(产品id		类型：int		是否必填：必填)
 						参数：title		(名称		类型：string		是否必填：非必填)
 						
 	5	会员
 			5-1	会员列表【在线咨询列表：role=1】
-						地址:1.ynncp.com/api/member/index
+						地址:/api/member/index
 						请求方式:GET
 						参数：username		(用户username		类型：string		是否必填：非必填)
 						参数：nickname		(用户nickname		类型：string		是否必填：非必填)
 						参数：role		(用户role		类型：string		是否必填：非必填)
 						参数：phone		(用户phone		类型：string		是否必填：非必填)
 						
-			5-2	会员登录
-						地址:1.ynncp.com/api/member/login
-						请求方式:GET
-						参数：username		(用户username|phone		类型：string		是否必填：必填)
+			5-2	登录-发送验证码【前端做60s，验证码5分钟有效】
+						地址:/api/member/send_code
+						请求方式:GET/POST
+						参数：phone		(用户phone		类型：string		是否必填：必填)
+						参数：code		(验证码code		类型：string		是否必填：必填)
+						
+			5-3	会员登录
+						地址:/api/member/login
+						请求方式:GET/POST
+						参数：phone		(用户phone		类型：string		是否必填：必填)
 						参数：password		(用户password		类型：string		是否必填：必填)
+						参数：code		(验证码code		类型：string		是否必填：必填)
+						参数：role		(用户角色role		类型：int		是否必填：必填)
 						
 			5-3	我的收藏
-						地址:1.ynncp.com/api/member/clist
+						地址:/api/member/clist
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						
 			5-4	添加收藏
-						地址:1.ynncp.com/api/member/addc
+						地址:/api/member/addc
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						参数：pid		(用户pid		类型：int		是否必填：必填)
 						
 			5-5	我的消息
-						地址:1.ynncp.com/api/member/mlist
+						地址:/api/member/mlist
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						
 			5-6	用户信息修改
-						地址:1.ynncp.com/api/member/upinfo
+						地址:/api/member/upinfo
 						请求方式:GET/POST
 						参数：id		(用户id		类型：int		是否必填：必填)
 						参数：nickname		(用户nickname		类型：string		是否必填：非必填)

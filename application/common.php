@@ -15,6 +15,7 @@
 use service\DataService;
 use service\NodeService;
 use think\Db;
+use service\SmsService;
 
 /**
  * 打印输出数据到文件
@@ -146,4 +147,38 @@ function get_p_item($id)
 //反序列化
 function mb_unserialize($str) {
     return preg_replace_callback('#s:(\d+):"(.*?)";#s',function($match){return 's:'.strlen($match[2]).':"'.$match[2].'";';},$str);
+}
+
+//生成随机验证码
+function create_smscode($length = 4){
+    $min = pow(10 , ($length - 1));
+    $max = pow(10, $length) - 1;
+    return rand($min, $max);
+}
+
+/**
+ * 生成短信验证码
+ *  - 默认长度 6
+ * @param int $length
+ * @return string
+ */
+function create_code($length = 6) {
+    return str_pad(mt_rand(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT);
+}
+
+/**
+ * 验证手机号是否正确
+ * @author honfei
+ * @param number $mobile
+ */
+function is_mobile($mobile) {
+    if (!is_numeric($mobile)) {
+        return false;
+    }
+    return preg_match('#^13[\d]{9}$|^14[5,7]{1}\d{8}$|^15[^4]{1}\d{8}$|^17[0,6,7,8]{1}\d{8}$|^18[\d]{9}$#', $mobile) ? true : false;
+}
+
+//短信发送
+function send_sms($phone, $code){
+    return SmsService::smsBao($phone, $code);
 }
