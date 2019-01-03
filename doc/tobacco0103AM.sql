@@ -11,7 +11,7 @@
  Target Server Version : 50553
  File Encoding         : 65001
 
- Date: 03/01/2019 15:51:14
+ Date: 03/01/2019 16:01:37
 */
 
 SET NAMES utf8mb4;
@@ -279,8 +279,8 @@ CREATE TABLE `member`  (
 -- ----------------------------
 -- Records of member
 -- ----------------------------
-INSERT INTO `member` VALUES (10001, 'user1', '111111', 'dggd', 2, NULL, '22222222', '', '18208885555', '', 1, '2018-12-21 13:57:31', 0, 0, NULL, '2015-11-13 15:14:22');
-INSERT INTO `member` VALUES (10006, 'pp0001', '222222', '222222', 2, NULL, NULL, '', '18208702258', '', 10, '2019-01-03 15:01:00', 0, 0, NULL, '0000-00-00 00:00:00');
+INSERT INTO `member` VALUES (10001, 'user001', '111111', 'dggd', 1, NULL, '22222222', '', '15888888888', '', 2, '2019-01-03 15:59:36', 0, 0, NULL, '2015-11-13 15:14:22');
+INSERT INTO `member` VALUES (10006, 'user002', '111111', '222222', 2, NULL, NULL, '', '15999999999', '', 10, '2019-01-03 15:01:00', 0, 0, NULL, '0000-00-00 00:00:00');
 INSERT INTO `member` VALUES (10007, 'pp0002', '111111', '5678', 2, NULL, NULL, '', '18208885557', '', 0, NULL, 0, 0, NULL, '0000-00-00 00:00:00');
 INSERT INTO `member` VALUES (10008, 'pp0003', '111111', 'mmm1', NULL, NULL, NULL, '', '18208885558', '', 0, NULL, 0, 0, NULL, '0000-00-00 00:00:00');
 
@@ -656,8 +656,8 @@ CREATE TABLE `sms_log`  (
 -- ----------------------------
 -- Records of sms_log
 -- ----------------------------
-INSERT INTO `sms_log` VALUES (1, '18208885556', '1', 1546495918);
-INSERT INTO `sms_log` VALUES (2, '18208702258', '078610', 1546498666);
+INSERT INTO `sms_log` VALUES (1, '15888888888', '111111', 1546495918);
+INSERT INTO `sms_log` VALUES (2, '15999999999', '111111', 1546498666);
 
 -- ----------------------------
 -- Table structure for system_auth

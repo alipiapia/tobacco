@@ -124,9 +124,9 @@ class Member extends BasicApi
             $this->error('找不到验证码');
         }
         $timeDiff = floor(time() - $codeInfo['create_at']);
-        if(($timeDiff / 60) >= 5){
-            $this->error('验证码超时');
-        }
+        // if(($timeDiff / 60) >= 5){
+        //     $this->error('验证码超时');
+        // }
         if($codeInfo['code'] != $code){
             $this->error('验证码错误');
         }
