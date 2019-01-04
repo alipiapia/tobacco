@@ -144,6 +144,8 @@ class Member extends BasicApi
 
     //发送验证码
     public function send_code(){
+        // $send = send_sms('18208702258', '111111', '1', []);
+        // halt($send);
         $phone = input('phone');
         if(!is_mobile($phone)){
             $this->error('请输入正确手机号码');
@@ -151,7 +153,7 @@ class Member extends BasicApi
         $code = create_code();
         // $send = send_sms($phone, $code);
         // halt($send);
-        $this->success('发送成功');
+        $this->success('发送成功', '111111');
 
         $map = [
             'phone' => ['eq', $phone],
