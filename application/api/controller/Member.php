@@ -168,7 +168,7 @@ class Member extends BasicApi
                 $isE['code'] = $code;
                 $isE['create_at'] = time();
                 $this->SmsLog->allowField(true)->isUpdate(true)->save($isE);    
-                $this->success('发送成功');            
+                $this->success('发送成功', $code);            
             }else{
                 $this->error($send['message']);
             }
@@ -181,7 +181,7 @@ class Member extends BasicApi
                     'create_at' => time()
                 ];
                  $this->SmsLog->insert($data);
-                 $this->success('发送成功');
+                 $this->success('发送成功', $code);
              }else{
                 $this->error($send['message']);
              }
@@ -300,13 +300,49 @@ class Member extends BasicApi
         $data = [
             'uid' => $uid,
             'pid' => $pid,
-            'create_at' => time(),
         ];
-        $insert = $this->memberCollection->insert($data);
-        if($insert){
-            $this->success('收藏成功');
+        $map = new Where($data);
+        $isE = $this->memberCollection->getOneDarry($map);
+        if($isE){
+            $this->error('已经收藏过');
         }else{
-            $this->error('收藏失败');
+            $data['create_at'] = time();
+            $insert = $this->memberCollection->insert($data);
+            if($insert){
+                $this->success('收藏成功');
+            }else{
+                $this->error('收藏失败');
+            }
+        }
+    }
+
+    //取消收藏
+    public function delc(){        
+        $uid = input('uid');
+        $pid = input('pid');
+        if(!$uid){
+            $this->error('用户参数错误');
+        }
+        if(!$pid){
+            $this->error('产品参数错误');
+        }
+        $pids = explode(',', $pid);
+        // foreach ($pids as $k => $v) {
+        //     $data[$k]['pid'] = $v,
+        //     $data[$k]['uid'] => $uid,
+        //     $data[$k]['create_at'] => time(),
+        // }
+        $data = [
+            'uid' => $uid,
+            'pid' => ['in', $pids],
+        ];
+        // halt($data);
+        $map = new Where($data);
+        $del = $this->memberCollection->where($map)->delete();
+        if($del){
+            $this->success('取消收藏成功');
+        }else{
+            $this->error('取消收藏失败');
         }
     }
 
