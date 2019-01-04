@@ -46,7 +46,7 @@ class BasicApi
      * @param array $data 返回数据
      * @param integer $code 返回代码
      */
-    protected function success($msg, $data = [], $code = 1)
+    protected function success($msg, $data = null, $code = 1)
     {
         ToolsService::success($msg, $data, $code);
     }
@@ -57,7 +57,7 @@ class BasicApi
      * @param array $data 返回数据
      * @param integer $code 返回代码
      */
-    protected function error($msg, $data = [], $code = 0)
+    protected function error($msg, $data = null, $code = 0)
     {
         ToolsService::error($msg, $data, $code);
     }
