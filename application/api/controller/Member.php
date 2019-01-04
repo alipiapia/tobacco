@@ -166,7 +166,7 @@ class Member extends BasicApi
             if($send['code'] == 0){
                 $isE['code'] = $code;
                 $isE['create_at'] = time();
-                // $this->SmsLog->allowField(true)->isUpdate(true)->save($isE);    
+                $this->SmsLog->allowField(true)->isUpdate(true)->save($isE);    
                 $this->success('发送成功');            
             }else{
                 $this->error($send['message']);
