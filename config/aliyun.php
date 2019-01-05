@@ -1,6 +1,6 @@
 <?php
 
 return [
-	'SmsAppid' => '1',
-	'SmsAppkey' => '2',
+	'SmsAppid' => 'LTAIqTmeVhOSkODU',
+	'SmsAppkey' => 'q2S6iOZcp4yVbXqXHyBGSaibAQ2nwt',
 ];

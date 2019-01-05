@@ -134,7 +134,7 @@ class Product extends BasicApi
         $map = new Where($map);
         // halt($map);
         $list = $this->product->getLists($map, '', 'id,title,logo');
-        $list = $list ? $list : null;
+        $list = $list ? $list[0] : null;
         // halt($list);
         $this->success('请求成功', $list);
     }
