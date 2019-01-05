@@ -61,6 +61,7 @@ class Member extends BasicApi
         }
         $map = new Where($map);
         $list = $this->member->getLists($map, '', 'id,username,nickname,role,phone,status,avatar');
+        $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
     }
@@ -144,6 +145,8 @@ class Member extends BasicApi
 
     //发送验证码
     public function send_code(){
+        // $send = send_sms('18208702258', '111111', '1', []);
+        // halt($send);
         $phone = input('phone');
         if(!is_mobile($phone)){
             $this->error('请输入正确手机号码');
@@ -151,7 +154,7 @@ class Member extends BasicApi
         $code = create_code();
         // $send = send_sms($phone, $code);
         // halt($send);
-        $this->success('发送成功');
+        $this->success('发送成功', '111111');
 
         $map = [
             'phone' => ['eq', $phone],
@@ -168,7 +171,7 @@ class Member extends BasicApi
                 $isE['code'] = $code;
                 $isE['create_at'] = time();
                 $this->SmsLog->allowField(true)->isUpdate(true)->save($isE);    
-                $this->success('发送成功');            
+                $this->success('发送成功', $code);            
             }else{
                 $this->error($send['message']);
             }
@@ -181,7 +184,7 @@ class Member extends BasicApi
                     'create_at' => time()
                 ];
                  $this->SmsLog->insert($data);
-                 $this->success('发送成功');
+                 $this->success('发送成功', $code);
              }else{
                 $this->error($send['message']);
              }
@@ -283,6 +286,7 @@ class Member extends BasicApi
         ];
         $map = new Where($map);
         $list = $this->memberCollection->getLists($map);
+        $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
     }
@@ -300,13 +304,55 @@ class Member extends BasicApi
         $data = [
             'uid' => $uid,
             'pid' => $pid,
-            'create_at' => time(),
         ];
-        $insert = $this->memberCollection->insert($data);
-        if($insert){
-            $this->success('收藏成功');
+        $map = new Where($data);
+        $isE = $this->memberCollection->getOneDarry($map);
+        if($isE){
+            // $this->error('已经收藏过');
+            $del = $this->memberCollection->where($data)->delete();
+            if($del){
+                $this->success('取消收藏成功');
+            }else{
+                $this->error('取消收藏失败');
+            }
         }else{
-            $this->error('收藏失败');
+            $data['create_at'] = time();
+            $insert = $this->memberCollection->insert($data);
+            if($insert){
+                $this->success('收藏成功');
+            }else{
+                $this->error('收藏失败');
+            }
+        }
+    }
+
+    //取消收藏
+    public function delc(){        
+        $uid = input('uid');
+        $pid = input('pid');
+        if(!$uid){
+            $this->error('用户参数错误');
+        }
+        if(!$pid){
+            $this->error('产品参数错误');
+        }
+        $pids = explode(',', $pid);
+        // foreach ($pids as $k => $v) {
+        //     $data[$k]['pid'] = $v,
+        //     $data[$k]['uid'] => $uid,
+        //     $data[$k]['create_at'] => time(),
+        // }
+        $data = [
+            'uid' => $uid,
+            'pid' => ['in', $pids],
+        ];
+        // halt($data);
+        $map = new Where($data);
+        $del = $this->memberCollection->where($map)->delete();
+        if($del){
+            $this->success('取消收藏成功');
+        }else{
+            $this->error('取消收藏失败');
         }
     }
 
@@ -321,6 +367,7 @@ class Member extends BasicApi
         ];
         $map = new Where($map);
         $list = $this->memberMessage->getLists($map);
+        $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
     }
