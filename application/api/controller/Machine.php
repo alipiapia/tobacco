@@ -55,6 +55,7 @@ class Machine extends BasicApi
         foreach ($list as $k => $v) {
             $list[$k]['pid'] = input('pid');
         }
+        $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
     }

@@ -88,6 +88,7 @@ class Product extends BasicApi
         $map = new Where($map);
         // halt($map);
         $list = $this->product->getLists($map, '', 'id,title,logo');
+        $list = $list ? $list : null;
         // foreach ($list as $k => $v) {
         //     $map = ['id' => $v['id']];
         //     $machinInfo = $this->machine->getOneDarry($map, 'id,title,item');
@@ -133,6 +134,7 @@ class Product extends BasicApi
         $map = new Where($map);
         // halt($map);
         $list = $this->product->getLists($map, '', 'id,title,logo');
+        $list = $list ? $list : null;
         // halt($list);
         $this->success('请求成功', $list);
     }

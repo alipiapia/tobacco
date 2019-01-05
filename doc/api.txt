@@ -85,13 +85,13 @@
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						
-			5-5	添加收藏
+			5-5	收藏/取消[单个]
 						地址:/api/member/addc
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						参数：pid		(用户pid		类型：int		是否必填：必填)
 						
-			5-5	取消收藏
+			5-5	取消收藏【多个】
 						地址:/api/member/delc
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)

@@ -61,6 +61,7 @@ class Member extends BasicApi
         }
         $map = new Where($map);
         $list = $this->member->getLists($map, '', 'id,username,nickname,role,phone,status,avatar');
+        $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
     }
@@ -285,6 +286,7 @@ class Member extends BasicApi
         ];
         $map = new Where($map);
         $list = $this->memberCollection->getLists($map);
+        $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
     }
@@ -306,7 +308,13 @@ class Member extends BasicApi
         $map = new Where($data);
         $isE = $this->memberCollection->getOneDarry($map);
         if($isE){
-            $this->error('已经收藏过');
+            // $this->error('已经收藏过');
+            $del = $this->memberCollection->where($data)->delete();
+            if($del){
+                $this->success('取消收藏成功');
+            }else{
+                $this->error('取消收藏失败');
+            }
         }else{
             $data['create_at'] = time();
             $insert = $this->memberCollection->insert($data);
@@ -359,6 +367,7 @@ class Member extends BasicApi
         ];
         $map = new Where($map);
         $list = $this->memberMessage->getLists($map);
+        $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
     }
