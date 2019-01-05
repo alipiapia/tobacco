@@ -22,17 +22,17 @@
         </div>
     </div>
 
-    <!--{if !empty($spec_type)}-->
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">类型</label>
+    <!--{if !empty($brands)}-->
+    <div class="layui-form-item  layui-inline">
+        <label class="layui-form-label">品牌</label>
         <div class="layui-input-inline">
-            <select name="type" lay-search>
-                <option value="">类型</option>
-                {foreach $spec_type as $spec}
-                <!--{if $Think.get.type eq $spec.id}-->
-                <option selected="selected" value="{$spec.id}">{$spec.title}</option>
+            <select name="brand" lay-verify="required" lay-search>
+                <option>请选择品牌</option>
+                {foreach $brands as $brand}
+                <!--{if $Think.get.brand eq $brand.id}-->
+                <option selected="selected" value="{$brand.id}">{$brand.title}</option>
                 <!--{else}-->
-                <option value="{$spec.id}">{$spec.title}</option>
+                <option value="{$brand.id}">{$brand.title}</option>
                 <!--{/if}-->
                 {/foreach}
             </select>

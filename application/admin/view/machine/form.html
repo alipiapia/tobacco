@@ -15,9 +15,15 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">钢印号匹配规则</label>
+                    <label class="layui-form-label">条盒钢印号匹配规则</label>
                     <div class="layui-input-block">                        
-                        <input name="pattern" value='{$vo["pattern"]|default=""}' title="请输入钢印号匹配规则" placeholder="请输入钢印号匹配规则" class="layui-input">
+                        <input name="tpattern" value='{$vo["tpattern"]|default=""}' required="required" title="请输入条盒钢印号匹配规则" placeholder="请输入条盒钢印号匹配规则" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">小盒钢印号匹配规则</label>
+                    <div class="layui-input-block">                        
+                        <input name="xpattern" value='{$vo["xpattern"]|default=""}' required="required" title="请输入小盒钢印号匹配规则" placeholder="请输入小盒钢印号匹配规则" class="layui-input">
                     </div>
                 </div>
 

@@ -7,9 +7,7 @@
 			1-1	产品列表
 						地址:/api/product/index
 						请求方式:GET
-						参数：title		(名称		类型：string		是否必填：非必填)
-						参数：ttxm		(条条形码		类型：string		是否必填：非必填)
-						参数：htxm		(盒条形码		类型：string		是否必填：非必填)
+						参数：keyword		(名称		类型：string		是否必填：非必填)
 						参数：brand		(品牌名称		类型：string		是否必填：非必填)
 						
 			1-2	产品详情
@@ -22,7 +20,7 @@
 						地址:/api/product/check
 						请求方式:GET
 						参数：txm		(条码txm		类型：string		是否必填：必填)
-						参数：sn		(钢印号		类型：string		是否必填：必填)
+						参数：sn		(钢印号		类型：string		是否必填：必填)【5位即是条盒钢印号，7位则是小盒钢印号】
 		
 	2	公告
 			2-1	公告列表

@@ -67,8 +67,14 @@ class Product extends BasicAdmin
     {
         $this->title = '产品管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'htxm', 'ttxm'] as $key) {
-            (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
+        foreach (['title', 'brand', 'htxm', 'ttxm'] as $key) {
+            if(isset($get[$key]) && $get[$key] !== ''){
+                if($key == 'brand'){
+                    $db->where($key, $get[$key]);
+                }else{
+                    $db->whereLike($key, "%{$get[$key]}%");
+                }
+            }
         }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode(' - ', $get['date']);
@@ -76,7 +82,7 @@ class Product extends BasicAdmin
             $db->whereBetween('create_at', [strtotime("{$start} 00:00:00"), strtotime("{$end} 23:59:59")]);
         }
         // halt($db);
-        return parent::_list($db->where(['is_deleted' => '0']));
+        return parent::_list($db->where(['status' => 0, 'is_deleted' => '0']));
     }
 
     /**

@@ -63,7 +63,7 @@ class Product extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        foreach (['title', 'ttxm', 'htxm', 'brand', 'sn'] as $key) {
+        foreach (['title', 'ttxm', 'htxm', 'brand', 'keyword'] as $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
                 // halt($key);
                 if($key == 'brand'){
@@ -75,11 +75,8 @@ class Product extends BasicApi
                     $bMap = new Where($bMap);
                     $bids = $this->brand->getColumn($bMap, 'id');
                     $map[$key] = ['in', $bids];
-                }elseif($key == 'sn'){
-                    // $mids = $this->getMids($param[$key]);
-                    // if($mids){
-                    //     $map['mid'] = ['in', $mids];
-                    // }
+                }elseif($key == 'keyword'){
+                    $map['title|ttxm|htxm'] = ['like', "%{$param[$key]}%"]; 
                 }else{
                     $map[$key] = ['like', "%{$param[$key]}%"];                    
                 }
@@ -87,7 +84,7 @@ class Product extends BasicApi
         }
         $map = new Where($map);
         // halt($map);
-        $list = $this->product->getLists($map, '', 'id,title,logo');
+        $list = $this->product->getLists($map, '', 'id,title,logo', 1000);
         $list = $list ? $list : null;
         // foreach ($list as $k => $v) {
         //     $map = ['id' => $v['id']];
@@ -165,16 +162,22 @@ class Product extends BasicApi
             'is_deleted' => '0',
         ];
         $mids = [];
-        $mPatterns = $this->machine->getColumn($map, 'id,title,pattern');
+        $mPatterns = $this->machine->getColumn($map, 'id,title,tpattern,xpattern');
         // halt($mPatterns);
         foreach ($mPatterns as $k => $v) {
-            if($v['pattern']){
-                $match = preg_match($v['pattern'], $sn, $matches);
+            if((strlen($sn) == 5) && $v['tpattern']){
+                $match = preg_match($v['tpattern'], $sn, $matches);
                 // halt($match);
                 if($match){
                     $mids[] = $v['id'];
-                }
-                
+                }                
+            }
+            if((strlen($sn) == 7) && $v['xpattern']){
+                $match = preg_match($v['xpattern'], $sn, $matches);
+                // halt($match);
+                if($match){
+                    $mids[] = $v['id'];
+                }                
             }
         }
         // halt($mids);
