@@ -371,4 +371,53 @@ class Member extends BasicApi
         // halt($map);
         $this->success('请求成功', $list);
     }
+
+    //聊天室
+    public function chat(){
+        $create_by = input('create_by');
+        $uid = input('uid');
+        if(!$create_by){
+            $this->error('发送用户参数错误');
+        }
+        if(!$uid){
+            $this->error('接收用户参数错误');
+        }
+        $map = [
+            'create_by' => $create_by,
+            'uid' => $uid,
+        ];
+        $map = new Where($map);
+        $list = $this->memberMessage->getLists($map, 'create_at desc', '', 1000);
+        $list = $list ? $list : null;
+        // halt($map);
+        $this->success('请求成功', $list);
+    }
+
+    //发送消息
+    public function addm(){
+        $create_by = input('create_by');
+        $uid = input('uid');
+        $content = input('content');
+        if(!$create_by){
+            $this->error('发送用户参数错误');
+        }
+        if(!$uid){
+            $this->error('接收用户参数错误');
+        }
+        if(!$content){
+            $this->error('消息内容不能为空');
+        }
+        $data = [
+            'create_by' => $create_by,
+            'uid' => $uid,
+            'content' => $content,
+            'create_at' => time(),
+        ];
+        $insert = $this->memberMessage->insert($data);
+        if($insert){
+            $this->success('发送成功', $insert);
+        }else{
+            $this->error('发送失败');
+        }
+    }
 }

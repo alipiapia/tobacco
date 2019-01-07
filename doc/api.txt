@@ -78,29 +78,13 @@
 							pp0002 15999999999 111111 111111 2
 						}
 						
-			5-4	我的收藏
-						地址:/api/member/clist
-						请求方式:GET
+			5-4	头像上传
+						地址:/api/member/upfile
+						请求方式:POST
 						参数：uid		(用户uid		类型：int		是否必填：必填)
+						参数：avatar		(用户头像		类型：FILE		是否必填：必填)
 						
-			5-5	收藏/取消[单个]
-						地址:/api/member/addc
-						请求方式:GET
-						参数：uid		(用户uid		类型：int		是否必填：必填)
-						参数：pid		(用户pid		类型：int		是否必填：必填)
-						
-			5-5	取消收藏【多个】
-						地址:/api/member/delc
-						请求方式:GET
-						参数：uid		(用户uid		类型：int		是否必填：必填)
-						参数：pid		(用户pid		类型：string		是否必填：必填		demo:"1,2,3")
-						
-			5-6	我的消息
-						地址:/api/member/mlist
-						请求方式:GET
-						参数：uid		(用户uid		类型：int		是否必填：必填)
-						
-			5-7	用户信息修改
+			5-5	用户信息修改
 						地址:/api/member/upinfo
 						请求方式:GET/POST
 						参数：id		(用户id		类型：int		是否必填：必填)
@@ -110,8 +94,47 @@
 						参数：role		(用户角色role		类型：string		是否必填：非必填)
 						参数：avatar		(用户头像		类型：string		是否必填：非必填)
 						
-			5-8	头像上传
-						地址:/api/member/upfile
-						请求方式:POST
+	6	收藏
+			6-1	我的收藏
+						地址:/api/member/clist
+						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
-						参数：avatar		(用户头像		类型：FILE		是否必填：必填)
+						
+			6-2	收藏/取消[单个]
+						地址:/api/member/addc
+						请求方式:GET
+						参数：uid		(用户uid		类型：int		是否必填：必填)
+						参数：pid		(用户pid		类型：int		是否必填：必填)
+						
+			6-3	取消收藏【多个】
+						地址:/api/member/delc
+						请求方式:GET
+						参数：uid		(用户uid		类型：int		是否必填：必填)
+						参数：pid		(用户pid		类型：string		是否必填：必填		demo:"1,2,3")
+			
+	7	消息
+			7-1	在线咨询用户列表
+						地址:/api/member/index?role=1
+						请求方式:GET
+						参数：username		(用户username		类型：string		是否必填：非必填)
+						参数：nickname		(用户nickname		类型：string		是否必填：非必填)
+						参数：role		(用户role		类型：string		是否必填：非必填)
+						参数：phone		(用户phone		类型：string		是否必填：非必填)
+						
+			7-2	我的消息
+						地址:/api/member/mlist
+						请求方式:GET
+						参数：uid		(用户uid		类型：int		是否必填：必填)
+						
+			7-3	聊天室/消息列表
+						地址:/api/member/chat
+						请求方式:GET
+						参数：create_by		(发送用户create_by		类型：int		是否必填：必填)
+						参数：uid		(接收用户uid		类型：int		是否必填：必填)
+						
+			7-4	发送消息
+						地址:/api/member/addm
+						请求方式:POST
+						参数：create_by		(发送用户create_by		类型：int		是否必填：必填)
+						参数：uid		(接收用户uid		类型：int		是否必填：必填)
+						参数：content		(内容content		类型：string		是否必填：必填)
