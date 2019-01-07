@@ -70,7 +70,7 @@ class Member extends BasicAdmin
             list($start, $end) = explode(' - ', $get['date']);
             $db->whereBetween('login_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
         }
-        return parent::_list();
+        return parent::_list($db->where(['is_deleted' => 0]));
     }
 
     /**

@@ -47,6 +47,7 @@ class Product extends BasicApi
         $this->machine = model('common/Machine');
         $this->machineSpec = model('common/MachineSpec');
         $this->machineItem = model('common/MachineItem');
+        $this->memberCollection = model('common/MemberCollection');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
         $this->size = isset($param['size']) ? $param['size'] : 10;
@@ -106,11 +107,15 @@ class Product extends BasicApi
     {
         $txm = input('txm');
         $sn = input('sn');
+        $uid = input('uid');
         if(!$txm){
             $this->error('条码参数错误');
         }
         if(!$sn){
             $this->error('钢印号参数错误');
+        }
+        if(!$uid){
+            $this->error('用户参数错误');
         }
         $map = [
             'status' => 0,
@@ -144,6 +149,8 @@ class Product extends BasicApi
             $mItem = $this->formatItem($info['item'], $machinInfo['item']);
             $info = array_merge($info, $mItem);
             unset($info['item']);
+            $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => $newPids[0]]);
+            $info['is_collect'] = $collect ? 1 : 0;
             $list = $info;
         }
         // halt($list);
@@ -158,6 +165,9 @@ class Product extends BasicApi
         if(!input('mid')){
             $this->error('机型参数错误');
         }
+        if(!input('uid')){
+            $this->error('用户参数错误');
+        }
         $pMap = ['id' => input('pid')];
         $mMap = ['id' => input('mid')];
         $info = $this->product->getOneDarry($pMap, 'id,title,ttxm,htxm,brand,video,video_thumb,item');
@@ -165,6 +175,8 @@ class Product extends BasicApi
         $mItem = $this->formatItem($info['item'], $machinInfo['item']);
         $info = array_merge($info, $mItem);
         unset($info['item']);
+        $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => input('pid')]);
+        $info['is_collect'] = $collect ? 1 : 0;
         $this->success('请求成功', $info);
     }
 

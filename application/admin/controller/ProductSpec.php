@@ -63,7 +63,7 @@ class ProductSpec extends BasicAdmin
             // $db->whereBetween('login_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
             $db->whereBetween('create_at', [strtotime("{$start} 00:00:00"), strtotime("{$end} 23:59:59")]);
         }
-        return parent::_list();
+        return parent::_list($db->where(['is_deleted' => 0]));
     }
 
     /**
