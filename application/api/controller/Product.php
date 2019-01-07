@@ -88,7 +88,7 @@ class Product extends BasicApi
         }
         $map = new Where($map);
         // halt($map);
-        $list = $this->product->getNewPageLists($map, '', 'id,title,logo', $this->page, $size);
+        $list = $this->product->getNewPageLists($map, '', 'id,title,logo', $this->page, $this->size);
         $list = $list ? $list : null;
         // foreach ($list as $k => $v) {
         //     $map = ['id' => $v['id']];
