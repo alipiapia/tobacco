@@ -47,6 +47,10 @@ class Product extends BasicApi
         $this->machine = model('common/Machine');
         $this->machineSpec = model('common/MachineSpec');
         $this->machineItem = model('common/MachineItem');
+        $param = $this->request->param();
+        $this->page = isset($param['page']) ? $param['page'] : 1;
+        $this->size = isset($param['size']) ? $param['size'] : 10;
+        // halt($param);
         // $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
         // foreach ($specs as $k => $v) {
         //     $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
@@ -84,7 +88,7 @@ class Product extends BasicApi
         }
         $map = new Where($map);
         // halt($map);
-        $list = $this->product->getLists($map, '', 'id,title,logo', 1000);
+        $list = $this->product->getNewPageLists($map, '', 'id,title,logo', $this->page, $size);
         $list = $list ? $list : null;
         // foreach ($list as $k => $v) {
         //     $map = ['id' => $v['id']];

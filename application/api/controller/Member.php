@@ -40,6 +40,10 @@ class Member extends BasicApi
         $this->memberMessage = model('common/MemberMessage');
         $this->memberCollection = model('common/MemberCollection');
         $this->SmsLog = model('common/SmsLog');
+        $param = $this->request->param();
+        $this->page = isset($param['page']) ? $param['page'] : 1;
+        $this->size = isset($param['size']) ? $param['size'] : 10;
+        // halt($param);
     }
 
     //列表
@@ -60,7 +64,7 @@ class Member extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->member->getLists($map, '', 'id,username,nickname,role,phone,status,avatar', 1000);
+        $list = $this->member->getNewPageLists($map, '', 'id,username,nickname,role,phone,status,avatar', $this->page, $this->size);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
@@ -285,7 +289,7 @@ class Member extends BasicApi
             'uid' => $uid,
         ];
         $map = new Where($map);
-        $list = $this->memberCollection->getLists($map, '', '', 1000);
+        $list = $this->memberCollection->getNewPageLists($map, '', '', $this->page, $this->size);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
@@ -366,7 +370,7 @@ class Member extends BasicApi
             'uid' => $uid,
         ];
         $map = new Where($map);
-        $list = $this->memberMessage->getLists($map, '', '', 1000);
+        $list = $this->memberMessage->getNewPageLists($map, '', '', $this->page, $this->size);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
@@ -387,7 +391,7 @@ class Member extends BasicApi
             'uid' => $uid,
         ];
         $map = new Where($map);
-        $list = $this->memberMessage->getLists($map, 'create_at desc', '', 1000);
+        $list = $this->memberMessage->getNewPageLists($map, 'create_at desc', '', $this->page, $this->size);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);

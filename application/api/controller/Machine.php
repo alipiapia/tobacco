@@ -32,6 +32,10 @@ class Machine extends BasicApi
     public function __construct(){
         parent::__construct();
         $this->machine = model('common/Machine');
+        $param = $this->request->param();
+        $this->page = isset($param['page']) ? $param['page'] : 1;
+        $this->size = isset($param['size']) ? $param['size'] : 10;
+        // halt($param);
     }
 
     //列表
@@ -51,7 +55,7 @@ class Machine extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->machine->getLists($map, '', 'id as mid,title', 1000);
+        $list = $this->machine->getNewPageLists($map, '', 'id,title,logo', $this->page, $this->size);
         foreach ($list as $k => $v) {
             $list[$k]['pid'] = input('pid');
         }

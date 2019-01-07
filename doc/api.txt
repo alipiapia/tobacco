@@ -9,6 +9,8 @@
 						请求方式:GET
 						参数：keyword		(名称		类型：string		是否必填：非必填)
 						参数：brand		(品牌名称		类型：string		是否必填：非必填)
+						参数：page		(页码		类型：int		是否必填：非必填	默认：第1页)
+						参数：size		(每页数量		类型：int		是否必填：非必填	默认：10条)
 						
 			1-2	产品详情
 						地址:/api/product/info
@@ -28,6 +30,8 @@
 						请求方式:GET
 						参数：title		(名称		类型：string		是否必填：非必填)
 						参数：desc		(描述		类型：string		是否必填：非必填)
+						参数：page		(页码		类型：int		是否必填：非必填	默认：第1页)
+						参数：size		(每页数量		类型：int		是否必填：非必填	默认：10条)
 						
 			2-2	公告详情
 						地址:/api/notice/info
@@ -40,6 +44,8 @@
 						请求方式:GET
 						参数：title		(名称		类型：string		是否必填：非必填)
 						参数：desc		(描述		类型：string		是否必填：非必填)
+						参数：page		(页码		类型：int		是否必填：非必填	默认：第1页)
+						参数：size		(每页数量		类型：int		是否必填：非必填	默认：10条)
 						
 	4	机型
 			4-1	机型列表
@@ -47,6 +53,8 @@
 						请求方式:GET
 						参数：pid		(产品id		类型：int		是否必填：必填)
 						参数：title		(名称		类型：string		是否必填：非必填)
+						参数：page		(页码		类型：int		是否必填：非必填	默认：第1页)
+						参数：size		(每页数量		类型：int		是否必填：非必填	默认：10条)
 						
 	5	会员
 			5-1	会员列表【在线咨询列表：role=1】
@@ -56,6 +64,8 @@
 						参数：nickname		(用户nickname		类型：string		是否必填：非必填)
 						参数：role		(用户role		类型：string		是否必填：非必填)
 						参数：phone		(用户phone		类型：string		是否必填：非必填)
+						参数：page		(页码		类型：int		是否必填：非必填	默认：第1页)
+						参数：size		(每页数量		类型：int		是否必填：非必填	默认：10条)
 						
 			5-2	登录-发送验证码【前端做60s，验证码5分钟有效】
 						地址:/api/member/send_code
@@ -99,6 +109,8 @@
 						地址:/api/member/clist
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
+						参数：page		(页码		类型：int		是否必填：非必填	默认：第1页)
+						参数：size		(每页数量		类型：int		是否必填：非必填	默认：10条)
 						
 			6-2	收藏/取消[单个]
 						地址:/api/member/addc
@@ -120,17 +132,23 @@
 						参数：nickname		(用户nickname		类型：string		是否必填：非必填)
 						参数：role		(用户role		类型：string		是否必填：非必填)
 						参数：phone		(用户phone		类型：string		是否必填：非必填)
+						参数：page		(页码		类型：int		是否必填：非必填	默认：第1页)
+						参数：size		(每页数量		类型：int		是否必填：非必填	默认：10条)
 						
-			7-2	我的消息
+			7-2	我的消息列表
 						地址:/api/member/mlist
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
+						参数：page		(页码		类型：int		是否必填：非必填	默认：第1页)
+						参数：size		(每页数量		类型：int		是否必填：非必填	默认：10条)
 						
 			7-3	聊天室/消息列表
 						地址:/api/member/chat
 						请求方式:GET
 						参数：create_by		(发送用户create_by		类型：int		是否必填：必填)
 						参数：uid		(接收用户uid		类型：int		是否必填：必填)
+						参数：page		(页码		类型：int		是否必填：非必填	默认：第1页)
+						参数：size		(每页数量		类型：int		是否必填：非必填	默认：10条)
 						
 			7-4	发送消息
 						地址:/api/member/addm

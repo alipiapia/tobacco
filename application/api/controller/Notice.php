@@ -32,6 +32,10 @@ class Notice extends BasicApi
     public function __construct(){
         parent::__construct();
         $this->notice = model('common/Notice');
+        $param = $this->request->param();
+        $this->page = isset($param['page']) ? $param['page'] : 1;
+        $this->size = isset($param['size']) ? $param['size'] : 10;
+        // halt($param);
     }
 
     //列表
@@ -48,7 +52,7 @@ class Notice extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->notice->getLists($map, '', 'id,title,desc,content,create_at', 1000);
+        $list = $this->notice->getNewPageLists($map, '', 'id,title,desc,content,create_at', $this->page, $this->size);
         foreach ($list as $k => $v) {
             $list[$k]['create_at'] = date('Y-m-d', $v['create_at']);
         }

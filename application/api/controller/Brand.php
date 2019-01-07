@@ -32,6 +32,10 @@ class Brand extends BasicApi
     public function __construct(){
         parent::__construct();
         $this->brand = model('common/Brand');
+        $param = $this->request->param();
+        $this->page = isset($param['page']) ? $param['page'] : 1;
+        $this->size = isset($param['size']) ? $param['size'] : 10;
+        // halt($param);
     }
 
     //列表
@@ -48,7 +52,7 @@ class Brand extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->brand->getLists($map, '', 'id,title,logo,desc', 1000);
+        $list = $this->brand->getNewPageLists($map, '', 'id,title,logo,desc', $this->page, $this->size);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
