@@ -60,7 +60,7 @@ class Member extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->member->getLists($map, '', 'id,username,nickname,role,phone,status,avatar');
+        $list = $this->member->getLists($map, '', 'id,username,nickname,role,phone,status,avatar', 1000);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
@@ -285,7 +285,7 @@ class Member extends BasicApi
             'uid' => $uid,
         ];
         $map = new Where($map);
-        $list = $this->memberCollection->getLists($map);
+        $list = $this->memberCollection->getLists($map, '', '', 1000);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
@@ -366,7 +366,7 @@ class Member extends BasicApi
             'uid' => $uid,
         ];
         $map = new Where($map);
-        $list = $this->memberMessage->getLists($map);
+        $list = $this->memberMessage->getLists($map, '', '', 1000);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);

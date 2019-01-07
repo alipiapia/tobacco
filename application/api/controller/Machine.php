@@ -51,7 +51,7 @@ class Machine extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->machine->getLists($map, '', 'id as mid,title');
+        $list = $this->machine->getLists($map, '', 'id as mid,title', 1000);
         foreach ($list as $k => $v) {
             $list[$k]['pid'] = input('pid');
         }

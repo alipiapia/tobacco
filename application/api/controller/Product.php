@@ -132,6 +132,16 @@ class Product extends BasicApi
         // halt($map);
         $list = $this->product->getLists($map, '', 'id,title,logo');
         $list = $list ? $list[0] : null;
+        if($list){
+            $pMap = ['id' => $list['id']];
+            $mMap = ['id' => $newPids[0]];
+            $info = $this->product->getOneDarry($pMap, 'id,title,ttxm,htxm,brand,video,video_thumb,item');
+            $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
+            $mItem = $this->formatItem($info['item'], $machinInfo['item']);
+            $info = array_merge($info, $mItem);
+            unset($info['item']);
+            $list = $info;
+        }
         // halt($list);
         $this->success('请求成功', $list);
     }

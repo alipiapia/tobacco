@@ -48,7 +48,7 @@ class Notice extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->notice->getLists($map, '', 'id,title,desc,content,create_at');
+        $list = $this->notice->getLists($map, '', 'id,title,desc,content,create_at', 1000);
         foreach ($list as $k => $v) {
             $list[$k]['create_at'] = date('Y-m-d', $v['create_at']);
         }

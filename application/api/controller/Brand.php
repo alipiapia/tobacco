@@ -48,7 +48,7 @@ class Brand extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->brand->getLists($map, '', 'id,title,logo,desc');
+        $list = $this->brand->getLists($map, '', 'id,title,logo,desc', 1000);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
