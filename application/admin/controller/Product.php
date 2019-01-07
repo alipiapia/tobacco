@@ -82,7 +82,7 @@ class Product extends BasicAdmin
             $db->whereBetween('create_at', [strtotime("{$start} 00:00:00"), strtotime("{$end} 23:59:59")]);
         }
         // halt($db);
-        return parent::_list($db->where(['status' => 0, 'is_deleted' => '0']));
+        return parent::_list();
     }
 
     /**

@@ -315,7 +315,7 @@ class Member extends BasicApi
             // $this->error('已经收藏过');
             $del = $this->memberCollection->where($data)->delete();
             if($del){
-                $this->success('取消收藏成功');
+                $this->success('取消收藏成功', 2);
             }else{
                 $this->error('取消收藏失败');
             }
@@ -323,7 +323,7 @@ class Member extends BasicApi
             $data['create_at'] = time();
             $insert = $this->memberCollection->insert($data);
             if($insert){
-                $this->success('收藏成功');
+                $this->success('收藏成功', 1);
             }else{
                 $this->error('收藏失败');
             }
