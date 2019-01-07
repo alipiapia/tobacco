@@ -119,6 +119,7 @@
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						参数：pid		(产品pid		类型：int		是否必填：必填)
+						参数：mid		(机型mid		类型：int		是否必填：必填)
 						
 			6-3	取消收藏【多个】
 						地址:/api/member/delc

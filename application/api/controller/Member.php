@@ -37,6 +37,8 @@ class Member extends BasicApi
         $this->table = 'Member';
         $this->member = model('common/Member');
         $this->product = model('common/Product');
+        $this->brand = model('common/Brand');
+        $this->machine = model('common/Machine');
         $this->memberMessage = model('common/MemberMessage');
         $this->memberCollection = model('common/MemberCollection');
         $this->SmsLog = model('common/SmsLog');
@@ -206,7 +208,7 @@ class Member extends BasicApi
         if (!$file->checkExt(strtolower(sysconf('storage_local_exts')))) {
             $this->error('文件上传类型受限');
         }
-        $names = ['avatar', $uid];
+        $names = ['avatar/'.date('Y-m-d'), md5($uid)];
         $ext = strtolower(pathinfo($file->getInfo('name'), 4));
         $ext = $ext ? $ext : 'tmp';
         $filename = "{$names[0]}/{$names[1]}.{$ext}";
@@ -291,6 +293,16 @@ class Member extends BasicApi
         $map = new Where($map);
         $list = $this->memberCollection->getNewPageLists($map, '', '', $this->page, $this->size);
         $list = $list ? $list : null;
+        if($list){
+            foreach ($list as $k => $v) {
+                $proInfo = $this->product->getOneDarry(['id' => $v['pid']], 'title,logo,brand');
+                $brandInfo = $this->brand->getOneDarry(['id' => $proInfo['brand']], 'title,logo');
+                $list[$k]['title'] = $proInfo['title'];
+                $list[$k]['logo'] = $proInfo['logo'];
+                $list[$k]['brand'] = $brandInfo['logo'];
+                $list[$k]['mid'] = $this->machine->getValue(['id' => $v['mid']], 'title');
+            }
+        }
         // halt($map);
         $this->success('请求成功', $list);
     }
@@ -299,15 +311,20 @@ class Member extends BasicApi
     public function addc(){        
         $uid = input('uid');
         $pid = input('pid');
+        $mid = input('mid');
         if(!$uid){
             $this->error('用户参数错误');
         }
         if(!$pid){
             $this->error('产品参数错误');
         }
+        if(!$mid){
+            $this->error('机型参数错误');
+        }
         $data = [
             'uid' => $uid,
             'pid' => $pid,
+            'mid' => $mid,
         ];
         $map = new Where($data);
         $isE = $this->memberCollection->getOneDarry($map);
