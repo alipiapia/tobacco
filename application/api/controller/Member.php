@@ -89,6 +89,7 @@ class Member extends BasicApi
         ];
         $map = new Where($map);
         $info = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
+        $info = $info ? $info : null;
         // halt($map);
         $this->success('请求成功', $info);
     }
@@ -419,17 +420,21 @@ class Member extends BasicApi
         $map = new Where($map);
         $list = $this->memberMessage->getNewPageLists($map, 'create_at desc', 'id,uid,create_by,title,desc,content,create_at', $this->page, $this->size);
         $list = $list ? $list : null;
+        // halt($list);
         if($list){
             foreach ($list as $k => $v) {
-                $umap = [
-                    'id' => $v['uid'],
-                ];
-                $umap = new Where($umap);
+                // $map = [
+                //     'id' => ['eq', $v['uid']],
+                // ];
+                // $map = new Where($map);
+                // $info = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
+                // halt($info);
                 // $list[$k]['uid'] = $this->member->getOneDarry($umap, 'id,username,avatar');
                 // $list[$k]['create_by'] = $this->member->getOneDarry(['id' => $v['create_by']], 'id,username,avatar');
+                // $list[$k]['create_by'] = Db::name('member')->where(['id' => 1])->select();
             }
         }
-        // halt($map);
+        // halt($list);
         $this->success('请求成功', $list);
     }
 
