@@ -56,16 +56,16 @@ class Member extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        // if(empty($param['uid'])){
-        //     $this->error('用户参数错误');
-        // }
+        if(empty($param['uid'])){
+            $this->error('用户参数错误');
+        }
         foreach (['username', 'nickname', 'role', 'phone'] as $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
                 if($key == 'role'){
                     $map[$key] = $param[$key];
-                    // if($param[$key] == 1){
-                    //     $map['id'] = ['neq', $param['uid']];
-                    // }
+                    if($param[$key] == 1){
+                        $map['id'] = ['neq', $param['uid']];
+                    }
                 }else{
                     $map[$key] = ['like', "%{$param[$key]}%"];
                 }
