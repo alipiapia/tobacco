@@ -297,11 +297,11 @@ class Member extends BasicApi
             foreach ($list as $k => $v) {
                 $proInfo = $this->product->getOneDarry(['id' => $v['pid']], 'title,logo,brand');
                 $brandInfo = $this->brand->getOneDarry(['id' => $proInfo['brand']], 'title,logo');
-                $list[$k]['mtitle'] = $this->machine->getValue(['id' => $v['mid']], 'title');
                 $list[$k]['title'] = $proInfo['title'];
                 $list[$k]['logo'] = $proInfo['logo'];
                 $list[$k]['brand'] = $brandInfo['logo'];
                 $list[$k]['mid'] = $v['mid'];
+                $list[$k]['mtitle'] = $this->machine->getValue(['id' => $v['mid']], 'title');
             }
         }
         // halt($map);
