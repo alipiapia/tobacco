@@ -105,7 +105,7 @@ class SmsService
     }
 
     //聚合短信
-    function sms_juhe($m, $code){
+    public static function sms_juhe($m, $code){
             /*
             ***聚合数据（JUHE.CN）短信API服务接口PHP请求示例源码
             ***DATE:2015-05-25
@@ -121,7 +121,7 @@ class SmsService
             'tpl_value' =>'#code#='.$code //您设置的模板变量，根据实际情况修改
         );
          
-        $content = juhecurl($sendUrl,$smsConf,1); //请求发送短信
+        $content = self::sms_curl($sendUrl,$smsConf,1); //请求发送短信
          
         if($content){
             $result = json_decode($content,true);
@@ -136,7 +136,41 @@ class SmsService
             }
         }else{
             //返回内容异常，以下可根据业务逻辑自行修改
-            return ['code' => $error_code, 'data' => null, 'msg' => "请求发送短信失败"];
+            return ['code' => 1, 'data' => null, 'msg' => "请求发送短信失败"];
+        }
+    }
+
+    //submail短信
+    public static function sms_sub($m, $code){
+        header('content-type:text/html;charset=utf-8');   
+            //<主> https://api.mysubmail.com/message/xsend.json
+           //<备> https://api.submail.cn/message/xsend.json       
+        $sendUrl = 'https://api.mysubmail.com/message/xsend.json'; 
+          
+        $smsConf = array(
+            'appid'   => sysconf('sms_sub_appid'), 
+            'to'    => $m, 
+            'project'    => sysconf('sms_sub_project'), 
+            'signature' => sysconf('sms_sub_signature') ,
+            // 'vars' => ['code' => $code]
+        );
+         
+        $content = self::sms_curl($sendUrl,json_encode($smsConf),1); 
+         halt($content);
+        if($content){
+            $result = json_decode($content,true);
+            $status = $result['status'];
+            if($status == 'success'){
+                //状态为0，说明短信发送成功
+                return ['code' => 0, 'data' => $result['send_id'], 'msg' => "短信发送成功"];
+            }else{
+                //状态非0，说明失败
+                $msg = $result['reason'];
+                return ['code' => 1, 'data' => $msg, 'msg' => "短信发送失败"];
+            }
+        }else{
+            //返回内容异常，以下可根据业务逻辑自行修改
+            return ['code' => 1, 'data' => null, 'msg' => "请求发送短信失败"];
         }
     }
      
@@ -147,7 +181,7 @@ class SmsService
      * @param  int $ipost [是否采用POST形式]
      * @return  string
      */
-    function juhecurl($url,$params=false,$ispost=0){
+    public static function sms_curl($url,$params=false,$ispost=0){
         $httpInfo = array();
         $ch = curl_init();
         curl_setopt( $ch, CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1 );

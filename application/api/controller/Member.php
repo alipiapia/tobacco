@@ -158,6 +158,7 @@ class Member extends BasicApi
     //发送验证码
     public function send_code(){
         // $send = send_sms('18208702258', '111111', '1', []);
+        // $send = send_sms('18208702258', '111111');
         // halt($send);
         $phone = input('phone');
         if(!is_mobile($phone)){
@@ -214,7 +215,7 @@ class Member extends BasicApi
         if (!$file->checkExt(strtolower(sysconf('storage_local_exts')))) {
             $this->error('文件上传类型受限');
         }
-        $names = ['avatar/'.date('Y-m-d'), md5($uid)];
+        $names = ['avatar/'.$uid.'/'.date('Ymd'), md5(time())];
         $ext = strtolower(pathinfo($file->getInfo('name'), 4));
         $ext = $ext ? $ext : 'tmp';
         $filename = "{$names[0]}/{$names[1]}.{$ext}";
@@ -416,8 +417,18 @@ class Member extends BasicApi
             'uid' => $uid,
         ];
         $map = new Where($map);
-        $list = $this->memberMessage->getNewPageLists($map, 'create_at desc', '', $this->page, $this->size);
+        $list = $this->memberMessage->getNewPageLists($map, 'create_at desc', 'id,uid,create_by,title,desc,content,create_at', $this->page, $this->size);
         $list = $list ? $list : null;
+        if($list){
+            foreach ($list as $k => $v) {
+                $umap = [
+                    'id' => $v['uid'],
+                ];
+                $umap = new Where($umap);
+                // $list[$k]['uid'] = $this->member->getOneDarry($umap, 'id,username,avatar');
+                // $list[$k]['create_by'] = $this->member->getOneDarry(['id' => $v['create_by']], 'id,username,avatar');
+            }
+        }
         // halt($map);
         $this->success('请求成功', $list);
     }
