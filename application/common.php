@@ -181,5 +181,5 @@ function is_mobile($mobile) {
 //短信发送
 function send_sms($phone, $code){
     // return ['code' => 0, 'msg' => '发送成功'];
-    return SmsService::smsBao($phone, $code);
+    return SmsService::sms_bao($phone, $code);
 }

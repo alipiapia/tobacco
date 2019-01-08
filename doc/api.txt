@@ -131,6 +131,7 @@
 			7-1	在线咨询用户列表
 						地址:/api/member/index?role=1
 						请求方式:GET
+						参数：uid		(当前登录用户uid		类型：int		是否必填：必填)
 						参数：username		(用户username		类型：string		是否必填：非必填)
 						参数：nickname		(用户nickname		类型：string		是否必填：非必填)
 						参数：role		(用户role		类型：string		是否必填：非必填)
