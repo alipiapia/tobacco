@@ -57,7 +57,7 @@ class ProductSpec extends Model {
 
   //分页数据
   public function getPageLists($where = 1, $order = ['id'], $field = "*", $p = 10){
-    $lists = $this->where($where)->order($order)->paginate($p,false,['query' => request()->get()]);
+    $lists = $this->where($where)->order($order)->field($field)->paginate($p,false,['query' => request()->get()]);
     $page = $lists->render();
     $return_lists = [];
    foreach ($lists as $k => $v){
@@ -68,7 +68,7 @@ class ProductSpec extends Model {
 
   //分页数据/接口用
   public function getNewPageLists($where = 1, $order = ['id'], $field = "*", $page = 1, $size = 10){
-    $lists = $this->where($where)->order($order)->page($page, $size)->select();
+    $lists = $this->where($where)->order($order)->field($field)->page($page, $size)->select();
     $return_lists = [];
    foreach ($lists as $k => $v){
        $return_lists[$k] = $v->toArray();

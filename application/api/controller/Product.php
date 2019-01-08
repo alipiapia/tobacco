@@ -149,7 +149,7 @@ class Product extends BasicApi
             $mItem = $this->formatItem($info['item'], $machinInfo['item']);
             $info = array_merge($info, $mItem);
             unset($info['item']);
-            $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => $newPids[0]]);
+            $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => $newPids[0], 'mid' => $mids[0]]);
             $info['is_collect'] = $collect ? 1 : 0;
             $list = $info;
         }
@@ -175,7 +175,7 @@ class Product extends BasicApi
         $mItem = $this->formatItem($info['item'], $machinInfo['item']);
         $info = array_merge($info, $mItem);
         unset($info['item']);
-        $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => input('pid')]);
+        $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => input('pid'), 'mid' => input('mid')]);
         $info['is_collect'] = $collect ? 1 : 0;
         $this->success('请求成功', $info);
     }
