@@ -139,24 +139,29 @@ class SmsService
             return ['code' => 1, 'data' => null, 'msg' => "请求发送短信失败"];
         }
     }
-
+    
     //submail短信
     public static function sms_sub($m, $code){
-        header('content-type:text/html;charset=utf-8');   
-            //<主> https://api.mysubmail.com/message/xsend.json
-           //<备> https://api.submail.cn/message/xsend.json       
-        $sendUrl = 'https://api.mysubmail.com/message/xsend.json'; 
-          
-        $smsConf = array(
-            'appid'   => sysconf('sms_sub_appid'), 
-            'to'    => $m, 
-            'project'    => sysconf('sms_sub_project'), 
-            'signature' => sysconf('sms_sub_signature') ,
-            // 'vars' => ['code' => $code]
-        );
-         
-        $content = self::sms_curl($sendUrl,json_encode($smsConf),1); 
-         halt($content);
+        //<主> https://api.mysubmail.com/message/send.json
+        //<备> https://api.submail.cn/message/send.json  
+        //<主> https://api.mysubmail.com/message/xsend.json
+        //<备> https://api.submail.cn/message/xsend.json    
+        
+        //curl -d 'appid=31314&to=18208702258&content=【烟草真伪鉴别系统】您的短信验证码：9527，请在5分钟内输入。&signature=db318a385d9563d3655164596d373a20' https://api.mysubmail.com/message/send.json
+        //curl -d 'appid=31314&to=18208702258&project=10H102&signature=db318a385d9563d3655164596d373a20&vars={"code":9527}' https://api.mysubmail.com/message/xsend.json
+        
+        //自定义模板发送
+        $sendUrl = 'https://api.mysubmail.com/message/send.json';       
+        $content = '【烟草真伪鉴别系统】您的验证码是：'.$code.'，5分钟内有效，如非本人操作，请忽略本短信！';
+        $str = 'appid='.sysconf('sms_sub_appid').'&to='.$m.'&content='.$content.'&signature='.sysconf('sms_sub_signature'); 
+
+        //固定模板发送
+        // $sendUrl = 'https://api.mysubmail.com/message/xsend.json';
+        // $str = 'appid='.sysconf('sms_sub_appid').'&to='.$m.'&project='.sysconf('sms_sub_project').'&signature='.sysconf('sms_sub_signature').'&vars={"code":'.$code.'}';
+        
+        // halt($str);         
+        $content = self::sms_curl($sendUrl,$str,1); 
+         // halt($content);
         if($content){
             $result = json_decode($content,true);
             $status = $result['status'];
@@ -165,7 +170,7 @@ class SmsService
                 return ['code' => 0, 'data' => $result['send_id'], 'msg' => "短信发送成功"];
             }else{
                 //状态非0，说明失败
-                $msg = $result['reason'];
+                $msg = $result['msg'];
                 return ['code' => 1, 'data' => $msg, 'msg' => "短信发送失败"];
             }
         }else{
@@ -184,6 +189,8 @@ class SmsService
     public static function sms_curl($url,$params=false,$ispost=0){
         $httpInfo = array();
         $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt( $ch, CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1 );
         curl_setopt( $ch, CURLOPT_USERAGENT , 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22' );
         curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT , 30 );

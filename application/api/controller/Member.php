@@ -168,7 +168,7 @@ class Member extends BasicApi
         $code = create_code();
         // $send = send_sms($phone, $code);
         // halt($send);
-        $this->success('发送成功', '111111');
+        // $this->success('发送成功', '111111');
 
         $map = [
             'phone' => ['eq', $phone],
@@ -405,6 +405,7 @@ class Member extends BasicApi
 
     //聊天室
     public function chat(){
+        // halt(send_sms('18208702258', '1314111'));
         $create_by = input('create_by');
         $uid = input('uid');
         if(!$create_by){
