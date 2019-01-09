@@ -155,15 +155,15 @@ class Member extends BasicAdmin
         $username = get_model_value($post['id'], 'Member','username');
         $data = ['id' => $post['id'], 'password' => $post['password']];
         if (DataService::save($this->table, $data, 'id')) {
-            // $rs = $this->hx->hx_user_update_password($username, $data['password']);
-            // $ret  = json_decode($rs, true);
-            // if(isset($ret['error'])){
-            //     if($ret['error'] == 'duplicate_unique_property_exists'){
-            //         $this->error("用户已存在");
-            //     }else{
-            //         $this->error($ret['error']);
-            //     }
-            // }
+            $rs = $this->hx->hx_user_update_password($username, $data['password']);
+            $ret  = json_decode($rs, true);
+            if(isset($ret['error'])){
+                if($ret['error'] == 'duplicate_unique_property_exists'){
+                    $this->error("用户已存在");
+                }else{
+                    $this->error($ret['error']);
+                }
+            }
             $this->success('密码修改成功，下次请使用新密码登录！', '');
         }
         $this->error('密码修改失败，请稍候再试！');
@@ -192,18 +192,18 @@ class Member extends BasicAdmin
             if (isset($data['id'])) {
                 // halt($data);
                 $data['update_at'] = time();
-                // $oldNickname = Db::name($this->table)->where('id', 'eq', $data['id'])->value('nickname');
-                // if(isset($data['nickname']) && $oldNickname != $data['nickname']){
-                //     $rs = $this->hx->hx_user_update_nickname($data['username'], $data['nickname']);
-                //     $ret  = json_decode($rs, true);
-                //     if(isset($ret['error'])){
-                //         if($ret['error'] == 'duplicate_unique_property_exists'){
-                //             $this->error("用户已存在");
-                //         }else{
-                //             $this->error($ret['error']);
-                //         }
-                //     }
-                // }
+                $oldNickname = Db::name($this->table)->where('id', 'eq', $data['id'])->value('nickname');
+                if(isset($data['nickname']) && $oldNickname != $data['nickname']){
+                    $rs = $this->hx->hx_user_update_nickname($data['username'], $data['nickname']);
+                    $ret  = json_decode($rs, true);
+                    if(isset($ret['error'])){
+                        if($ret['error'] == 'duplicate_unique_property_exists'){
+                            $this->error("用户已存在");
+                        }else{
+                            $this->error($ret['error']);
+                        }
+                    }
+                }
 
                 if(isset($data['phone'])){
                     $editMap = ['phone' => $data['phone'], 'id' => ['neq', $data['id']]];
@@ -267,10 +267,10 @@ class Member extends BasicAdmin
         $username = get_model_value($this->request->post('id'), 'Member','username');
         // if (DataService::update($this->table)) {
         if ($this->member::get($this->request->post('id'))->delete()) {
-            // $hx_delete = $this->hx->hx_user_delete($username);
-            // if($hx_delete){
+            $hx_delete = $this->hx->hx_user_delete($username);
+            if($hx_delete){
                 $this->success("用户删除成功！", '');
-            // }
+            }
         }
         $this->error("用户删除失败，请稍候再试！");
     }
@@ -287,10 +287,10 @@ class Member extends BasicAdmin
         // }
         $username = get_model_value($this->request->post('id'), 'Member','username');
         if (DataService::update($this->table)) {
-            // $hx_deactivate = $this->hx->hx_user_deactivate($username);
-            // if($hx_deactivate){
+            $hx_deactivate = $this->hx->hx_user_deactivate($username);
+            if($hx_deactivate){
                 $this->success("用户禁用成功！", '');
-            // }
+            }
         }
         $this->error("用户禁用失败，请稍候再试！");
     }
@@ -304,10 +304,10 @@ class Member extends BasicAdmin
     {
         $username = get_model_value($this->request->post('id'), 'Member','username');
         if (DataService::update($this->table)) {
-            // $hx_activate = $this->hx->hx_user_activate($username);
-            // if($hx_activate){
+            $hx_activate = $this->hx->hx_user_activate($username);
+            if($hx_activate){
                 $this->success("用户启用成功！", '');
-            // }
+            }
         }
         $this->error("用户启用失败，请稍候再试！");
     }
