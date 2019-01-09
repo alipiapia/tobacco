@@ -423,15 +423,8 @@ class Member extends BasicApi
         // halt($list);
         if($list){
             foreach ($list as $k => $v) {
-                // $map = [
-                //     'id' => ['eq', $v['uid']],
-                // ];
-                // $map = new Where($map);
-                // $info = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
-                // halt($info);
-                // $list[$k]['uid'] = $this->member->getOneDarry($umap, 'id,username,avatar');
-                // $list[$k]['create_by'] = $this->member->getOneDarry(['id' => $v['create_by']], 'id,username,avatar');
-                // $list[$k]['create_by'] = Db::name('member')->where(['id' => 1])->select();
+                $list[$k]['uid'] = $this->member->getOneDarry(['id' => $v['uid']], 'id,username,avatar');
+                $list[$k]['create_by'] = $this->member->getOneDarry(['id' => $v['create_by']], 'id,username,avatar');
             }
         }
         // halt($list);
