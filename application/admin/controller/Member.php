@@ -221,7 +221,7 @@ class Member extends BasicAdmin
             if(!isset($data['id'])){
                 //环信注册验证
                 $data['password'] = '111111';//默认密码
-                // $this->hxReg($data);
+                $this->hxReg($data);
                 $data['create_at'] = time();
             }
         } else {
