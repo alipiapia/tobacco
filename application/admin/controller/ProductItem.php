@@ -18,6 +18,7 @@ use controller\BasicAdmin;
 use service\DataService;
 use service\ToolsService;
 use think\Db;
+use think\db\Where;
 
 /**
  * 产品规格属性 控制器
@@ -40,7 +41,9 @@ class ProductItem extends BasicAdmin
         parent::__construct();
         $this->productSpec = model('common/ProductSpec');
         // $this->specs = $this->productSpec->getColumn(['status' => 0, 'is_deleted' => 0], 'id,title,desc');
-        $this->specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
+        $map = ['status' => 0, 'is_deleted' => 0, 'sort' => ['neq', '555']];
+        $map = new Where($map);
+        $this->specs = $this->productSpec->getLists($map, 'sort asc,id asc', 'id,title,desc,type,mark',0);
         $this->assign('specs',$this->specs);
         // halt($this->specs);
     }
