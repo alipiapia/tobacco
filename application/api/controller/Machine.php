@@ -54,6 +54,7 @@ class Machine extends BasicApi
                 if($key == 'pid'){
                     $map[$key] = [
                         ['eq', $param[$key]],
+                        ['like', "{$param[$key]},%"],
                         ['like', "%,{$param[$key]}"],
                         ['like', "%,{$param[$key]},%"],
                         'or'
