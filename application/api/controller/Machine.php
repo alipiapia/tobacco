@@ -49,9 +49,27 @@ class Machine extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        foreach (['title', 'pid'] as $key) {
+        foreach (['title', 'pid'] as $k => $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
-                $map[$key] = ['like', "%{$param[$key]}%"];
+                if($key == 'pid'){
+                    $map[$key] = [
+                        ['eq', $param[$key]],
+                        ['like', "%,{$param[$key]}"],
+                        ['like', "%,{$param[$key]},%"],
+                        'or'
+                    ];
+                    // $map1 = ['eq', $param[$key]];
+                    // $map2 = ['like', "%,{$param[$key]}"];
+                    // $map3 = ['like', "%,{$param[$key]},%"];
+                    // $map[$key]['_complex'] = [
+                    //     $map1,
+                    //     $map2,
+                    //     '_logic' => 'or'
+                    // ];
+                    // halt($map);
+                }else{
+                    $map[$key] = ['like', "%{$param[$key]}%"];
+                }
             }
         }
         $map = new Where($map);
