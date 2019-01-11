@@ -34,7 +34,7 @@ class Machine extends BasicApi
         $this->machine = model('common/Machine');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
-        $this->size = isset($param['size']) ? $param['size'] : 10;
+        $this->size = isset($param['size']) ? $param['size'] : 50;
         // halt($param);
     }
 
