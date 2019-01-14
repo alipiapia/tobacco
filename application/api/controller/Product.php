@@ -144,13 +144,14 @@ class Product extends BasicApi
         if($list){
             $pMap = ['id' => $list['id']];
             $mMap = ['id' => $newPids[0]];
-            $info = $this->product->getOneDarry($pMap, 'id,title,ttxm,htxm,brand,video,video_thumb,item');
+            $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
             $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
             $mItem = $this->formatItem($info['item'], $machinInfo['item']);
             $info = array_merge($info, $mItem);
             unset($info['item']);
             $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => $newPids[0], 'mid' => $mids[0]]);
             $info['is_collect'] = $collect ? 1 : 0;
+            $info['mid'] = $mids[0];
             $list = $info;
         }
         // halt($list);
@@ -170,13 +171,14 @@ class Product extends BasicApi
         }
         $pMap = ['id' => input('pid')];
         $mMap = ['id' => input('mid')];
-        $info = $this->product->getOneDarry($pMap, 'id,title,ttxm,htxm,brand,video,video_thumb,item');
+        $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
         $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
         $mItem = $this->formatItem($info['item'], $machinInfo['item']);
         $info = array_merge($info, $mItem);
         unset($info['item']);
         $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => input('pid'), 'mid' => input('mid')]);
         $info['is_collect'] = $collect ? 1 : 0;
+        $info['mid'] = input('mid');
         $this->success('请求成功', $info);
     }
 
