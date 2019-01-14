@@ -241,16 +241,16 @@ class Product extends BasicApi
                 // unset($item[$k]);
                 // $item[$k] = $exp;
                 // halt($item[$k]);
-                $itemExp['thumb'] = !empty($exp[0]) ? $exp[0] : null;
-                $itemExp['image'] = !empty($exp[1]) ? $exp[1] : null;
+                $itemExp['thumb'] = !empty($exp[0]) ? $exp[0] : '';
+                $itemExp['image'] = !empty($exp[1]) ? $exp[1] : '';
 
                 //钢印号
-                $itemExpQt1['thumb'] = !empty($exp[0]) ? $exp[0] : null;
-                $itemExpQt1['image'] = !empty($exp[1]) ? $exp[1] : null;
+                $itemExpQt1['thumb'] = !empty($exp[0]) ? $exp[0] : '';
+                $itemExpQt1['image'] = !empty($exp[1]) ? $exp[1] : '';
 
                 //胶点图
-                $itemExpQt2['thumb'] = !empty($exp[2]) ? $exp[2] : null;
-                $itemExpQt2['image'] = !empty($exp[3]) ? $exp[3] : null;
+                $itemExpQt2['thumb'] = !empty($exp[2]) ? $exp[2] : '';
+                $itemExpQt2['image'] = !empty($exp[3]) ? $exp[3] : '';
                 // $itemExp['thumb'] = $exp[0];
                 // $itemExp['image'] = $exp[1];
                 // halt($item[$k]);
