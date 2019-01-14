@@ -212,12 +212,23 @@
                             </div>
                         {/if}
                         {if $spec.type eq '6'}
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">{$spec.title}</label>
-                                <div class="layui-input-block">                        
-                                    <input type="hidden" data-imgs="imgs" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input">
+                            {if condition="in_array($c, ['fwtjthqt', 'fwtjxhqt', 'fwtjyzqt'])"}
+                                {volist name="vo.mitem" id="mt" empty=""}
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$spec.title}({$mt})</label>
+                                    <div class="layui-input-block">                        
+                                        <input type="hidden" data-imgs="imgs" name="item[{$c}-{$key}]" value='{$vo["item"]["$c-$key"]|default=""}' class="layui-input">
+                                    </div>
                                 </div>
-                            </div>
+                                {/volist}
+                            {else /}
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$spec.title}</label>
+                                    <div class="layui-input-block">                        
+                                        <input type="hidden" data-imgs="imgs" name="item[{$c}]" value='{$vo["item"]["$c"]|default=""}' class="layui-input">
+                                    </div>
+                                </div>
+                            {/if}
                         {/if}
                         {if $spec.type eq '7'}
                             <div class="layui-form-item">

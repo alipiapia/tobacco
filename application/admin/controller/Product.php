@@ -18,6 +18,7 @@ use controller\BasicAdmin;
 use service\DataService;
 use service\ToolsService;
 use think\Db;
+use think\db\Where;
 
 /**
  * 产品 控制器
@@ -48,7 +49,7 @@ class Product extends BasicAdmin
         foreach ($specs as $k => $v) {
             $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
         }
-        // halt($machines);
+        // halt($specs);
         $this->specs = $specs;
         $this->assign('specs',$this->specs);
         $this->assign('brands',$brands);
@@ -172,6 +173,20 @@ class Product extends BasicAdmin
             // $data['item'] = unserialize(base64_decode(isset($data['item']) ? $data['item'] : ''));
             // $data['mid'] = explode(',', isset($data['mid']) ? $data['mid'] : '');
             $data['item'] = json_decode(isset($data['item']) ? $data['item'] : '', true);
+            if(isset($data['id'])){
+                $map['pid'] = [
+                        ['eq', $data['id']],
+                        ['like', "{$data['id']},%"],
+                        ['like', "%,{$data['id']}"],
+                        ['like', "%,{$data['id']},%"],
+                        'or'
+                    ];
+                $map = new Where($map);
+                // $mitem = $this->machine->getLists($map, '', 'id,title');
+                $mitem = $this->machine->getColumn($map,'id,title');
+                $data['mitem'] = $mitem;
+                // halt($mitem);
+            }
             // halt($data);
         }
     }
