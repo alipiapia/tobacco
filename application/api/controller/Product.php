@@ -142,17 +142,18 @@ class Product extends BasicApi
         $list = $this->product->getLists($map, '', 'id,title,logo');
         $list = $list ? $list[0] : null;
         if($list){
-            $pMap = ['id' => $list['id']];
-            $mMap = ['id' => $newPids[0]];
-            $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
-            $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
-            $mItem = $this->formatItem($info['item'], $machinInfo['item']);
-            $info = array_merge($info, $mItem);
-            unset($info['item']);
-            $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => $newPids[0], 'mid' => $mids[0]]);
-            $info['is_collect'] = $collect ? 1 : 0;
-            $info['mid'] = $mids[0];
-            $list = $info;
+            // $pMap = ['id' => $list['id']];
+            // $mMap = ['id' => $newPids[0]];
+            // $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
+            // $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
+            // $mItem = $this->formatItem($info['item'], $machinInfo['item']);
+            // $info = array_merge($info, $mItem);
+            // unset($info['item']);
+            // $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => $newPids[0], 'mid' => $mids[0]]);
+            // $info['is_collect'] = $collect ? 1 : 0;
+            // $info['mid'] = $mids[0];
+            // $list = $info;
+            $list = $this->formatItem($list['id'], $newPids[0], input('uid'));
         }
         // halt($list);
         $this->success('请求成功', $list);
@@ -169,16 +170,17 @@ class Product extends BasicApi
         if(!input('uid')){
             $this->error('用户参数错误');
         }
-        $pMap = ['id' => input('pid')];
-        $mMap = ['id' => input('mid')];
-        $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
-        $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
-        $mItem = $this->formatItem($info['item'], $machinInfo['item']);
-        $info = array_merge($info, $mItem);
-        unset($info['item']);
-        $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => input('pid'), 'mid' => input('mid')]);
-        $info['is_collect'] = $collect ? 1 : 0;
-        $info['mid'] = input('mid');
+        $info = $this->formatItem(input('pid'), input('mid'), input('uid'));
+        // $pMap = ['id' => input('pid')];
+        // $mMap = ['id' => input('mid')];
+        // $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
+        // $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
+        // $mItem = $this->formatItem($info['item'], $machinInfo['item']);
+        // $info = array_merge($info, $mItem);
+        // unset($info['item']);
+        // $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => input('pid'), 'mid' => input('mid')]);
+        // $info['is_collect'] = $collect ? 1 : 0;
+        // $info['mid'] = input('mid');
         $this->success('请求成功', $info);
     }
 
@@ -213,9 +215,13 @@ class Product extends BasicApi
     }
 
     //item
-    private function formatItem($item, $mItem, $title = 'title'){
-        $item = json_decode($item, true);
-        $mItem = json_decode($mItem, true);
+    private function formatItem($pid, $mid, $uid, $title = 'title'){
+        $pMap = ['id' => $pid];
+        $mMap = ['id' => $mid];
+        $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
+        $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
+        $item = json_decode($info['item'], true);
+        $mItem = json_decode($machinInfo['item'], true);
         // halt($item);
         // halt($mItem);
         // $ht = "<table class='GeneratedTable'<thead><tr><th>Header</th><th>Header</th></tr></thead><tbody>";
@@ -235,63 +241,82 @@ class Product extends BasicApi
                 // unset($item[$k]);
                 // $item[$k] = $exp;
                 // halt($item[$k]);
-                $itemExp['thumb'] = !empty($exp[0]) ? $exp[0] : '';
-                $itemExp['image'] = !empty($exp[1]) ? $exp[1] : '';
+                $itemExp['thumb'] = !empty($exp[0]) ? $exp[0] : null;
+                $itemExp['image'] = !empty($exp[1]) ? $exp[1] : null;
 
-                //其它
-                $itemExpQt1['thumb'] = !empty($exp[0]) ? $exp[0] : '';
-                $itemExpQt1['image'] = !empty($exp[1]) ? $exp[1] : '';
-                $itemExpQt2['thumb'] = !empty($exp[2]) ? $exp[2] : '';
-                $itemExpQt2['image'] = !empty($exp[3]) ? $exp[3] : '';
+                //钢印号
+                $itemExpQt1['thumb'] = !empty($exp[0]) ? $exp[0] : null;
+                $itemExpQt1['image'] = !empty($exp[1]) ? $exp[1] : null;
+
+                //胶点图
+                $itemExpQt2['thumb'] = !empty($exp[2]) ? $exp[2] : null;
+                $itemExpQt2['image'] = !empty($exp[3]) ? $exp[3] : null;
                 // $itemExp['thumb'] = $exp[0];
                 // $itemExp['image'] = $exp[1];
                 // halt($item[$k]);
                 // halt($k);
                 
-                if($specInfo == 6 && strpos($k, 'fwtjth') !== false){//防伪分组条盒
-                    // $item['fwtjth'][$k] = $item[$k];
-                    if(in_array($k, ['fwtjthzm', 'fwtjthbm'])){
-                        $item['fwtj']['th']['zmbm'][] = $itemExp;
+                if(strpos($k, 'fwtjth') !== false){//防伪分组条盒
+                    if($specInfo == 6){
+                        // $item['fwtjth'][$k] = $item[$k];
+                        if(in_array($k, ['fwtjthzm', 'fwtjthbm'])){
+                            $item['fwtj']['th']['zmbm'][] = $itemExp;
+                        }
+                        if(in_array($k, ['fwtjthzc', 'fwtjthyc'])){
+                            $item['fwtj']['th']['zcyc'][] = $itemExp;
+                        }
+                        if(in_array($k, ['fwtjthdb', 'fwtjthdb2'])){
+                            $item['fwtj']['th']['dbdb2'][] = $itemExp;
+                        }                        
                     }
-                    if(in_array($k, ['fwtjthzc', 'fwtjthyc'])){
-                        $item['fwtj']['th']['zcyc'][] = $itemExp;
+                    if(strpos($k, 'fwtjthqt') !== false){
+                        $exprr = explode('-', $k);
+                        // halt($exprr);
+                        if($exprr[1] == $mid){
+                            // halt($mid);
+                            $item['fwtj']['th']['qt'][] = $itemExpQt1;
+                            $item['fwtj']['th']['qt'][] = $itemExpQt2;
+                        }
                     }
-                    if(in_array($k, ['fwtjthdb', 'fwtjthdb2'])){
-                        $item['fwtj']['th']['dbdb2'][] = $itemExp;
+                }elseif(strpos($k, 'fwtjxh') !== false){//防伪分组小盒
+                    if($specInfo == 6){
+                        // $item['fwtjxh'][$k] = $item[$k];
+                        if(in_array($k, ['fwtjxhzm', 'fwtjxhbm'])){
+                            $item['fwtj']['xh']['zmbm'][] = $itemExp;
+                        }
+                        if(in_array($k, ['fwtjxhzc', 'fwtjxhyc'])){
+                            $item['fwtj']['xh']['zcyc'][] = $itemExp;
+                        }
+                        if(in_array($k, ['fwtjxhdb', 'fwtjxhdb2'])){
+                            $item['fwtj']['xh']['dbdb2'][] = $itemExp;
+                        }
                     }
-                    if($k == 'fwtjthqt'){
-                        $item['fwtj']['th']['qt'][] = $itemExpQt1;
-                        $item['fwtj']['th']['qt'][] = $itemExpQt2;
+                    if(strpos($k, 'fwtjxhqt') !== false){
+                        $exprr = explode('-', $k);
+                        if($exprr[1] == $mid){
+                            $item['fwtj']['xh']['qt'][] = $itemExpQt1;
+                            $item['fwtj']['xh']['qt'][] = $itemExpQt2;
+                        }
                     }
-                }elseif($specInfo == 6 && strpos($k, 'fwtjxh') !== false){//防伪分组小盒
-                    // $item['fwtjxh'][$k] = $item[$k];
-                    if(in_array($k, ['fwtjxhzm', 'fwtjxhbm'])){
-                        $item['fwtj']['xh']['zmbm'][] = $itemExp;
+                }elseif(strpos($k, 'fwtjyz') !== false){//防伪分组烟支
+                    if($specInfo == 6){
+                        // $item['fwtjyz'][$k] = $item[$k];
+                        if(in_array($k, ['fwtjyzzm', 'fwtjyzbm'])){
+                            $item['fwtj']['yz']['zmbm'][] = $itemExp;
+                        }
+                        if(in_array($k, ['fwtjyzzc', 'fwtjyzyc'])){
+                            $item['fwtj']['yz']['zcyc'][] = $itemExp;
+                        }
+                        if(in_array($k, ['fwtjyzdb', 'fwtjyzdb2'])){
+                            $item['fwtj']['yz']['dbdb2'][] = $itemExp;
+                        }                        
                     }
-                    if(in_array($k, ['fwtjxhzc', 'fwtjxhyc'])){
-                        $item['fwtj']['xh']['zcyc'][] = $itemExp;
-                    }
-                    if(in_array($k, ['fwtjxhdb', 'fwtjxhdb2'])){
-                        $item['fwtj']['xh']['dbdb2'][] = $itemExp;
-                    }
-                    if($k == 'fwtjxhqt'){
-                        $item['fwtj']['xh']['qt'][] = $itemExpQt1;
-                        $item['fwtj']['xh']['qt'][] = $itemExpQt2;
-                    }
-                }elseif($specInfo == 6 && strpos($k, 'fwtjyz') !== false){//防伪分组烟支
-                    // $item['fwtjyz'][$k] = $item[$k];
-                    if(in_array($k, ['fwtjyzzm', 'fwtjyzbm'])){
-                        $item['fwtj']['yz']['zmbm'][] = $itemExp;
-                    }
-                    if(in_array($k, ['fwtjyzzc', 'fwtjyzyc'])){
-                        $item['fwtj']['yz']['zcyc'][] = $itemExp;
-                    }
-                    if(in_array($k, ['fwtjyzdb', 'fwtjyzdb2'])){
-                        $item['fwtj']['yz']['dbdb2'][] = $itemExp;
-                    }
-                    if($k == 'fwtjyzqt'){
-                        $item['fwtj']['yz']['qt'][] = $itemExpQt1;
-                        $item['fwtj']['yz']['qt'][] = $itemExpQt2;
+                    if(strpos($k, 'fwtjyzqt') !== false){
+                        $exprr = explode('-', $k);
+                        if($exprr[1] == $mid){
+                            $item['fwtj']['yz']['qt'][] = $itemExpQt1;
+                            $item['fwtj']['yz']['qt'][] = $itemExpQt2;
+                        }
                     }
                 }else{//其他详细参数
                     // $item['detail'][$k] = $item[$k];
@@ -326,8 +351,14 @@ class Product extends BasicApi
         }
         $ht1 .= '</table></div></body></html>';
         $item['machine'] = $ht1;
+
+        $info = array_merge($info, $item);
+        unset($info['item']);
+        $collect = $this->memberCollection->getOneDarry(['uid' => $uid, 'pid' => $pid, 'mid' => $mid]);
+        $info['is_collect'] = $collect ? 1 : 0;
+        $info['mid'] = $mid;
         // halt($item);
-        return $item;
+        return $info;
     }
 
     //spec
