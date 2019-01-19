@@ -20,45 +20,28 @@ use service\ToolsService;
 use think\Db;
 
 /**
- * 机台 控制器
- * Class Machine
+ * 机型 控制器
+ * Class Type
  * @package app\admin\controller
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Machine extends BasicAdmin
+class Type extends BasicAdmin
 {
 
     /**
      * 指定当前数据表
      * @var string
      */
-    public $table = 'Machine';
+    public $table = 'Type';
     public $specs;
 
-    function __construct(){
+    public function __construct(){
         parent::__construct();
-        // $e  =json_encode([1,2]);
-        // halt($e);
-        $this->machineSpec = model('common/MachineSpec');
-        $this->machineItem = model('common/MachineItem');
-        $this->product = model('common/Product');
-        $this->type = model('common/Type');
-        $products = $this->product->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,sort',0);
-        $specs = $this->machineSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
-        foreach ($specs as $k => $v) {
-            $specs[$k]['items'] = $this->machineItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
-        }
-        $types = $this->type->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,sort',0);
-        // halt($products);
-        $this->specs = $specs;
-        $this->assign('specs',$this->specs);
-        $this->assign('products',$products);
-        $this->assign('types',$types);
     }
 
     /**
-     * 机型列表
+     * 产品列表
      * @return array|string
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -67,40 +50,10 @@ class Machine extends BasicAdmin
      */
     public function index()
     {
-        // $pattern = '/^11[1-4]{1}1[A-B]{1}(0[1-9]|1[0-2]){1}$/';//FK700(1)
-        // $m = preg_match($pattern, '1141A12', $matches);
-        
-        // $pattern = '/^11[1-4]{1}06(0[1-9]|1[0-2]){1}$/';//GDX2000(6)
-        // $m = preg_match($pattern, '1140601', $matches);
-        
-        // $pattern = '/^06[1-4]{1}6[A-B]{1}(0[1-9]|1[0-2]){1}$/';//FX(16)
-        // $m = preg_match($pattern, '0646A01', $matches);
-        
-        // $pattern = '/^06[1-4]{1}21(0[1-9]|1[0-2]){1}$/';//FK350(21)
-        // $m = preg_match($pattern, '0642101', $matches);
-        
-        // $pattern = '/^06[1-4]{1}56(0[1-9]|1[0-2]){1}$/';//ZB48(56)
-        // $m = preg_match($pattern, '0645601', $matches);
-        
-        // $pattern = '/^[1-4]{1}11(0[1-9]|1[0-2]){1}(0[1-9]|1[0-9]|2[0-9]|3[0-1]){1}$/';//GDX2000(11)
-        // $m = preg_match($pattern, '4110131', $matches);
-        // halt($matches);
-        
-        // $d = Db::name('machine')->select();
-        // foreach ($d as $k => $v) {
-        //     Db::name('machine')->where(['id' => $v['id']])->update(['pattern' => '/'.$v['pattern'].'/']);
-        // }
-        // halt($d);
-        $this->title = '机台管理';
+        $this->title = '机型管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'type', 'desc'] as $key) {
-            if(isset($get[$key]) && $get[$key] !== ''){
-                if($key == 'type'){
-                    $db->where($key, $get[$key]);
-                }else{
-                    $db->whereLike($key, "%{$get[$key]}%");
-                }
-            }
+        foreach (['title', 'desc'] as $key) {
+            (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
         }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode(' - ', $get['date']);
@@ -118,8 +71,9 @@ class Machine extends BasicAdmin
     {
         // halt($data);
         foreach ($data as &$vo) {
+            // halt(strlen($vo['item']));
             // $vo['item'] = unserialize(base64_decode($vo['item']));
-            $vo['item'] = json_decode($vo['item'], true);
+            // $vo['item'] = json_decode($vo['item'], true);
         }
         // halt($data);
         // $data = ToolsService::arr2table($data);
@@ -162,20 +116,6 @@ class Machine extends BasicAdmin
     {
         if ($this->request->isPost()) {
             // halt($data);
-            if (isset($data['pid']) && is_array($data['pid'])) {
-                $data['pid'] = join(',', $data['pid']);
-            } else {
-                $data['pid'] = '';
-            }
-            if (isset($data['item']) && is_array($data['item'])) {
-                // if(isset($data['item']['cj'])){
-                //     $data['cj'] = $data['item']['cj'];
-                // }
-                // $data['item'] = base64_encode(serialize($data['item']));
-                $data['item'] = json_encode($data['item']);
-            } else {
-                $data['item'] = '';
-            }
             // halt($data);
             if (isset($data['id'])) {
                 // unset($data['title']);
@@ -183,14 +123,10 @@ class Machine extends BasicAdmin
             } else{
                 $data['create_at'] = time();
             }
-            //  elseif ($this->machineItem->getValue(['title' => $data['cpmc']],'title') > 0) {
+            //  elseif ($this->productItem->getValue(['title' => $data['cpmc']],'title') > 0) {
             //     $this->error('名称已经存在，请使用其它名称！');
             // }
         } else {
-            // halt($data);
-            // $data['item'] = unserialize(base64_decode(isset($data['item']) ? $data['item'] : ''));
-            $data['pid'] = explode(',', isset($data['pid']) ? $data['pid'] : '');
-            $data['item'] = json_decode(isset($data['item']) ? $data['item'] : '', true);
             // halt($data);
         }
     }

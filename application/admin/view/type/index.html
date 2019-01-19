@@ -2,7 +2,7 @@
 
 {block name="button"}
 <!--{if auth("$classuri/add")}-->
-<button data-open='{:url("$classuri/add")}' data-title="添加" class='layui-btn layui-btn-sm layui-btn-primary'>添加</button>
+<button data-modal='{:url("$classuri/add")}' data-title="添加" class='layui-btn layui-btn-sm layui-btn-primary'>添加</button>
 <!--{/if}-->
 
 <!--{if auth("$classuri/del")}-->
@@ -21,24 +21,6 @@
             <input name="title" value="{$Think.get.title|default=''}" placeholder="请输入名称" class="layui-input">
         </div>
     </div>
-
-    <!--{if !empty($types)}-->
-    <div class="layui-form-item  layui-inline">
-        <label class="layui-form-label">机型</label>
-        <div class="layui-input-inline">
-            <select name="type" lay-verify="required" lay-search>
-                <option>请选择机型</option>
-                {foreach $types as $type}
-                <!--{if $Think.get.type eq $type.id}-->
-                <option selected="selected" value="{$type.id}">{$type.title}</option>
-                <!--{else}-->
-                <option value="{$type.id}">{$type.title}</option>
-                <!--{/if}-->
-                {/foreach}
-            </select>
-        </div>
-    </div>
-    <!--{/if}-->
 
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">描述</label>
@@ -79,8 +61,8 @@
                 <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
             </th>
             <th class='text-left nowrap'>名 称</th>
-            <th class='text-left nowrap'>厂 家</th>
-            <th class='text-left nowrap'>添 加 时 间</th>
+            <th class='text-left nowrap'>描述</th>
+            <th class='text-left nowrap'>添加时间</th>
             <th class='text-left nowrap'>状 态</th>
             <th class='text-left nowrap'>操 作</th>
         </tr>
@@ -98,7 +80,7 @@
                 {$vo.title|default=''}
             </td>
             <td class='text-left nowrap'>
-                {$vo.item.cj|default='<span class="color-desc">未设置</span>'|raw|get_model_value='MachineItem','title'}
+                {$vo.desc|default='<span class="color-desc">未设置</span>'|raw}
             </td>
             <td class='text-left nowrap'>
                 {$vo.create_at|date='Y-m-d H:i:s'}
@@ -110,7 +92,7 @@
 
                 {if auth("$classuri/edit")}
                 <span class="text-explode">|</span>
-                <a data-title="编辑" data-open='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                <a data-title="编辑" data-modal='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
                 {/if}
 
                 {if $vo.status eq 0 and auth("$classuri/forbid")}

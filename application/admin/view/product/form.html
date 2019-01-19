@@ -81,7 +81,7 @@
                 </div>
                 {if isset($specs)}
                     {foreach $specs as $spec}
-                        {if $spec.sort neq '555'}
+                         {if !in_array($spec['sort'], ['555', '666','777'])}
                         <?php $c = $spec['mark'];?>
                         {if $spec.type eq '1'}
                             <div class="layui-form-item">
@@ -161,7 +161,7 @@
             <div class="layui-tab-item">
                 {if isset($specs)}
                     {foreach $specs as $spec}
-                        {if $spec.sort eq '555'}
+                         {if in_array($spec['sort'], ['555', '666','777'])}
                         <?php $c = $spec['mark'];?>
                         {if $spec.type eq '1'}
                             <div class="layui-form-item">
@@ -212,7 +212,7 @@
                             </div>
                         {/if}
                         {if $spec.type eq '6'}
-                            {if condition="in_array($c, ['fwtjthqt', 'fwtjxhqt', 'fwtjyzqt'])"}
+                            {if condition="in_array($c, ['fwtjthgyh', 'fwtjthjd', 'fwtjxhgyh', 'fwtjxhjd', 'fwtjyzgyh', 'fwtjyzjd'])"}
                                 {volist name="vo.mitem" id="mt" empty=""}
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">{$spec.title}({$mt})</label>

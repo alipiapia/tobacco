@@ -14,6 +14,25 @@
                         <input name="title" value='{$vo["title"]|default=""}' required="required" title="请输入名称" placeholder="请输入名称" class="layui-input">
                     </div>
                 </div>
+
+                <!--{if !empty($types)}-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">机型</label>
+                    <div class="layui-input-block">
+                        <select name="type" lay-verify="required" lay-search>
+                            <option>请选择机型</option>
+                            {foreach $types as $type}
+                            <!--{if isset($vo.type) && $vo.type eq $type.id}-->
+                            <option selected="selected" value="{$type.id}">{$type.title}</option>
+                            <!--{else}-->
+                            <option value="{$type.id}">{$type.title}</option>
+                            <!--{/if}-->
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <!--{/if}-->
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">条盒钢印号匹配规则</label>
                     <div class="layui-input-block">                        

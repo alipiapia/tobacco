@@ -22,15 +22,16 @@ use think\db\Where;
 
 /**
  * 机型 控制器
- * Class Machine
+ * Class Type
  * @package app\api\controller
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Machine extends BasicApi
+class Type extends BasicApi
 {
     public function __construct(){
         parent::__construct();
+        $this->type = model('common/Type');
         $this->machine = model('common/Machine');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
@@ -49,38 +50,35 @@ class Machine extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        foreach (['title', 'type'] as $k => $key) {
+        foreach (['title', 'pid'] as $k => $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
-                // if($key == 'pid'){
-                //     $map[$key] = [
-                //         ['eq', $param[$key]],
-                //         ['like', "{$param[$key]},%"],
-                //         ['like', "%,{$param[$key]}"],
-                //         ['like', "%,{$param[$key]},%"],
-                //         'or'
-                //     ];
-                //     // $map1 = ['eq', $param[$key]];
-                //     // $map2 = ['like', "%,{$param[$key]}"];
-                //     // $map3 = ['like', "%,{$param[$key]},%"];
-                //     // $map[$key]['_complex'] = [
-                //     //     $map1,
-                //     //     $map2,
-                //     //     '_logic' => 'or'
-                //     // ];
-                //     // halt($map);
-                // }else{
-                //     $map[$key] = ['like', "%{$param[$key]}%"];
-                // }
-
-                if($key == 'type'){
-                    $map[$key] = $param[$key];
+                if($key == 'pid'){
+                    $mMap[$key] = [
+                        ['eq', $param[$key]],
+                        ['like', "{$param[$key]},%"],
+                        ['like', "%,{$param[$key]}"],
+                        ['like', "%,{$param[$key]},%"],
+                        'or'
+                    ];
+                    // $map1 = ['eq', $param[$key]];
+                    // $map2 = ['like', "%,{$param[$key]}"];
+                    // $map3 = ['like', "%,{$param[$key]},%"];
+                    // $map[$key]['_complex'] = [
+                    //     $map1,
+                    //     $map2,
+                    //     '_logic' => 'or'
+                    // ];
+                    // halt($map);
+                    $mMap = new Where($mMap);
+                    $mids = $this->machine->getColumn($mMap, 'type');
+                    $map['id'] = ['in', $mids];
                 }else{
                     $map[$key] = ['like', "%{$param[$key]}%"];
                 }
             }
         }
         $map = new Where($map);
-        $list = $this->machine->getNewPageLists($map, '', 'id,title', $this->page, $this->size);
+        $list = $this->type->getNewPageLists($map, '', 'id,title', $this->page, $this->size);
         foreach ($list as $k => $v) {
             $list[$k]['pid'] = input('pid');
         }
