@@ -43,6 +43,7 @@ class Product extends BasicAdmin
         $this->productSpec = model('common/ProductSpec');
         $this->productItem = model('common/ProductItem');
         $this->machine = model('common/Machine');
+        $this->type = model('common/Type');
         $brands = $this->brand->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,sort',0);
         // $machines = $this->machine->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,sort',0);
         $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark,sort',0);
@@ -174,16 +175,19 @@ class Product extends BasicAdmin
             // $data['mid'] = explode(',', isset($data['mid']) ? $data['mid'] : '');
             $data['item'] = json_decode(isset($data['item']) ? $data['item'] : '', true);
             if(isset($data['id'])){
-                $map['pid'] = [
+                $mMap['pid'] = [
                         ['eq', $data['id']],
                         ['like', "{$data['id']},%"],
                         ['like', "%,{$data['id']}"],
                         ['like', "%,{$data['id']},%"],
                         'or'
                     ];
+                $mMap = new Where($mMap);
+                $mids = $this->machine->getColumn($mMap, 'type');
+                $map['id'] = ['in', $mids];
                 $map = new Where($map);
                 // $mitem = $this->machine->getLists($map, '', 'id,title');
-                $mitem = $this->machine->getColumn($map,'id,title');
+                $mitem = $this->type->getColumn($map,'id,title');
                 $data['mitem'] = $mitem;
                 // halt($mitem);
             }

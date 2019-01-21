@@ -153,7 +153,8 @@ class Product extends BasicApi
             // $info['is_collect'] = $collect ? 1 : 0;
             // $info['mid'] = $mids[0];
             // $list = $info;
-            $list = $this->formatItem($list['id'], $newPids[0], input('uid'));
+            $mid = $this->machine->getValue(['id' => $newPids[0]], 'type');
+            $list = $this->formatItem($list['id'], $mid, input('uid'));
         }
         // halt($list);
         $this->success('请求成功', $list);
@@ -170,7 +171,8 @@ class Product extends BasicApi
         if(!input('uid')){
             $this->error('用户参数错误');
         }
-        $info = $this->formatItem(input('pid'), input('mid'), input('uid'));
+        $mid = $this->machine->getValue(['id' => input('mid')], 'type');
+        $info = $this->formatItem(input('pid'), $mid, input('uid'));
         // $pMap = ['id' => input('pid')];
         // $mMap = ['id' => input('mid')];
         // $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
