@@ -207,6 +207,110 @@ class HxService
         );
         return $this->curl($url, "", $header, "GET");
     }
+
+    // public function getChatTime($time){
+    //    $url=$this->url.'chatmessages/'.$time;
+    //    $header=array($this->getToken());
+    //    $result=$this->postCurl($url,'',$header,"GET");
+    //    return $result;
+    // }
+ 
+    /*
+     * 下载聊天文件
+     * 目录补充
+     * 2018-01-31
+     * mzj
+     * @parem : $time 2018013014   时间
+     * @parem : $path   保存的路径
+     * */
+    public function downContent($time,$path){
+        $result = $this->hx_chat_messages($time);//调用下载方法
+        $result = json_decode($result,true);
+        // return $result;
+        //设置路径
+        $path = $path ? $path : '../../../static';
+        if(isset($result['error'])) return '该时段暂无数据1';
+        if(!isset($result['data'][0]['url'])) return '该时段暂无数据2';
+        $downData = $this->httpcopy($result['data'][0]['url'],$path);
+        if($downData == 'fail') return '下载失败';
+        $ungz = $this->unzipGz($downData);
+        if($ungz == 'fail') return '解压失败';
+        if(!file_exists($path.''.$ungz)) return '文件不存在';
+        $txt = file_get_contents($path.''.$ungz);
+        if(empty(trim($txt))) return '该时段暂无数据';
+        $aa = explode("\n",trim($txt));
+        foreach($aa as $key => $val){
+            $info[$key] = json_decode($val,true);
+        }
+        return $info;
+        echo "<pre>";
+        print_r($info);die;
+    }
+ 
+    /*
+     * 下载远程文件
+     * mzj
+     * 2018-01-31
+     * */
+    public function httpcopy($url,$path, $files="", $timeout=60) {
+        $path = $path ? $path : '../down/';
+        $file_a = empty($files) ? pathinfo($url,PATHINFO_BASENAME) : $files;
+        //分割
+        $file = explode('?',$file_a)[0];
+        $dir = pathinfo($file,PATHINFO_DIRNAME);
+        !is_dir($dir) && @mkdir($dir,0755,true);
+        $url = str_replace(" ","%20",$url);
+ 
+        if(!function_exists('curl_init')) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            $temp = curl_exec($ch);
+            if(@file_put_contents($path.''.$file, $temp) && !curl_error($ch)) {
+                return $path.''.$file;
+            } else {
+                return 'fail';
+            }
+        } else {
+            $opts = array(
+                "http"=>array(
+                    "method"=>"GET",
+                    "header"=>"",
+                    "timeout"=>$timeout
+                )
+            );
+            $context = stream_context_create($opts);
+            if(@copy($url, $path.''.$file, $context)) {
+                //$http_response_header
+                return $path.''.$file;
+            } else {
+                return 'fail';
+            }
+        }
+    }
+ 
+    /*
+     * 解压gz压缩包
+     * mzj
+     * 2018-01-31
+     * @parem:gz_file   文件路径
+     * */
+    public function unzipGz($gz_file){
+        $buffer_size = 4096; // read 4kb at a time
+        $out_file_name = str_replace('.gz', '', $gz_file);
+        $file = gzopen($gz_file, 'rb');
+        $out_file = fopen($out_file_name, 'wb');
+        $str='';
+        if(!gzeof($file)) {
+            fwrite($out_file, gzread($file, $buffer_size));
+            fclose($out_file);
+            gzclose($file);
+            return $out_file_name;
+        } else {
+            return 'fail';
+        }
+    }
     /*
      *
      * curl

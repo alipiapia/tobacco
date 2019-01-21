@@ -56,6 +56,7 @@ class Member extends BasicAdmin
     public function index()
     {
         // $f = $this->hx->hx_chat_messages('2019012111');
+        // $f = $this->hx->downContent('2019012111', '../../../static');
         // halt($f);
         $this->title = '用户管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
