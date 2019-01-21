@@ -30,6 +30,7 @@
 			2-1	公告列表
 						地址:/api/notice/index
 						请求方式:GET
+						参数：uid		(用户uid		类型：int		是否必填：必填)
 						参数：title		(名称		类型：string		是否必填：非必填)
 						参数：desc		(描述		类型：string		是否必填：非必填)
 						参数：page		(页码		类型：int		是否必填：非必填	默认：第1页)
@@ -39,6 +40,7 @@
 						地址:/api/notice/info
 						请求方式:GET
 						参数：id		(公告id		类型：int		是否必填：必填)
+						参数：uid		(用户uid		类型：int		是否必填：必填)
 						
 	3	品牌
 			3-1	品牌列表

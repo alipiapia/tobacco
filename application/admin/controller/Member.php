@@ -55,6 +55,8 @@ class Member extends BasicAdmin
      */
     public function index()
     {
+        // $f = $this->hx->hx_chat_messages('2019012111');
+        // halt($f);
         $this->title = '用户管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['username', 'nickname', 'role', 'phone', 'mail'] as $key) {
@@ -257,22 +259,25 @@ class Member extends BasicAdmin
      */
     public function del()
     {
+        $ids = explode(',', $this->request->post('id'));
         // if (in_array('10000', explode(',', $this->request->post('id')))) {
         //     $this->error('系统超级账号禁止删除！');
         // }
         
         // halt($this->hx->hx_user_delete('pp0005'));
         // halt($this->member::get($this->request->post('id'))->delete());
-        
-        $username = get_model_value($this->request->post('id'), 'Member','username');
-        // if (DataService::update($this->table)) {
-        if ($this->member::get($this->request->post('id'))->delete()) {
-            $hx_delete = $this->hx->hx_user_delete($username);
-            if($hx_delete){
-                $this->success("用户删除成功！", '');
+        foreach($ids as $k => $v){
+            $username = get_model_value($v, 'Member','username');
+            // if (DataService::update($this->table)) {
+            if ($this->member::get($v)->delete()) {
+                $hx_delete = $this->hx->hx_user_delete($username);
+                if($hx_delete){
+                    // $this->success("用户删除成功！", '');
+                }
             }
         }
-        $this->error("用户删除失败，请稍候再试！");
+        $this->success("用户删除成功！", '');
+        // $this->error("用户删除失败，请稍候再试！");
     }
 
     /**

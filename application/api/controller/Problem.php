@@ -21,17 +21,17 @@ use think\Db;
 use think\db\Where;
 
 /**
- * 通知公告 控制器
- * Class Notice
+ * 常见问题 控制器
+ * Class Problem
  * @package app\api\controller
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Notice extends BasicApi
+class Problem extends BasicApi
 {
     public function __construct(){
         parent::__construct();
-        $this->notice = model('common/Notice');
+        $this->notice = model('common/Problem');
         $this->member = model('common/Member');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;

@@ -1,12 +1,12 @@
 <form autocomplete="off" class="layui-form layui-box modal-form-box" action="{:request()->url()}" data-auto="true" method="post">
 
     <div class="layui-form-item">
-        <label class="layui-form-label">用户账号</label>
+        <label class="layui-form-label">用户名称</label>
         <div class="layui-input-block">
             {if $vo and isset($vo.username)}
             <input readonly="readonly" name="username" value='{$vo.username|default=""}' required="required" title="请输入用户名称" placeholder="请输入用户名称" class="layui-input layui-bg-gray">
             {else}
-            <input name="username" value='{$vo.username|default=""}' required="required" pattern="^.{4,}$" title="请输入用户名称" placeholder="请输入4位及以上字符用户名称" class="layui-input">
+            <input name="username" value='{$vo.username|default=""}' required="required" pattern="^([a-zA-Z0-9_\.\-])+$" title="请输入用户名称" placeholder="请输入用户名称" class="layui-input">
             {/if}
         </div>
     </div>
@@ -14,7 +14,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">用户昵称</label>
         <div class="layui-input-block">
-            <input name="nickname" value='{$vo.nickname|default=""}' required="required" pattern="^.{4,}$" title="请输入用户昵称" placeholder="请输入4位及以上字符用户昵称" class="layui-input">
+            <input name="nickname" value='{$vo.nickname|default=""}' required="required" pattern="" title="请输入用户昵称" placeholder="请输入用户昵称" class="layui-input">
         </div>
     </div>
 

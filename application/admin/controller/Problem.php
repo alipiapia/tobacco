@@ -20,20 +20,20 @@ use service\ToolsService;
 use think\Db;
 
 /**
- * 通知公告 控制器
- * Class Notice
+ * 常见问题 控制器
+ * Class Problem
  * @package app\admin\controller
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Notice extends BasicAdmin
+class Problem extends BasicAdmin
 {
 
     /**
      * 指定当前数据表
      * @var string
      */
-    public $table = 'Notice';
+    public $table = 'Problem';
     public $specs;
 
     public function __construct(){
@@ -51,7 +51,7 @@ class Notice extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '通知公告';
+        $this->title = '常见问题';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['title', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");

@@ -197,6 +197,17 @@ class HxService
         return $this->curl($url, "", $header, "POST");
     }
     /*
+     * 历史消息文件
+     */
+    public function hx_chat_messages($time)
+    {
+        $url = $this->url . "/chatmessages/${time}";
+        $header = array(
+            'Authorization: Bearer ' . $this->token
+        );
+        return $this->curl($url, "", $header, "GET");
+    }
+    /*
      *
      * curl
      */
