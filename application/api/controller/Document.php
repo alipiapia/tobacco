@@ -31,7 +31,7 @@ class Document extends BasicApi
 {
     public function __construct(){
         parent::__construct();
-        $this->notice = model('common/Document');
+        $this->document = model('common/Document');
         $this->member = model('common/Member');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
@@ -46,11 +46,14 @@ class Document extends BasicApi
         if(!isset($param['uid'])){
             $this->error('用户参数错误');
         }
+        if(!isset($param['type'])){
+            $this->error('文件类型参数错误');
+        }
         $role = $this->member->getValue(['id' => $param['uid']], 'role');
         if(!$role){
             $this->error('找不到用户或用户角色未设置');
         }
-        // halt($role);
+        // halt($param);
         $map = [
             'status' => 0,
             'is_deleted' => '0',
@@ -64,13 +67,17 @@ class Document extends BasicApi
                 'or',
             ];
         }
-        foreach (['title', 'desc', 'content'] as $key) {
+        foreach (['title', 'type'] as $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
-                $map['title'] = ['like', "%{$param[$key]}%"];
+                if($key == 'type'){
+                    $map[$key] = $param[$key];
+                }else{
+                    $map[$key] = ['like', "%{$param[$key]}%"];
+                }
             }
         }
         $map = new Where($map);
-        $list = $this->notice->getNewPageLists($map, '', 'id,title,desc,content,role,create_at', $this->page, $this->size);
+        $list = $this->document->getNewPageLists($map, '', 'id,title,file,type,role,create_at', $this->page, $this->size);
         foreach ($list as $k => $v) {
             $list[$k]['create_at'] = date('Y-m-d', $v['create_at']);
         }
@@ -92,7 +99,7 @@ class Document extends BasicApi
         if(!$role){
             $this->error('找不到用户或用户角色未设置');
         }
-        $info = $this->notice->getOneDarry(['id' => $id], 'id,title,desc,content,role,create_at');
+        $info = $this->document->getOneDarry(['id' => $id], 'id,title,desc,content,role,create_at');
         $roleArr = explode(',',$info['role']);
         if(!in_array($role, $roleArr)){
             $this->error('无权访问');

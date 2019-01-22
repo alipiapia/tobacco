@@ -31,7 +31,7 @@ class Problem extends BasicApi
 {
     public function __construct(){
         parent::__construct();
-        $this->notice = model('common/Problem');
+        $this->problem = model('common/Problem');
         $this->member = model('common/Member');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
@@ -70,7 +70,7 @@ class Problem extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->notice->getNewPageLists($map, '', 'id,title,desc,content,role,create_at', $this->page, $this->size);
+        $list = $this->problem->getNewPageLists($map, '', 'id,title,desc,content,role,create_at', $this->page, $this->size);
         foreach ($list as $k => $v) {
             $list[$k]['create_at'] = date('Y-m-d', $v['create_at']);
         }
@@ -92,7 +92,7 @@ class Problem extends BasicApi
         if(!$role){
             $this->error('找不到用户或用户角色未设置');
         }
-        $info = $this->notice->getOneDarry(['id' => $id], 'id,title,desc,content,role,create_at');
+        $info = $this->problem->getOneDarry(['id' => $id], 'id,title,desc,content,role,create_at');
         $roleArr = explode(',',$info['role']);
         if(!in_array($role, $roleArr)){
             $this->error('无权访问');

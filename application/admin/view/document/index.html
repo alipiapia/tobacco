@@ -79,7 +79,7 @@
                 <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
             </th>
             <th class='text-left nowrap'>标 题</th>
-            <th class='text-left nowrap'>描 述</th>
+            <th class='text-left nowrap'>类 型</th>
             <th class='text-left nowrap'>发布者</th>
             <th class='text-left nowrap'>发布时间</th>
             <th class='text-left nowrap'>状 态</th>
@@ -99,7 +99,10 @@
                 {$vo.title|default=''}
             </td>
             <td class='text-left nowrap'>
-                {$vo.desc|default='<span class="color-desc">未设置</span>'|raw}
+                {if $vo.type eq 1}<span class="color-green">管理办法</span>
+                {elseif $vo.type eq 2}<span class="color-green">技术标准</span>
+                {elseif $vo.type eq 3}<span class="color-green">通知文件</span>
+                {/if}
             </td>
             <td class='text-left nowrap'>
                 {$vo.create_by|default='<span class="color-desc">未设置</span>'|raw|get_model_value='SystemUser','username'}

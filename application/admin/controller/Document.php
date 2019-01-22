@@ -124,6 +124,9 @@ class Document extends BasicAdmin
     {
         if ($this->request->isPost()) {
             // halt($data);
+            if(!($data['file'])){
+                $this->error('请上传文件');
+            }
             if(!isset($data['type'])){
                 $this->error('请选择文件类型');
             }
