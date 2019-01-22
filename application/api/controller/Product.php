@@ -377,15 +377,16 @@ class Product extends BasicApi
                         // }                       
                     }
                     if(strpos($k, 'fwtjyzqt') !== false){
+                        //烟支其它-列表
                         for ($i=0; $i < count($exp); $i++) { 
                             $it = [
                                 'thumb' => isset($exp[$i]) ? $exp[$i] : '',
                                 'image' => isset($exp[$i+1]) ? $exp[$i+1] : '',
                             ];
-                                // $itemExpQt[]['thumb'] = isset($exp[$i]) ? $exp[$i] : '';
-                                // $itemExpQt[]['image'] = isset($exp[$i+1]) ? $exp[$i+1] : '';
-                                $itemExpQt[] = $it;
-                                $i++;
+                            // $itemExpQt[]['thumb'] = isset($exp[$i]) ? $exp[$i] : '';
+                            // $itemExpQt[]['image'] = isset($exp[$i+1]) ? $exp[$i+1] : '';
+                            $itemExpQt[] = $it;
+                            $i++;
                         }
                         // halt($itemExpQt);
                         // $exprr = explode('-', $k);

@@ -204,3 +204,11 @@
 						请求方式:GET
 						参数：id		(公告id		类型：int		是否必填：必填)
 						参数：uid		(用户uid		类型：int		是否必填：必填)
+		
+	10	在线咨询消息记录备份
+			10-1	发送
+						地址:/api/chat/send
+						请求方式:POST
+						参数：create_by		(发送者create_by		类型：int		是否必填：必填)
+						参数：receive_by		(接收者receive_by		类型：int		是否必填：必填)
+						参数：content		(内容content		类型：text		是否必填：必填)
