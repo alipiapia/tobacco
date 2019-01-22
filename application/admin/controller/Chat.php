@@ -42,7 +42,7 @@ class Chat extends BasicAdmin
     }
 
     /**
-     * 产品列表
+     * 列表
      * @return array|string
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -51,7 +51,30 @@ class Chat extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '通知公告';
+        $this->title = '聊天消息';
+        list($get, $db) = [$this->request->get(), Db::name($this->table)];
+        foreach (['title', 'desc'] as $key) {
+            (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
+        }
+        if (isset($get['date']) && $get['date'] !== '') {
+            list($start, $end) = explode(' - ', $get['date']);
+            // $db->whereBetween('login_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
+            $db->whereBetween('create_at', [strtotime("{$start} 00:00:00"), strtotime("{$end} 23:59:59")]);
+        }
+        return parent::_list($db->where(['is_deleted' => 0]));
+    }
+
+    /**
+     * 统计分析
+     * @return array|string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\Exception
+     */
+    public function statics()
+    {
+        $this->title = '统计分析';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['title', 'desc'] as $key) {
             (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");

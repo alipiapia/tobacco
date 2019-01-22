@@ -246,6 +246,23 @@ class Product extends BasicApi
                 $itemExp['thumb'] = !empty($exp[0]) ? $exp[0] : '';
                 $itemExp['image'] = !empty($exp[1]) ? $exp[1] : '';
 
+                //烟支其它
+                // foreach ($exp as $kk => $vv) {
+                //     // halt($vv);
+                //     if($kk%2 == 0){
+                //         $itemExpQt01[$kk]['thumb'] = $vv;
+                //         $itemExpQt01[$kk]['image'] = isset($exp[$kk+1]) ? $exp[$kk+1] : '';
+                //     }else{
+                //         $itemExpQt01[$kk]['thumb'] = isset($exp[$kk-1]) ? $exp[$kk-1] : '';
+                //         $itemExpQt01[$kk]['image'] = $vv;
+                //     }
+                // }
+                // for ($i=0; $i < count($exp); $i++) { 
+                //         $itemExpQt01[]['thumb'] = isset($exp[$i]) ? $exp[$i] : '';
+                //         $itemExpQt01[]['image'] = isset($exp[$i+1]) ? $exp[$i+1] : '';
+                // }
+                // halt($itemExpQt01);
+
                 //钢印号
                 $itemExpQt1['thumb'] = !empty($exp[0]) ? $exp[0] : '';
                 $itemExpQt1['image'] = !empty($exp[1]) ? $exp[1] : '';
@@ -360,10 +377,21 @@ class Product extends BasicApi
                         // }                       
                     }
                     if(strpos($k, 'fwtjyzqt') !== false){
+                        for ($i=0; $i < count($exp); $i++) { 
+                            $it = [
+                                'thumb' => isset($exp[$i]) ? $exp[$i] : '',
+                                'image' => isset($exp[$i+1]) ? $exp[$i+1] : '',
+                            ];
+                                // $itemExpQt[]['thumb'] = isset($exp[$i]) ? $exp[$i] : '';
+                                // $itemExpQt[]['image'] = isset($exp[$i+1]) ? $exp[$i+1] : '';
+                                $itemExpQt[] = $it;
+                                $i++;
+                        }
+                        // halt($itemExpQt);
                         // $exprr = explode('-', $k);
                         // if(isset($exprr[1]) && $exprr[1] == $mid){
-                            $item['fwtj']['yz']['qt'][] = $itemExpQt1;
-                            $item['fwtj']['yz']['qt'][] = $itemExpQt2;
+                            $item['fwtj']['yz']['qt'] = $itemExpQt;
+                            // $item['fwtj']['yz']['qt'][] = $itemExpQt02;
                         // }
                     }
                 }else{//其他详细参数
