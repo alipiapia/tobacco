@@ -1,0 +1,39 @@
+{foreach $list as $key=>$vo}
+
+<div class="layui-collapse" lay-accordion="">
+
+    <div class="layui-colla-item">
+
+        <div class="checkbox-ls">
+            <input class="list-check-box" value='{$vo.ids}' lay-skin="primary" type="checkbox">
+        </div>
+        <h2 class="layui-colla-title" data-area-id="{$vo.area_id}"></h2>
+        <div class="input-ls">
+            <input name="_{$vo.area_id}" value="{$vo.area_sort}" class="list-sort-input"/>
+            <input class='layui-input layui-input-inline title-input' style='height:28px;line-height:28px;width:auto' name='area_name.{$vo.area_id}' value="{$vo.area_name}"/>
+            <input class='layui-input layui-input-inline title-input' style='height:28px;line-height:28px;width:auto' name='area_region.{$vo.area_id}' value="{$vo.area_region}"/>
+        </div>
+
+        <div class="operate">
+            <div class="layui-btn-group">
+                <button type="button" data-modal='{:url("$classuri/add")}?pid={$vo.area_id}' class="layui-btn layui-btn-primary layui-btn-small">新增下级</button>
+
+                {if auth("$classuri/edit")}
+                <button type="button" data-modal='{:url("$classuri/edit")}?id={$vo.area_id}&pid={$vo.area_id}' class="layui-btn layui-btn-primary layui-btn-small"><i class="layui-icon"></i></button>
+                {/if}
+
+                {if auth("$classuri/del")}
+                <button type="button" data-update="{$vo.area_id}" data-field='delete' data-action='{:url("$classuri/del")}' class="layui-btn layui-btn-primary layui-btn-small"><i class="layui-icon"></i></button>
+                {/if}
+            </div>
+        </div>
+
+        <div class="layui-colla-content">
+
+        </div>
+    </div>
+</div>
+
+
+{/foreach}
+

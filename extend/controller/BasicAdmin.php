@@ -15,6 +15,7 @@
 namespace controller;
 
 use service\DataService;
+use service\ToolsService;
 use think\Controller;
 use think\Db;
 use think\db\Query;
@@ -155,6 +156,27 @@ class BasicAdmin extends Controller
             }
         }
         return true;
+    }
+    
+    //地区节点（带上下级）
+    public function _getAreaTrees($table = 'Area', $where = ['area_open' => 1]) {
+        $_menus = Db::name($table)->where($where)->order('area_sort asc,area_id asc')->select();
+
+        $menus = ToolsService::arr2table($_menus,'area_id','area_parent_id');
+        foreach ($menus as $key => &$menu) {
+
+            if (substr_count($menu['path'], '-') > 4) {
+                unset($menus[$key]);
+                continue;
+            }
+            if (isset($vo['area_parent_id'])) {
+                $current_path = "-{$vo['area_parent_id']}-{$vo['area_id']}";
+                if ($vo['area_parent_id'] !== '' && (stripos("{$menu['path']}-", "{$current_path}-") !== false || $menu['path'] === $current_path)) {
+                    unset($menus[$key]);
+                }
+            }
+        }
+        return $menus;
     }
 
 }

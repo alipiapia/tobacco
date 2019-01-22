@@ -16,6 +16,7 @@ namespace app\admin\controller;
 
 use controller\BasicAdmin;
 use service\DataService;
+use service\ToolsService;
 use service\HxService;
 use think\Db;
 use think\db\Where;
@@ -43,6 +44,11 @@ class Member extends BasicAdmin
         $this->member = model('common/Member');
         $this->hx = new HxService();
         $this->assign('roles', config('pp.role_type'));
+
+        //获取地区
+        $this->areaList = $this->_getAreaTrees('Area', ['area_open' => 1]);
+        // halt($this->areaList);
+        $this->assign('areaList', $this->areaList);
     }
 
     /**

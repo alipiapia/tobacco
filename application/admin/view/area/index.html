@@ -1,0 +1,108 @@
+{extend name='admin@public/content' /}
+
+{block name="button"}
+<div class="nowrap pull-right" style="margin-top:10px">
+    {if auth("$classuri/add")}
+    <button data-modal='{:url("$classuri/add")}' data-title="添加地区" class='layui-btn layui-btn-small'><i
+            class='fa fa-plus'></i> 添加地区
+    </button>
+    {/if}
+    {if auth("$classuri/del")}
+    <button data-update data-field='delete' data-action='{:url("$classuri/del")}'
+            class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除地区
+    </button>
+    {/if}
+</div>
+{/block}
+
+{block name="content"}
+<script type="text/javascript" src="__STATIC__/admin/jquery.area.js" charset="utf-8"></script>
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>
+                <!--<input data-none-auto="" data-check-target='.list-check-box' lay-skin="primary" lay-filter="allChoose" type="checkbox">-->
+                <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+            </th>
+            <th class='text-center'>排序</th>
+            <th class='text-center'>地区名称</th>
+            <th class='text-center'>大区名称</th>
+            <th class='text-center'>是否开启</th>
+            <th class='text-center'>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td>
+                <!--<input class="list-check-box" value='{$vo.area_id}' lay-skin="primary" type="checkbox">-->
+                <input class="list-check-box" value='{$vo.ids}' type='checkbox'/>
+                <img fieldid="{$vo.area_id}" status="open" nc_type="flex" src="__STATIC__/admin/theme/default/img/tv-expandable.gif">
+            </td>
+            <td class="list-table-sort-td">
+                <input class="list-sort-input title-input" name="area_sort.{$vo.area_id}" value="{$vo.area_sort|default=0}" />
+            </td>
+            <td class="text-center nowrap">
+                <input class='layui-input layui-input-inline title-input' style='height:28px;line-height:28px;width:auto' name="area_name.{$vo.area_id}" value="{$vo.area_name|default=''}" />
+            </td>
+            <td class="text-center nowrap">
+                <input class='layui-input layui-input-inline title-input' style='height:28px;line-height:28px;width:auto' name="area_region.{$vo.area_id}" value="{$vo.area_region|default=''}" />
+            </td>
+            <td class='text-center nowrap'>
+                {if $vo.area_open eq 1}
+                <span style="color:#090">已开启</span>
+                {else/}
+                <span>已关闭</span>
+                {/if}
+            </td>
+            <td class="text-center nowrap">
+                <div class="layui-btn-group">
+                    {if $vo.area_open eq 1 and auth("$classuri/close")}
+                    <button type="button" data-update="{$vo.area_id}" data-field='area_open' data-value='0' data-action='{:url("$classuri/close")}' class="layui-btn layui-btn-primary layui-btn-small">关闭</button>
+                    {elseif auth("$classuri/open")}
+                    <button type="button" data-update="{$vo.area_id}" data-field='area_open' data-value='1' data-action='{:url("$classuri/open")}' class="layui-btn layui-btn-primary layui-btn-small">开启</button>
+                    {/if}
+
+                    {if auth("$classuri/add")}
+                    <button type="button" data-modal='{:url("$classuri/add")}?area_parent_id={$vo.area_id}' class="layui-btn layui-btn-primary layui-btn-small">新增下级</button>
+                    {/if}
+
+                    {if auth("$classuri/edit")}
+                    <button type="button" data-modal='{:url("$classuri/edit")}?area_id={$vo.area_id}&area_parent_id={$vo.area_parent_id}' class="layui-btn layui-btn-primary layui-btn-small"><i class="layui-icon"></i></button>
+                    {/if}
+
+                    {if auth("$classuri/del")}
+                    <button type="button" data-update="{$vo.area_id}" data-field='delete' data-action='{:url("$classuri/del")}' class="layui-btn layui-btn-primary layui-btn-small"><i class="layui-icon"></i></button>
+                    {/if}
+                </div>
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+</form>
+
+
+<script>window.form.render();</script>
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+
+    });
+</script>
+{if auth("$classuri/add")}
+<script>
+    $(function () {
+        $('input.title-input').on('blur', function () {
+            $.form.load('{:url("save")}', {name: this.name, value: this.value}, 'POST', function (ret) {
+                return false;
+            });
+        });
+    })
+</script>
+{/if}
+
+{/block}

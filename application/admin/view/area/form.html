@@ -1,0 +1,55 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">上级地区</label>
+        <div class="layui-input-block">
+            <select name='area_parent_id' class='layui-select full-width'>
+                <option value="">请选择地区</option>
+                {foreach $areaList as $area}
+                {eq name='area.area_id' value='$vo.area_parent_id|default=0'}
+                <option selected  value='{$area.area_id}'>{$area.spl}{$area.area_name}</option>
+                {else/}
+                <option  value='{$area.area_id}'>{$area.spl}{$area.area_name}</option>
+                {/eq}
+                {/foreach}
+            </select>
+            <p class="help-block">系统将根据所选择的上级菜单层级决定新增项的所在级，即选择上级菜单为“北京”，则新增项为北京地区的下级区域，以此类推。</p>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">地区名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="area_name" value='{$vo.area_name|default=""}' required="required" title="请输入地区名称" placeholder="请输入地区名称" class="layui-input">
+            <p class="help-block">请认真填写地区名称，地区设定后将直接影响订单、收货地址等重要信息，请谨慎操作。</p>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">大区名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="area_region" value='{$vo.area_region|default=""}' title="请输入大区名称" placeholder="请输入大区名称" class="layui-input">
+            <p class="help-block">默认只有省级地区才需要填写大区域，目前全国几大区域有：华北、东北、华东、华南、华中、西南、西北、港澳台、海外。</p>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序</label>
+        <div class="layui-input-block">
+            <input type="text" name="area_sort" value='{$vo.area_sort|default="100"}' lay-verify="area_sort" title="请输入排序编号" placeholder="请输入排序编号" class="layui-input">
+            <p class="help-block">数字范围为0~255，数字越小越靠前</p>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <div class="layui-form-item text-center">
+        {if isset($vo['area_id'])}<input type='hidden' value='{$vo.area_id}' name='area_id'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+</form>
+
+<script>window.form.render();</script>
+
+
