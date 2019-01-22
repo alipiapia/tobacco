@@ -1,0 +1,92 @@
+
+<form autocomplete="off" onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" id="ProductForm" class='form-horizontal layui-form padding-top-20'>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-block">                        
+            <input name="title" value='{$vo["title"]|default=""}' required="required" title="请输入标题" placeholder="请输入标题" class="layui-input">
+        </div>
+    </div>
+
+<!--     <div class="layui-form-item">
+        <label class="layui-form-label">图片</label>
+        <div class="layui-input-block">                        
+            <input type="hidden" data-img="img" name="logo" value='{$vo["logo"]|default=""}' class="layui-input">
+        </div>
+    </div> -->
+<!--     <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea" name="desc" required="required" placeholder="请输入描述">{$vo["desc"]|default=''}</textarea>
+        </div>
+    </div> -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea" name="content" required="required" placeholder="请输入内容">{$vo["content"]|default=''}</textarea>
+        </div>
+    </div>
+
+    {if isset($roles)}
+    <div class="layui-form-item">
+        <label class="layui-form-label">接收角色</label>
+        <div class="layui-input-block">
+            {foreach $roles as $role}
+            <label class="think-checkbox">
+                <!--{if in_array($role['id'],$vo['role'])}-->
+                <input type="checkbox" checked name="role[]" value="{$role.id}" lay-ignore> {$role.title}
+                <!--{else}-->
+                <input type="checkbox" name="role[]" value="{$role.id}" lay-ignore> {$role.title}
+                <!--{/if}-->
+            </label>
+            {/foreach}
+            {if empty($roles)}<span class="color-desc" style="line-height:36px">未配置接收角色</span>{/if}
+        </div>
+    </div>
+    {/if}
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <!-- <script>window.form.render();</script> -->
+    <script>
+        $(function () {
+            $('.layui-tab ul.layui-tab-title li:first').trigger('click');
+        });
+    </script>
+    <script type="text/javascript">
+        require(['jquery', 'ckeditor', 'angular', 'ueditor.all', 'ueditor.config'], function () {
+            window.form.render();
+            var app = angular.module("ProductForm", []).run(callback);
+            angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+            function callback($rootScope) {
+                // 单图片上传处理
+                // $('[data-img="img"]').uploadOneImage();
+                var img = $("[data-img='img']");
+                var arr =[];
+                $(img).each(function(){
+                    // arr.push($(this));
+                    if($(this)){
+                        $(this).uploadOneImage();
+                    }
+                });
+
+                // 多图片上传处理
+                // $('[data-imgs="imgs"]').uploadMultipleImage();
+                var imgs = $("[data-imgs='imgs']");
+                var arr =[];
+                $(imgs).each(function(){
+                    // arr.push($(this));
+                    if($(this)){
+                        $(this).uploadMultipleImage();
+                    }
+                });
+            }
+        })
+    </script>
+</form>

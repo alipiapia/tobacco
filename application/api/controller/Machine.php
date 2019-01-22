@@ -49,6 +49,9 @@ class Machine extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
+        if(!isset($param['type']) || $param['type'] == ''){
+            $this->error('机型参数错误');
+        }
         foreach (['title', 'type'] as $k => $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
                 // if($key == 'pid'){
