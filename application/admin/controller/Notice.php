@@ -120,7 +120,8 @@ class Notice extends BasicAdmin
             if (isset($data['role']) && is_array($data['role'])) {
                 $data['role'] = join(',', $data['role']);
             } else {
-                $data['role'] = '';
+                // $data['role'] = '';
+                $this->error('请选择接收角色');
             }
             if (isset($data['id'])) {
                 // unset($data['title']);

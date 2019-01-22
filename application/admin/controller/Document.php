@@ -20,25 +20,26 @@ use service\ToolsService;
 use think\Db;
 
 /**
- * 常见问题 控制器
- * Class Problem
+ * 文件资料 控制器
+ * Class Document
  * @package app\admin\controller
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Problem extends BasicAdmin
+class Document extends BasicAdmin
 {
 
     /**
      * 指定当前数据表
      * @var string
      */
-    public $table = 'Problem';
+    public $table = 'Document';
     public $specs;
 
     public function __construct(){
         parent::__construct();
         $this->assign('roles', config('pp.role_type'));
+        $this->assign('docs', config('pp.doc_type'));
     }
 
     /**
@@ -51,10 +52,16 @@ class Problem extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '常见问题';
+        $this->title = '文件资料';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'desc'] as $key) {
-            (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
+        foreach (['type', 'title', 'desc'] as $key) {
+            if(isset($get[$key]) && $get[$key] !== ''){                
+                if($key == 'type'){
+                    $db->where($key, $get[$key]);
+                }else{
+                    $db->whereLike($key, "%{$get[$key]}%");
+                }
+            };
         }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode(' - ', $get['date']);
@@ -117,6 +124,9 @@ class Problem extends BasicAdmin
     {
         if ($this->request->isPost()) {
             // halt($data);
+            if(!isset($data['type'])){
+                $this->error('请选择文件类型');
+            }
             if (isset($data['role']) && is_array($data['role'])) {
                 $data['role'] = join(',', $data['role']);
             } else {

@@ -473,6 +473,16 @@ $(function () {
     $.fn.vali = function (callback, options) {
         return $.vali(this, callback, options);
     };
+	
+    // 上传单个文件
+    $.fn.uploadOneFile= function () {
+        var name = $(this).attr('name') || 'image';
+        var type = $(this).data('type') || 'png,jpg';
+        var $tpl = $('<span data-file="one" data-field="' + name + '" data-type="' + type + '" class="layui-btn-sm">点击上传</span>');
+        $(this).attr('name', name).after($tpl).on('change', function () {
+            !!this.value && $tpl.html(this.value);
+        }).trigger('change');
+    };
 
     // 上传单个图片
     $.fn.uploadOneImage = function () {

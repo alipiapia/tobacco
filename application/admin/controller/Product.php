@@ -190,6 +190,8 @@ class Product extends BasicAdmin
                 $mitem = $this->type->getColumn($map,'id,title');
                 $data['mitem'] = $mitem;
                 // halt($mitem);
+            }else{                
+                $data['mitem'] = [];
             }
             // halt($data);
         }

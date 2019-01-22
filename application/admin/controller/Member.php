@@ -63,12 +63,12 @@ class Member extends BasicAdmin
         foreach (['username', 'nickname', 'role', 'phone', 'mail'] as $key) {
             if(isset($get[$key]) && $get[$key] !== ''){
                 if($key == 'role'){
-                        $db->where($key, $get[$key]);
-                    }else{
-                        $db->whereLike($key, "%{$get[$key]}%");
-                    }
+                    $db->where($key, $get[$key]);
+                }else{
+                    $db->whereLike($key, "%{$get[$key]}%");
                 }
             }
+        }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode(' - ', $get['date']);
             $db->whereBetween('login_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
