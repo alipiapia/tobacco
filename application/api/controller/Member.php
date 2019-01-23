@@ -135,12 +135,12 @@ class Member extends BasicApi
 
         $codeInfo = $this->SmsLog->getOneDarry($map, 'code,create_at');
         if(!$codeInfo){
-            $this->error('找不到验证码');
+            $this->error('验证码错误');
         }
         $timeDiff = floor(time() - $codeInfo['create_at']);
-        // if(($timeDiff / 60) >= 5){
-        //     $this->error('验证码超时');
-        // }
+        if(($timeDiff / 60) >= 5){
+            $this->error('验证码已过期');
+        }
         if($codeInfo['code'] != $code){
             $this->error('验证码错误');
         }
@@ -153,6 +153,66 @@ class Member extends BasicApi
         ]);
         if($up){
             $this->success('登录成功', $mem);
+        }
+    }
+
+    //修改密码
+    public function uppass(){
+        $phone = input('phone');
+        $password = input('password');
+        $code = input('code');
+
+        if(!$phone || !is_mobile($phone)){
+            $this->error('请输入正确手机号码');
+        }
+        if(!$password){
+            $this->error('请输入密码');
+        }
+        if(!$code){
+            $this->error('请输入验证码');
+        }
+
+        $map = [
+            'phone' => ['eq', $phone],
+        ];
+        $map = new Where($map);
+        $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
+        if(!$mem){
+            $this->error('账号不存在，请重新输入');            
+        }
+        if($mem['password'] == $password){
+            $this->error('新密码不能与原密码一致，请重新输入');            
+        }
+
+        $codeInfo = $this->SmsLog->getOneDarry($map, 'code,create_at');
+        if(!$codeInfo){
+            $this->error('验证码错误');
+        }
+        $timeDiff = floor(time() - $codeInfo['create_at']);
+        // if(($timeDiff / 60) >= 5){
+        //     $this->error('验证码已过期');
+        // }
+        if($codeInfo['code'] != $code){
+            $this->error('验证码错误');
+        }
+        // halt($code);
+
+        // 更新登录信息
+        $up = $this->member->where($map)->update([
+            'password'  => $password,
+        ]);
+        $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
+        $rs = $this->hx->hx_user_update_password($mem['username'], $password);
+        $ret  = json_decode($rs, true);
+        if(isset($ret['error'])){
+            if($ret['error'] == 'duplicate_unique_property_exists'){
+                $this->error("用户已存在");
+            }else{
+                $this->error($ret['error']);
+            }
+        }
+        if($up){
+            $this->success('密码修改成功', $mem);
         }
     }
 
