@@ -93,6 +93,9 @@ class Chat extends BasicApi
             $this->error('找不到用户或用户角色未设置');
         }
         $info = $this->chat->getOneDarry(['id' => $id], 'id,title,content,create_at,create_by,receive_by');
+        if(!$info){
+            $this->error('找不到记录');
+        }
         $roleArr = explode(',',$info['role']);
         if(!in_array($role, $roleArr)){
             $this->error('无权访问');

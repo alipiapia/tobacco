@@ -100,6 +100,9 @@ class Document extends BasicApi
             $this->error('找不到用户或用户角色未设置');
         }
         $info = $this->document->getOneDarry(['id' => $id], 'id,title,file,type,role,create_at');
+        if(!$info){
+            $this->error('找不到文件');
+        }
         $roleArr = explode(',',$info['role']);
         if(!in_array($role, $roleArr)){
             $this->error('无权访问');
