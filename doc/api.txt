@@ -118,6 +118,14 @@
 						参数：role		(用户角色role		类型：string		是否必填：非必填)
 						参数：avatar		(用户头像		类型：string		是否必填：非必填)
 						
+			5-5	密码修改
+						地址:/api/member/uppass
+						请求方式:POST
+						参数：phone		(用户phone		类型：string		是否必填：必填)
+						参数：password		(用户新password		类型：string		是否必填：必填)
+						参数：code	(验证码code		类型：string		是否必填：必填)
+
+						
 	6	收藏
 			6-1	我的收藏
 						地址:/api/member/clist
