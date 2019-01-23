@@ -1,4 +1,6 @@
 
+<!--     <script type="text/javascript" src="__STATIC__/admin/js/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__STATIC__/admin/js/ueditor/ueditor.all.min.js"></script> -->
 <form autocomplete="off" onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" id="ProductForm" class='form-horizontal layui-form padding-top-20'>
 
     <div class="layui-form-item">
@@ -13,17 +15,28 @@
         <div class="layui-input-block">                        
             <input type="hidden" data-img="img" name="logo" value='{$vo["logo"]|default=""}' class="layui-input">
         </div>
-    </div> -->
-<!--     <div class="layui-form-item">
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-block">
             <textarea class="layui-textarea" name="desc" required="required" placeholder="请输入描述">{$vo["desc"]|default=''}</textarea>
         </div>
-    </div> -->
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label">内容</label>
         <div class="layui-input-block">
             <textarea class="layui-textarea" name="content" required="required" placeholder="请输入内容">{$vo["content"]|default=''}</textarea>
+        </div>
+    </div> -->
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">内容</label>
+        <div class="layui-input-block">
+            <!-- <textarea placeholder="请输入内容" title="请输入内容" class="layui-textarea" name="content">{$vo.content|default=""}</textarea> -->
+            <!-- <script id="container" name="content" type="text/plain">
+                这里是初始化内容
+            </script> -->
+            <textarea name="content" data-content="content" id="content" data-c='{$vo["content"]|default=""}'>{$vo["content"]|default=''|htmlspecialchars_decode}</textarea>
         </div>
     </div>
 
@@ -48,6 +61,7 @@
     <div class="hr-line-dashed"></div>
 
     <div class="layui-form-item text-center">
+        <input type="hidden" id="vocontent" value='{$vo.content|default=""}'>
         {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
         <button class="layui-btn" type='submit'>保存数据</button>
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
@@ -87,6 +101,51 @@
                     }
                 });
             }
+
+            // var ue = UE.getEditor('container');
+            // ue.ready(function() {
+            //     ue.setHeight(200);
+            //     //设置编辑器的内容
+            //     // ue.setContent('hello');
+            //     //获取html内容，返回: <p>hello</p>
+            //     // var html = ue.getContent();
+            //     //获取纯文本内容，返回: hello
+            //     // var txt = ue.getContentTxt();
+
+            //     var cont = $("#vocontent").val();
+            //     // alert(cont);return false;
+            //     ue.setContent(cont);
+            // });
+            
+            var content = $("[data-content='content']");
+            var arr =[];
+            $(content).each(function(){
+                // arr.push($(this));
+                if($(this)){
+                    window.createEditor($(this), {height: 100});
+
+                    //Ueditor 13th Dec. 2018
+                    // var objId = $(this).attr("id");
+                    // var cont = $(this).attr("data-c");
+                    // var ue = UE.getEditor(objId,{
+                    //     // autoHeight:true,
+                    // });
+                    // ue.ready(function() {
+                    //     ue.setHeight(400);
+                    //     //设置编辑器的内容
+                    //     // ue.setContent('hello');
+                    //     //获取html内容，返回: <p>hello</p>
+                    //     // var html = ue.getContent();
+                    //     //获取纯文本内容，返回: hello
+                    //     // var txt = ue.getContentTxt();
+
+                    //     // var cont = $(this).attr("data-c");
+                    //     // console.log(cont);
+                    //     // alert(cont);return false;
+                    //     ue.setContent(cont);
+                    // });
+                }
+            });
         })
     </script>
 </form>
