@@ -117,6 +117,9 @@ class Notice extends BasicAdmin
     {
         if ($this->request->isPost()) {
             // halt($data);
+            if (!isset($data['content']) || $data['content'] == '') {
+                $this->error('请填写内容');
+            }
             if (isset($data['role']) && is_array($data['role'])) {
                 $data['role'] = join(',', $data['role']);
             } else {
