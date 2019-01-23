@@ -38,17 +38,19 @@ class Member extends BasicAdmin
     public $table = 'Member';
     public $member;
     public $hx;
+    public $area;
 
     public function __construct(){
         parent::__construct();
         $this->member = model('common/Member');
+        $this->area = model('common/Area');
         $this->hx = new HxService();
         $this->assign('roles', config('pp.role_type'));
 
         //获取地区
         $this->areaList = $this->_getAreaTrees('Area', ['area_open' => 1]);
-        // halt($this->areaList);
         $this->assign('areaList', $this->areaList);
+        // halt($this->areaList);
     }
 
     /**
@@ -61,15 +63,20 @@ class Member extends BasicAdmin
      */
     public function index()
     {
+        // halt(join_area_name(3089));
         // $f = $this->hx->hx_chat_messages('2019012111');
         // $f = $this->hx->downContent('2019012111', '../../../static');
         // halt($f);
         $this->title = '用户管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['username', 'nickname', 'role', 'phone', 'mail'] as $key) {
+        foreach (['username', 'nickname', 'role', 'phone', 'mail', 'aid'] as $key) {
             if(isset($get[$key]) && $get[$key] !== ''){
                 if($key == 'role'){
                     $db->where($key, $get[$key]);
+                }elseif($key == 'aid'){
+                    $areas = $this->area->order('area_id asc')->select();
+                    $aids = ToolsService::getArrSubIds($areas,$get[$key],'area_id','area_parent_id');//当前区域下地区Ids
+                    $db->where($key, 'in', $aids);
                 }else{
                     $db->whereLike($key, "%{$get[$key]}%");
                 }

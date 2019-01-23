@@ -25,6 +25,24 @@
         </div>
     </div>
 
+    {if !empty($areaList)}
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属地区</label>
+        <div class="layui-input-block">
+            <select name='aid' required="required" title="请选择地区" class='layui-select full-width'>
+                <option value="">请选择地区</option>
+                {foreach $areaList as $menu}
+                {eq name='menu.area_id' value='$vo.aid|default=0'}
+                <option selected  value='{$menu.area_id}'>{$menu.spl}{$menu.area_name}</option>
+                {else/}
+                <option  value='{$menu.area_id}'>{$menu.spl}{$menu.area_name}</option>
+                {/eq}
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    {/if}
+
     <div class="layui-form-item">
         <label class="layui-form-label">联系邮箱</label>
         <div class="layui-input-block">

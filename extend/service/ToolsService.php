@@ -150,7 +150,8 @@ class ToolsService
             $attr[$path] = "{$ppath}-{$attr[$id]}";
             $attr['sub'] = isset($attr['sub']) ? $attr['sub'] : [];
             $attr['spt'] = substr_count($ppath, '-');
-            $attr['spl'] = str_repeat("&nbsp;&nbsp;&nbsp;├&nbsp;&nbsp;", $attr['spt']);
+            // $attr['spl'] = str_repeat("&nbsp;&nbsp;&nbsp;├&nbsp;&nbsp;", $attr['spt']);
+            $attr['spl'] = html_entity_decode(str_repeat("&nbsp;&nbsp;&nbsp;├&nbsp;&nbsp;", $attr['spt']));//20190123 pp  Html实体反解析
             $sub = $attr['sub'];
             unset($attr['sub']);
             $tree[] = $attr;

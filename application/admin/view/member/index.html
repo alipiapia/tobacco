@@ -47,6 +47,24 @@
     </div>
     <!--{/if}-->
 
+    <!--{if !empty($areaList)}-->
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label" style="width:auto">所属地区</label>
+        <div class="layui-input-inline">
+            <select name='aid' class='layui-select'>
+                <option value="">所属地区</option>
+                {foreach $areaList as $val}
+                {eq name='val.area_id' value='$Think.get.aid|default=0'}
+                <option selected  value='{$val.area_id}'>{$val.spl}{$val.area_name}</option>
+                {else/}
+                <option  value='{$val.area_id}'>{$val.spl}{$val.area_name}</option>
+                {/eq}
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <!--{/if}-->
+
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">联系手机</label>
         <div class="layui-input-inline">
@@ -92,6 +110,7 @@
             <th class='text-left nowrap'>用户名</th>
             <th class='text-left nowrap'>昵称</th>
             <th class='text-left nowrap'>角色</th>
+            <th class='text-left nowrap'>地 区</th>
             <th class='text-left nowrap'>手机号</th>
             <th class='text-left nowrap'>邮箱</th>
             <th class='text-left nowrap'>登录次数</th>
@@ -118,6 +137,9 @@
                     <span class="color-green">{$role.title}</span>
                     {/if}
                 {/volist}
+            </td>
+            <td class=text-left nowrap'>
+                {$vo.aid|default="<span style='color:#ccc'>未设置</span>"|join_area_name}
             </td>
             <td class='text-left nowrap'>
                 {$vo.phone|default="<span class='color-desc'>还没有设置手机号</span>"|raw}

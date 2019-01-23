@@ -185,3 +185,33 @@ function send_sms($phone, $code){
     // return SmsService::sms_juhe($phone, $code);
     return SmsService::sms_sub($phone, $code);
 }
+
+//地区名称查询上级+拼接
+if (!function_exists('join_area_name')) {
+    // function join_area_name($area_id){
+    //     $cur_area = db("Area")->where(['area_id' => $area_id])->find();
+    //     $cur_name = $cur_area['area_name'];
+    //     if(isset($cur_area['area_parent_id'])){
+    //        $cur_name = join_area_name($cur_area['area_parent_id']).' '.$cur_name;
+    //     }
+    //     return $cur_name;
+    // }
+    
+    function join_area_name($area_id){
+        $cur_area = Db::name("Area")->where(['area_id' => $area_id])->field('area_id,area_name,area_parent_id')->find();
+        $cur_name = $cur_area['area_name'];
+        if(isset($cur_area['area_parent_id'])){
+            $cur_area1 = Db::name("Area")->where(['area_id' => $cur_area['area_parent_id']])->field('area_id,area_name,area_parent_id')->find();
+            $cur_name = $cur_area1['area_name'].' '.$cur_name;
+            if(isset($cur_area1['area_parent_id'])){
+                $cur_area2 = Db::name("Area")->where(['area_id' => $cur_area1['area_parent_id']])->field('area_id,area_name,area_parent_id')->find();
+                $cur_name = $cur_area2['area_name'].' '.$cur_name;
+                if(isset($cur_area2['area_parent_id'])){
+                    $cur_area3 = Db::name("Area")->where(['area_id' => $cur_area2['area_parent_id']])->field('area_id,area_name,area_parent_id')->find();
+                    $cur_name = $cur_area3['area_name'].' '.$cur_name;
+                }
+            }
+        }
+        return $cur_name;
+    }
+}

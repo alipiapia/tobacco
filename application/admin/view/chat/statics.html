@@ -22,6 +22,24 @@
         </div>
     </div>
 
+    <!--{if !empty($areaList)}-->
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label" style="width:auto">所属地区</label>
+        <div class="layui-input-inline">
+            <select name='aid' class='layui-select'>
+                <option value="">所属地区</option>
+                {foreach $areaList as $val}
+                {eq name='val.area_id' value='$Think.get.aid|default=0'}
+                <option selected  value='{$val.area_id}'>{$val.spl}{$val.area_name}</option>
+                {else/}
+                <option  value='{$val.area_id}'>{$val.spl}{$val.area_name}</option>
+                {/eq}
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <!--{/if}-->
+
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-inline">

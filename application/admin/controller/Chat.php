@@ -39,6 +39,10 @@ class Chat extends BasicAdmin
     public function __construct(){
         parent::__construct();
         $this->assign('roles', config('pp.role_type'));
+        //获取地区
+        $this->areaList = $this->_getAreaTrees('Area', ['area_open' => 1]);
+        $this->assign('areaList', $this->areaList);
+        // halt($this->areaList);
     }
 
     /**

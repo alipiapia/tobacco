@@ -179,4 +179,47 @@ class BasicAdmin extends Controller
         return $menus;
     }
 
+    /**
+     * 列表ajax获取数据方法
+     * @param null $db 数据库查询对象
+     * @param int $page 页码
+     * @param int $size 数量
+     * @return \think\response\Json
+     */
+    protected function _ajaxData($db = null,$searchArray = [], $page = 1, $size = 20) {
+
+        if (is_null($db)) {
+            $db = Db::name($this->table);
+        } elseif (is_string($db)) {
+            $db = Db::name($db);
+        }
+
+        $page = $this->request->param('page', $page);
+        $size = $this->request->param('limit', $size);
+
+        $get = $this->request->get();
+        // 搜索
+        if ($searchArray) {
+            $keyArr = !empty($get['key']) ? $get['key'] : [];
+            foreach ($searchArray as $key) {
+
+                if (isset($keyArr[$key]) && $keyArr[$key] !== '') {
+                    $db->where($key, 'like', "%{$keyArr[$key]}%");
+                }
+            }
+        }
+
+        $data = $db->page($page, $size)->select();
+        $count = $db->count();
+
+        $result = [
+            'code' => 0,
+            'count' => $count,
+            'data' => $data,
+            'msg' => '获取数据成功'
+        ];
+
+        return json($result);
+    }
+
 }
