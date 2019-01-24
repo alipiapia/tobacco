@@ -18,6 +18,7 @@ use controller\BasicAdmin;
 use service\DataService;
 use service\ToolsService;
 use think\Db;
+use think\db\Where;
 
 /**
  * 聊天记录 控制器
@@ -38,6 +39,8 @@ class Chat extends BasicAdmin
 
     public function __construct(){
         parent::__construct();
+        $this->member = model('common/Member');
+        $this->area = model('common/Area');
         $this->assign('roles', config('pp.role_type'));
         //获取地区
         $this->areaList = $this->_getAreaTrees('Area', ['area_open' => 1]);
@@ -69,6 +72,22 @@ class Chat extends BasicAdmin
     }
 
     /**
+     * 列表数据处理
+     * @param array $data
+     */
+    protected function _index_data_filter(&$data)
+    {
+        // halt($data);
+        foreach ($data as &$vo) {
+            // halt(strlen($vo['item']));
+            // $vo['item'] = unserialize(base64_decode($vo['item']));
+            // $vo['item'] = json_decode($vo['item'], true);
+        }
+        // halt($data);
+        // $data = ToolsService::arr2table($data);
+    }
+
+    /**
      * 统计分析
      * @return array|string
      * @throws \think\db\exception\DataNotFoundException
@@ -80,8 +99,24 @@ class Chat extends BasicAdmin
     {
         $this->title = '统计分析';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'desc'] as $key) {
-            (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
+        foreach (['title', 'aid', 'role', 'content'] as $key) {
+            if(isset($get[$key]) && $get[$key] !== ''){
+                if($key == 'role'){
+                    $mids = $this->member->getColumn(['role' => $get[$key]], 'id');
+                    // halt($mids);
+                    $db->where('create_by', 'in', $mids);
+                }elseif($key == 'aid'){
+                    $areas = $this->area->order('area_id asc')->select();
+                    $aids = ToolsService::getArrSubIds($areas,$get[$key],'area_id','area_parent_id');//当前区域下地区Ids
+                    $mMap = ['aid' => ['in', $aids]];
+                    $mMap = new Where($mMap);
+                    $mids = $this->member->getColumn($mMap, 'id');
+                    // halt($mids);
+                    $db->where('create_by', 'in', $mids);
+                }else{
+                    $db->whereLike($key, "%{$get[$key]}%");
+                }
+            }
         }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode(' - ', $get['date']);
@@ -95,7 +130,7 @@ class Chat extends BasicAdmin
      * 列表数据处理
      * @param array $data
      */
-    protected function _index_data_filter(&$data)
+    protected function _statics_data_filter(&$data)
     {
         // halt($data);
         foreach ($data as &$vo) {
@@ -103,6 +138,9 @@ class Chat extends BasicAdmin
             // $vo['item'] = unserialize(base64_decode($vo['item']));
             // $vo['item'] = json_decode($vo['item'], true);
         }
+        $data1 = array_column($data, 'content', 'create_by');
+        $data = array_count_values($data1);
+        arsort($data);
         // halt($data);
         // $data = ToolsService::arr2table($data);
     }
