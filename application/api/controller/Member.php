@@ -519,4 +519,10 @@ class Member extends BasicApi
             $this->error('发送失败');
         }
     }
+
+    //关于我们
+    public function aboutus(){
+        $aboutus = sysconf('aboutus');
+        $this->success('请求成功', $aboutus);
+    }
 }

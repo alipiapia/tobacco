@@ -1,0 +1,81 @@
+{extend name="admin@public/content"}
+
+{block name="content"}
+<form autocomplete="off" onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" class='form-horizontal layui-form padding-top-20'>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            aboutus<br><span class="nowrap color-desc">关于我们</span>
+        </label>
+        <div class='col-sm-8'>
+            <!-- <textarea name="aboutus" required="required" rows="10" cols="100">{:sysconf('aboutus')}</textarea> -->
+            <textarea name="aboutus" required="required" data-content="content" id="content" data-c="{:sysconf('aboutus')}">{:sysconf('aboutus')}</textarea>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="col-sm-4 col-sm-offset-2">
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">保存配置</button>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $('.layui-tab ul.layui-tab-title li:first').trigger('click');
+        });
+    </script>
+    <script type="text/javascript">
+        require(['jquery', 'ckeditor', 'angular', 'ueditor.all', 'ueditor.config'], function () {
+            window.form.render();
+
+            // var ue = UE.getEditor('container');
+            // ue.ready(function() {
+            //     ue.setHeight(200);
+            //     //设置编辑器的内容
+            //     // ue.setContent('hello');
+            //     //获取html内容，返回: <p>hello</p>
+            //     // var html = ue.getContent();
+            //     //获取纯文本内容，返回: hello
+            //     // var txt = ue.getContentTxt();
+
+            //     var cont = $("#vocontent").val();
+            //     // alert(cont);return false;
+            //     ue.setContent(cont);
+            // });
+            
+            var content = $("[data-content='content']");
+            var arr =[];
+            $(content).each(function(){
+                // arr.push($(this));
+                if($(this)){
+                    window.createEditor($(this), {height: 100});
+
+                    //Ueditor 13th Dec. 2018
+                    // var objId = $(this).attr("id");
+                    // var cont = $(this).attr("data-c");
+                    // var ue = UE.getEditor(objId,{
+                    //     // autoHeight:true,
+                    // });
+                    // ue.ready(function() {
+                    //     ue.setHeight(400);
+                    //     //设置编辑器的内容
+                    //     // ue.setContent('hello');
+                    //     //获取html内容，返回: <p>hello</p>
+                    //     // var html = ue.getContent();
+                    //     //获取纯文本内容，返回: hello
+                    //     // var txt = ue.getContentTxt();
+
+                    //     // var cont = $(this).attr("data-c");
+                    //     // console.log(cont);
+                    //     // alert(cont);return false;
+                    //     ue.setContent(cont);
+                    // });
+                }
+            });
+        })
+    </script>
+</form>
+
+{/block}

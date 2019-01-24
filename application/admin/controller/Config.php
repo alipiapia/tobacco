@@ -72,4 +72,24 @@ class Config extends BasicAdmin
         return $this->index();
     }
 
+    /**
+     * 关于我们
+     * @return string
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function aboutus()
+    {
+        $this->title = '关于我们';
+        if ($this->request->isGet()) {
+            return $this->fetch('', ['title' => $this->title]);
+        }
+        if ($this->request->isPost()) {
+            foreach ($this->request->post() as $key => $vo) {
+                sysconf($key, $vo);
+            }
+            $this->success('保存成功！', '');
+        }
+    }
+
 }
