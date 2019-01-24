@@ -220,3 +220,9 @@
 						参数：create_by		(发送者create_by		类型：int		是否必填：必填)
 						参数：receive_by		(接收者receive_by		类型：int		是否必填：必填)
 						参数：content		(内容content		类型：text		是否必填：必填)
+		
+	11	关于我们
+			11-1	关于我们
+						地址:/api/member/aboutus
+						请求方式:GET
+						参数：无
