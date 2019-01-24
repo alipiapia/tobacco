@@ -27,7 +27,7 @@
         <label class="layui-form-label">品牌</label>
         <div class="layui-input-inline">
             <select name="brand" lay-verify="required" lay-search>
-                <option>请选择品牌</option>
+                <option value="">请选择品牌</option>
                 {foreach $brands as $brand}
                 <!--{if $Think.get.brand eq $brand.id}-->
                 <option selected="selected" value="{$brand.id}">{$brand.title}</option>
