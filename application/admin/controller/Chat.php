@@ -101,14 +101,20 @@ class Chat extends BasicAdmin
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['title', 'aid', 'role', 'content'] as $key) {
             if(isset($get[$key]) && $get[$key] !== ''){
-                if($key == 'role'){
-                    $mids = $this->member->getColumn(['role' => $get[$key]], 'id');
+                if(($key == 'role') || ($key == 'aid')){
+                    $mMap = [];
+                    if($key == 'role'){
+                        $mMap['role'] = $get[$key];
+                    }
+                    // $mids = $this->member->getColumn(['role' => $get[$key]], 'id');
                     // halt($mids);
-                    $db->where('create_by', 'in', $mids);
-                }elseif($key == 'aid'){
+                    // $db->where('create_by', 'in', $mids);
+                // }elseif($key == 'aid'){
                     $areas = $this->area->order('area_id asc')->select();
                     $aids = ToolsService::getArrSubIds($areas,$get[$key],'area_id','area_parent_id');//当前区域下地区Ids
-                    $mMap = ['aid' => ['in', $aids]];
+                    if($aids){
+                        $mMap['aid'] = ['in', $aids];
+                    }                    
                     $mMap = new Where($mMap);
                     $mids = $this->member->getColumn($mMap, 'id');
                     // halt($mids);
@@ -138,7 +144,7 @@ class Chat extends BasicAdmin
             // $vo['item'] = unserialize(base64_decode($vo['item']));
             // $vo['item'] = json_decode($vo['item'], true);
         }
-        $data1 = array_column($data, 'content', 'create_by');
+        $data1 = array_column($data, 'content');
         $data = array_count_values($data1);
         arsort($data);
         // halt($data);
