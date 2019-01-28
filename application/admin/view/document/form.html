@@ -30,7 +30,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">文件地址</label>
         <div class="layui-input-block">                        
-            <input type="hidden" data-file="file" data-type="doc,xls" name="file" value='{$vo["file"]|default=""}' class="layui-input">
+            <input type="hidden" data-file="file" data-type="{:sysconf('storage_local_exts')}" name="file" value='{$vo["file"]|default=""}' class="layui-input">
         </div>
     </div>
 
