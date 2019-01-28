@@ -126,6 +126,10 @@ class Document extends BasicAdmin
             // halt($data);
             if(!($data['file'])){
                 $this->error('请上传文件');
+            }else{
+                $ext = strtolower(pathinfo($data['file'], 4));
+                $data['ext'] = $ext;
+                // halt($ext);
             }
             if(!isset($data['type'])){
                 $this->error('请选择文件类型');

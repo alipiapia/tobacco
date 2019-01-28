@@ -77,7 +77,7 @@ class Document extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->document->getNewPageLists($map, '', 'id,title,file,type,role,create_at', $this->page, $this->size);
+        $list = $this->document->getNewPageLists($map, '', 'id,title,file,ext,type,role,create_at', $this->page, $this->size);
         foreach ($list as $k => $v) {
             $list[$k]['create_at'] = date('Y-m-d', $v['create_at']);
         }
