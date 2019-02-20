@@ -38,7 +38,7 @@ class Area extends BasicAdmin
         ];
         $this->assign('alert', $alert);
 
-        $this->title = '网站栏目管理';
+        $this->title = '地区管理';
 
         $map['area_parent_id'] = $this->request->param('pid', 0); // 默认获取一级地区
         $db = Db::name($this->table)->order('area_sort asc, area_id asc')->where($map);
