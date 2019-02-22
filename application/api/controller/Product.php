@@ -125,6 +125,7 @@ class Product extends BasicApi
         if(!$mids){
             $this->error('找不到机型');
         }
+        // halt($mids[0]);
         $map22 = ['id' => ['in', $mids]];
         $map22 = new Where($map22);
         $pids = $this->machine->getColumn($map22, 'pid');
@@ -224,7 +225,8 @@ class Product extends BasicApi
         $pMap = ['id' => $pid];
         $mMap = ['id' => $mid];
         $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
-        $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
+        $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,type,item');
+        $tid = $machinInfo['type'];
         $item = json_decode($info['item'], true);
         $mItem = json_decode($machinInfo['item'], true);
         // halt($item);
@@ -300,25 +302,25 @@ class Product extends BasicApi
                     // if(strpos($k, 'fwtjthqt') !== false){
                     //     $exprr = explode('-', $k);
                     //     // halt($exprr);
-                    //     if($exprr[1] == $mid){
-                    //         // halt($mid);
+                    //     if($exprr[1] == $tid){
+                    //         // halt($tid);
                     //         $item['fwtj']['th']['qt'][] = $itemExpQt1;
                     //         $item['fwtj']['th']['qt'][] = $itemExpQt2;
                     //     }
                     // }
                     if(strpos($k, 'fwtjthgyh') !== false){
                         $exprr = explode('-', $k);
-                        if(isset($exprr[1]) && $exprr[1] == $mid){
+                        if(isset($exprr[1]) && $exprr[1] == $tid){
                             $item['fwtj']['th']['gyh'] = $itemExp;
                         }
-                        // $item['fwtj']['th']['gyh'] =  (isset($exprr[1]) && $exprr[1] == $mid) ? $itemExp : $itemExp;
+                        // $item['fwtj']['th']['gyh'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                     }
                     if(strpos($k, 'fwtjthjd') !== false){
                         $exprr = explode('-', $k);
-                        if(isset($exprr[1]) && $exprr[1] == $mid){
+                        if(isset($exprr[1]) && $exprr[1] == $tid){
                             $item['fwtj']['th']['jd'] = $itemExp;
                         }
-                        // $item['fwtj']['th']['jd'] =  (isset($exprr[1]) && $exprr[1] == $mid) ? $itemExp : $itemExp;
+                        // $item['fwtj']['th']['jd'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                     }
                 }elseif(strpos($k, 'fwtjxh') !== false){//防伪分组小盒
                     if($specInfo == 6){
@@ -341,24 +343,24 @@ class Product extends BasicApi
                     }
                     // if(strpos($k, 'fwtjxhqt') !== false){
                     //     $exprr = explode('-', $k);
-                    //     if($exprr[1] == $mid){
+                    //     if($exprr[1] == $tid){
                     //         $item['fwtj']['xh']['qt'][] = $itemExpQt1;
                     //         $item['fwtj']['xh']['qt'][] = $itemExpQt2;
                     //     }
                     // }
                     if(strpos($k, 'fwtjxhgyh') !== false){
                         $exprr = explode('-', $k);
-                        if(isset($exprr[1]) && $exprr[1] == $mid){
+                        if(isset($exprr[1]) && $exprr[1] == $tid){
                             $item['fwtj']['xh']['gyh'] = $itemExp;
                         }
-                        // $item['fwtj']['xh']['gyh'] =  (isset($exprr[1]) && $exprr[1] == $mid) ? $itemExp : $itemExp;
+                        // $item['fwtj']['xh']['gyh'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                     }
                     if(strpos($k, 'fwtjxhjd') !== false){
                         $exprr = explode('-', $k);
-                        if(isset($exprr[1]) && $exprr[1] == $mid){
+                        if(isset($exprr[1]) && $exprr[1] == $tid){
                             $item['fwtj']['xh']['jd'] = $itemExp;
                         }
-                        // $item['fwtj']['xh']['jd'] =  (isset($exprr[1]) && $exprr[1] == $mid) ? $itemExp : $itemExp;
+                        // $item['fwtj']['xh']['jd'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                     }
                 }elseif(strpos($k, 'fwtjyz') !== false){//防伪分组烟支
                     if($specInfo == 6){
@@ -393,7 +395,7 @@ class Product extends BasicApi
                         }
                         // halt($itemExpQt);
                         // $exprr = explode('-', $k);
-                        // if(isset($exprr[1]) && $exprr[1] == $mid){
+                        // if(isset($exprr[1]) && $exprr[1] == $tid){
                             $item['fwtj']['yz']['qt'] = $itemExpQt;
                             // $item['fwtj']['yz']['qt'][] = $itemExpQt02;
                         // }
