@@ -29,24 +29,6 @@
         </div>
     </div>
 
-    <!--{if !empty($roles)}-->
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">角色</label>
-        <div class="layui-input-inline">
-            <select name="role" lay-search>
-                <option value="">请选择角色</option>
-                {foreach $roles as $role}
-                <!--{if $Think.get.role eq $role.id}-->
-                <option selected="selected" value="{$role.id}">{$role.title}</option>
-                <!--{else}-->
-                <option value="{$role.id}">{$role.title}</option>
-                <!--{/if}-->
-                {/foreach}
-            </select>
-        </div>
-    </div>
-    <!--{/if}-->
-
     <!--{if !empty($areaList)}-->
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label" style="width:auto">所属地区</label>
@@ -59,6 +41,24 @@
                 {else/}
                 <option  value='{$val.area_id}'>{$val.spl}{$val.area_name}</option>
                 {/eq}
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <!--{/if}-->
+
+    <!--{if !empty($roles)}-->
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-inline">
+            <select name="role" lay-search>
+                <option value="">请选择角色</option>
+                {foreach $roles as $role}
+                <!--{if $Think.get.role eq $role.id}-->
+                <option selected="selected" value="{$role.id}">{$role.title}</option>
+                <!--{else}-->
+                <option value="{$role.id}">{$role.title}</option>
+                <!--{/if}-->
                 {/foreach}
             </select>
         </div>
