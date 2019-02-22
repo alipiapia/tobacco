@@ -70,7 +70,7 @@ class Notice extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->notice->getNewPageLists($map, '', 'id,title,desc,content,role,create_at', $this->page, $this->size);
+        $list = $this->notice->getNewPageLists($map, 'sort', 'id,title,desc,content,role,create_at', $this->page, $this->size);
         foreach ($list as $k => $v) {
             $list[$k]['create_at'] = date('Y-m-d', $v['create_at']);
         }

@@ -78,7 +78,7 @@ class Type extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->type->getNewPageLists($map, '', 'id,title', $this->page, $this->size);
+        $list = $this->type->getNewPageLists($map, 'sort', 'id,title', $this->page, $this->size);
         foreach ($list as $k => $v) {
             $list[$k]['pid'] = input('pid');
         }

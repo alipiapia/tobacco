@@ -52,7 +52,7 @@ class Brand extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->brand->getNewPageLists($map, '', 'id,title,logo,desc', $this->page, $this->size);
+        $list = $this->brand->getNewPageLists($map, 'sort', 'id,title,logo,desc', $this->page, $this->size);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);

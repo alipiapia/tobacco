@@ -72,7 +72,7 @@ class Member extends BasicApi
             }
         }
         $map = new Where($map);
-        $list = $this->member->getNewPageLists($map, '', 'id,username,nickname,role,phone,status,avatar', $this->page, $this->size);
+        $list = $this->member->getNewPageLists($map, 'id desc', 'id,username,nickname,role,phone,status,avatar', $this->page, $this->size);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
@@ -359,7 +359,7 @@ class Member extends BasicApi
             'uid' => $uid,
         ];
         $map = new Where($map);
-        $list = $this->memberCollection->getNewPageLists($map, '', '', $this->page, $this->size);
+        $list = $this->memberCollection->getNewPageLists($map, 'id desc', '', $this->page, $this->size);
         $list = $list ? $list : null;
         if($list){
             foreach ($list as $k => $v) {
@@ -457,7 +457,7 @@ class Member extends BasicApi
             'uid' => $uid,
         ];
         $map = new Where($map);
-        $list = $this->memberMessage->getNewPageLists($map, '', '', $this->page, $this->size);
+        $list = $this->memberMessage->getNewPageLists($map, 'id desc', '', $this->page, $this->size);
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
@@ -479,7 +479,7 @@ class Member extends BasicApi
             'uid' => $uid,
         ];
         $map = new Where($map);
-        $list = $this->memberMessage->getNewPageLists($map, 'create_at desc', 'id,uid,create_by,title,desc,content,create_at', $this->page, $this->size);
+        $list = $this->memberMessage->getNewPageLists($map, 'id desc', 'id,uid,create_by,title,desc,content,create_at', $this->page, $this->size);
         $list = $list ? $list : null;
         // halt($list);
         if($list){
