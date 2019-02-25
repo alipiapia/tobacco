@@ -311,14 +311,14 @@ class Product extends BasicApi
                     if(strpos($k, 'fwtjthgyh') !== false){
                         $exprr = explode('-', $k);
                         if(isset($exprr[1]) && $exprr[1] == $tid){
-                            $item['fwtj']['th']['gyh'] = $itemExp;
+                            $item['fwtj']['th']['gyh'][] = $itemExp;
                         }
                         // $item['fwtj']['th']['gyh'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                     }
                     if(strpos($k, 'fwtjthjd') !== false){
                         $exprr = explode('-', $k);
                         if(isset($exprr[1]) && $exprr[1] == $tid){
-                            $item['fwtj']['th']['jd'] = $itemExp;
+                            $item['fwtj']['th']['jd'][] = $itemExp;
                         }
                         // $item['fwtj']['th']['jd'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                     }
@@ -351,14 +351,14 @@ class Product extends BasicApi
                     if(strpos($k, 'fwtjxhgyh') !== false){
                         $exprr = explode('-', $k);
                         if(isset($exprr[1]) && $exprr[1] == $tid){
-                            $item['fwtj']['xh']['gyh'] = $itemExp;
+                            $item['fwtj']['xh']['gyh'][] = $itemExp;
                         }
                         // $item['fwtj']['xh']['gyh'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                     }
                     if(strpos($k, 'fwtjxhjd') !== false){
                         $exprr = explode('-', $k);
                         if(isset($exprr[1]) && $exprr[1] == $tid){
-                            $item['fwtj']['xh']['jd'] = $itemExp;
+                            $item['fwtj']['xh']['jd'][] = $itemExp;
                         }
                         // $item['fwtj']['xh']['jd'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                     }
