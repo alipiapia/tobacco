@@ -48,6 +48,16 @@ class Machine extends BasicApi
             'status' => 0,
             'is_deleted' => '0',
         ];
+
+        $pid = input('pid');
+        $map['pid'] = [
+            ['eq', $pid],
+            ['like', "{$pid},%"],
+            ['like', "%,{$pid}"],
+            ['like', "%,{$pid},%"],
+            'or'
+        ];
+        
         $param = $this->request->param();
         if(!isset($param['type']) || $param['type'] == ''){
             $this->error('机型参数错误');
