@@ -78,8 +78,12 @@ class Document extends BasicApi
         }
         $map = new Where($map);
         $list = $this->document->getNewPageLists($map, 'sort', 'id,title,file,ext,type,role,create_at', $this->page, $this->size);
+
         foreach ($list as $k => $v) {
             $list[$k]['create_at'] = date('Y-m-d', $v['create_at']);
+            $this->hHead .= '<a href="'.$v['file'].'"></a>';
+            $this->hHead .= $this->hFoot;
+            $list[$k]['new_file'] = $this->hHead;
         }
         // halt($map);
         $this->success('请求成功', $list);

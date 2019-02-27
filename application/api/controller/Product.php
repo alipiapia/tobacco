@@ -232,7 +232,7 @@ class Product extends BasicApi
         // halt($item);
         // halt($mItem);
         // $ht = "<table class='GeneratedTable'<thead><tr><th>Header</th><th>Header</th></tr></thead><tbody>";
-        $ht = $ht1 = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"><title>烟草</title><meta name="keywords" content="烟草" /><meta name="description" content="烟草" /><style>body {margin:0 auto;padding:0;font-family:"微软雅黑", Arial, Helvetica, sans-serif;font-size:13px;color:#333;text-align:center;background:#FFF;background-size:100% 100%;-moz-background-size: cover;background-size: cover;}div, form, img, ul, ol, li, dl, dt, dd, p {margin: 0;padding: 0;border: 0;list-style:none;}table, td, tr, th, input, select, textarea {font-size:13px;font-family:"微软雅黑";}.productdiv{width:96%;overflow:hidden;padding: 2%;background:#FFF;}.product_table{border-top:1px solid #ffe6cc;border-left:1px solid #ffe6cc;}.product_table td{border-bottom:1px solid #ffe6cc;border-right:1px solid #ffe6cc;padding:5px 10px;line-height:18px;text-align:left;}.product_font{background:#ffe6cc; color:#fe8100;font-weight:bold;font-size:15px;}</style></head><body><div class="productdiv"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="product_table">';
+        $ht = $ht1 = $this->hHead;
         foreach ($item as $k => $v) {
             $item[$k] = $v;
 
@@ -415,7 +415,7 @@ class Product extends BasicApi
             // $item['product_params'][$k] = $item[$k];
             unset($item[$k]);
         }
-        $ht .= '</table></div></body></html>';
+        $ht .= $this->hFoot;
         $item['detail'] = $ht;
 
         //机型参数
