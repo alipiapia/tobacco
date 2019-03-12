@@ -156,8 +156,8 @@ class Member extends BasicApi
         }
     }
 
-    //修改密码
-    public function uppass(){
+    //忘记密码
+    public function forgetpass(){
         $phone = input('phone');
         $password = input('password');
         $code = input('code');
@@ -212,12 +212,12 @@ class Member extends BasicApi
             }
         }
         if($up){
-            $this->success('密码修改成功', $mem);
+            $this->success('密码找回成功，请重新登录', $mem);
         }
     }
 
-    //忘记密码
-    public function forgetpass(){
+    //修改密码
+    public function uppass(){
         // $mid = input('mid');
         $phone = input('phone');
         $oldpassword = input('oldpassword');
@@ -280,7 +280,7 @@ class Member extends BasicApi
             }
         }
         if($up){
-            $this->success('密码找回成功，请重新登录', $mem);
+            $this->success('密码修改成功', $mem);
         }
     }
 
