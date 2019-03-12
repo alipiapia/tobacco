@@ -216,6 +216,74 @@ class Member extends BasicApi
         }
     }
 
+    //忘记密码
+    public function forgetpass(){
+        // $mid = input('mid');
+        $phone = input('phone');
+        $oldpassword = input('oldpassword');
+        $password = input('password');
+        $code = input('code');
+
+        if(!$phone || !is_mobile($phone)){
+            $this->error('请输入正确手机号码');
+        }
+        if(!$oldpassword){
+            $this->error('请输入原密码');
+        }
+        if(!$password){
+            $this->error('请输入新密码');
+        }
+        if(!$code){
+            $this->error('请输入验证码');
+        }
+
+        $map = [
+            'phone' => ['eq', $phone],
+        ];
+        $map = new Where($map);
+        $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
+        if(!$mem){
+            $this->error('账号不存在，请重新输入');            
+        }
+        if($mem['password'] != $oldpassword){
+            $this->error('原密码错误');  
+        }
+        if($mem['password'] == $password){
+            $this->error('新密码不能与原密码一致，请重新输入');            
+        }
+
+        $codeInfo = $this->SmsLog->getOneDarry($map, 'code,create_at');
+        if(!$codeInfo){
+            $this->error('验证码错误');
+        }
+        $timeDiff = floor(time() - $codeInfo['create_at']);
+        if(($timeDiff / 60) >= 60){
+            $this->error('验证码已过期');
+        }
+        if($codeInfo['code'] != $code){
+            $this->error('验证码错误');
+        }
+        // halt($code);
+
+        // 更新登录信息
+        $up = $this->member->where($map)->update([
+            'password'  => $password,
+        ]);
+        $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
+        $rs = $this->hx->hx_user_update_password($mem['username'], $password);
+        $ret  = json_decode($rs, true);
+        if(isset($ret['error'])){
+            if($ret['error'] == 'duplicate_unique_property_exists'){
+                $this->error("用户已存在");
+            }else{
+                $this->error($ret['error']);
+            }
+        }
+        if($up){
+            $this->success('密码找回成功，请重新登录', $mem);
+        }
+    }
+
     //发送验证码
     public function send_code(){
         // $send = send_sms('18208702258', '111111', '1', []);
