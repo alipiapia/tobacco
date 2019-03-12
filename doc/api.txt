@@ -124,6 +124,14 @@
 						参数：phone		(用户phone		类型：string		是否必填：必填)
 						参数：password		(用户新password		类型：string		是否必填：必填)
 						参数：code	(验证码code		类型：string		是否必填：必填)
+						
+			5-6	忘记密码
+						地址:/api/member/forgetpass
+						请求方式:POST
+						参数：phone		(用户phone		类型：string		是否必填：必填)
+						参数：oldpassword		(用户旧oldpassword		类型：string		是否必填：必填)
+						参数：password		(用户新password		类型：string		是否必填：必填)
+						参数：code	(验证码code		类型：string		是否必填：必填)
 
 						
 	6	收藏
