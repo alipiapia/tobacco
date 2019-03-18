@@ -458,7 +458,7 @@ class Product extends BasicApi
         $collect = $this->memberCollection->getOneDarry(['uid' => $uid, 'pid' => $pid, 'mid' => $mid]);
         $info['is_collect'] = $collect ? 1 : 0;
         $info['mid'] = $mid;
-        halt($item);
+        // halt($item);
         return $info;
     }
 
