@@ -16,7 +16,7 @@
 <form autocomplete="off" class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
 
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">用户账号</label>
+        <label class="layui-form-label">用户名</label>
         <div class="layui-input-inline">
             <input name="username" value="{$Think.get.username|default=''}" placeholder="请输入用户名" class="layui-input">
         </div>
@@ -29,23 +29,12 @@
         </div>
     </div>
 
-    <!--{if !empty($areaList)}-->
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label" style="width:auto">所属地区</label>
+        <label class="layui-form-label">手机号码</label>
         <div class="layui-input-inline">
-            <select name='aid' class='layui-select'>
-                <option value="">所属地区</option>
-                {foreach $areaList as $val}
-                {eq name='val.area_id' value='$Think.get.aid|default=0'}
-                <option selected  value='{$val.area_id}'>{$val.spl}{$val.area_name}</option>
-                {else/}
-                <option  value='{$val.area_id}'>{$val.spl}{$val.area_name}</option>
-                {/eq}
-                {/foreach}
-            </select>
+            <input name="phone" value="{$Think.get.phone|default=''}" placeholder="请输入手机号码" class="layui-input">
         </div>
     </div>
-    <!--{/if}-->
 
     <!--{if !empty($roles)}-->
     <div class="layui-form-item layui-inline">
@@ -65,19 +54,23 @@
     </div>
     <!--{/if}-->
 
+    <!--{if !empty($areaList)}-->
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">联系手机</label>
+        <label class="layui-form-label" style="width:auto">所属地区</label>
         <div class="layui-input-inline">
-            <input name="phone" value="{$Think.get.phone|default=''}" placeholder="请输入联系手机" class="layui-input">
+            <select name='aid' class='layui-select'>
+                <option value="">所属地区</option>
+                {foreach $areaList as $val}
+                {eq name='val.area_id' value='$Think.get.aid|default=0'}
+                <option selected  value='{$val.area_id}'>{$val.spl}{$val.area_name}</option>
+                {else/}
+                <option  value='{$val.area_id}'>{$val.spl}{$val.area_name}</option>
+                {/eq}
+                {/foreach}
+            </select>
         </div>
     </div>
-
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">电子邮箱</label>
-        <div class="layui-input-inline">
-            <input name="mail" value="{$Think.get.mail|default=''}" placeholder="请输入电子邮箱" class="layui-input">
-        </div>
-    </div>
+    <!--{/if}-->
 
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">登录时间</label>
@@ -108,14 +101,13 @@
                 <input data-auto-none="" data-check-target='.list-check-box' type='checkbox'>
             </th>
             <th class='text-left nowrap'>用户名</th>
-            <th class='text-left nowrap'>昵称</th>
-            <th class='text-left nowrap'>角色</th>
+            <th class='text-left nowrap'>昵 称</th>
+            <th class='text-left nowrap'>手机号码</th>
+            <th class='text-left nowrap'>角 色</th>
             <th class='text-left nowrap'>地 区</th>
-            <th class='text-left nowrap'>手机号</th>
-            <th class='text-left nowrap'>邮箱</th>
             <th class='text-left nowrap'>登录次数</th>
             <th class='text-left nowrap'>最后登录</th>
-            <th class='text-left nowrap'>状态</th>
+            <th class='text-left nowrap'>状 态</th>
             <th class='text-left nowrap'></th>
         </tr>
         </thead>
@@ -132,6 +124,9 @@
                 {$vo.nickname|default="<span class='color-desc'>还没有设置昵称</span>"|raw}
             </td>
             <td class='text-left nowrap'>
+                {$vo.phone|default="<span class='color-desc'>还没有设置手机号</span>"|raw}
+            </td>
+            <td class='text-left nowrap'>
                 {volist name="roles" id="role"}
                     {if condition="isset($vo['role']) and $vo['role'] eq $role['id']"}
                     <span class="color-green">{$role.title}</span>
@@ -140,12 +135,6 @@
             </td>
             <td class=text-left nowrap'>
                 {$vo.aid|default="<span style='color:#ccc'>未设置</span>"|join_area_name}
-            </td>
-            <td class='text-left nowrap'>
-                {$vo.phone|default="<span class='color-desc'>还没有设置手机号</span>"|raw}
-            </td>
-            <td class='text-left nowrap'>
-                {$vo.mail|default="<span class='color-desc'>还没有设置邮箱</span>"|raw}
             </td>
             <td class='text-left nowrap'>{$vo.login_num|default=0}</td>
             <td class='text-left nowrap'>
