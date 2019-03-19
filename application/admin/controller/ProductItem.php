@@ -60,8 +60,14 @@ class ProductItem extends BasicAdmin
     {
         $this->title = '产品规格属性管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'desc'] as $key) {
-            (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
+        foreach (['title', 'desc', 'status'] as $key) {
+            if(isset($get[$key]) && $get[$key] !== ''){
+                if($key == 'status'){
+                    $db->where($key, $get[$key]);
+                }else{
+                    $db->whereLike($key, "%{$get[$key]}%");
+                }
+            }
         }
         if (isset($get['spec_id']) && $get['spec_id'] !== '') {
             $db->where('spec_id', $get['spec_id']);

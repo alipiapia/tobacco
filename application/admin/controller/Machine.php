@@ -93,9 +93,9 @@ class Machine extends BasicAdmin
         // halt($d);
         $this->title = '机台管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'type', 'desc'] as $key) {
+        foreach (['title', 'type', 'desc', 'status'] as $key) {
             if(isset($get[$key]) && $get[$key] !== ''){
-                if($key == 'type'){
+                if($key == 'type' || $key == 'status'){
                     $db->where($key, $get[$key]);
                 }else{
                     $db->whereLike($key, "%{$get[$key]}%");

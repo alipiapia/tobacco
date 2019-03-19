@@ -36,6 +36,17 @@
         </div>
     </div>
 
+    <div class="layui-form-item  layui-inline">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <select name="status" lay-verify="required" lay-search>
+                <option value="">请选择状态</option>
+                <option {eq name="$Think.get.status" value="0"}selected="selected"{/eq} value="0">使用中</option>
+                <option {eq name="$Think.get.status" value="1"}selected="selected"{/eq} value="1">已禁用</option>
+            </select>
+        </div>
+    </div>
+
     <div class="layui-form-item layui-inline">
         <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>

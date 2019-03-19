@@ -52,8 +52,14 @@ class Type extends BasicAdmin
     {
         $this->title = '机型管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'desc'] as $key) {
-            (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
+        foreach (['title', 'desc', 'status'] as $key) {
+            if(isset($get[$key]) && $get[$key] !== ''){
+                if($key == 'status'){
+                    $db->where($key, $get[$key]);
+                }else{
+                    $db->whereLike($key, "%{$get[$key]}%");
+                }
+            }
         }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode(' - ', $get['date']);

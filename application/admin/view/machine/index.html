@@ -27,7 +27,7 @@
         <label class="layui-form-label">机型</label>
         <div class="layui-input-inline">
             <select name="type" lay-verify="required" lay-search>
-                <option>请选择机型</option>
+                <option value="">请选择机型</option>
                 {foreach $types as $type}
                 <!--{if $Think.get.type eq $type.id}-->
                 <option selected="selected" value="{$type.id}">{$type.title}</option>
@@ -51,6 +51,17 @@
         <label class="layui-form-label">时间</label>
         <div class="layui-input-inline">
             <input name="date" id='range-date' value="{$Think.get.date|default=''}" placeholder="请选择时间" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item  layui-inline">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+            <select name="status" lay-verify="required" lay-search>
+                <option value="">请选择状态</option>
+                <option {eq name="$Think.get.status" value="0"}selected="selected"{/eq} value="0">使用中</option>
+                <option {eq name="$Think.get.status" value="1"}selected="selected"{/eq} value="1">已禁用</option>
+            </select>
         </div>
     </div>
 
