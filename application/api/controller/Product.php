@@ -239,6 +239,7 @@ class Product extends BasicApi
         // halt($mItem);
         // $ht = "<table class='GeneratedTable'<thead><tr><th>Header</th><th>Header</th></tr></thead><tbody>";
         $ht = $ht1 = $this->hHead;
+        $thii = $xhii = $yzii = 1;
         if($item){
             foreach ($item as $k => $v) {
                 $item[$k] = $v;
@@ -288,6 +289,10 @@ class Product extends BasicApi
                     // halt($k);
                     
                     if(strpos($k, 'fwtjth') !== false){//防伪分组条盒
+                        // //相册
+                        // $item['fwtj']['th']['hd'][$thii] = $itemExp['thumb'];
+                        // $item['fwtj']['th']['hd'][$thii+1] = $itemExp['image'];
+                        // $thii++;
                         if($specInfo == 6){
                             // $item['fwtjth'][$k] = $item[$k];
                             if(in_array($k, ['fwtjthzm', 'fwtjthbm'])){
@@ -329,7 +334,10 @@ class Product extends BasicApi
                             }
                             // $item['fwtj']['th']['jd'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                         }
+                        $thii++;
                     }elseif(strpos($k, 'fwtjxh') !== false){//防伪分组小盒
+                        //相册
+                        $item['fwtj']['xh']['hd'][$xhii] = $itemExp;
                         if($specInfo == 6){
                             // $item['fwtjxh'][$k] = $item[$k];
                             if(in_array($k, ['fwtjxhzm', 'fwtjxhbm'])){
@@ -369,7 +377,10 @@ class Product extends BasicApi
                             }
                             // $item['fwtj']['xh']['jd'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                         }
+                        $xhii++;
                     }elseif(strpos($k, 'fwtjyz') !== false){//防伪分组烟支
+                        //相册
+                        $item['fwtj']['yz']['hd'][$yzii] = $itemExp;
                         if($specInfo == 6){
                             // $item['fwtjyz'][$k] = $item[$k];
                             if(in_array($k, ['fwtjyzzm', 'fwtjyzbm'])){
@@ -407,6 +418,7 @@ class Product extends BasicApi
                                 // $item['fwtj']['yz']['qt'][] = $itemExpQt02;
                             // }
                         }
+                        $yzii++;
                     }else{//其他详细参数
                         // $item['detail'][$k] = $item[$k];
                         $specName = $this->productSpec->getValue(['mark' => $k], 'title');
