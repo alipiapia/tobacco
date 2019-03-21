@@ -302,30 +302,36 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $thhd[] = $exp[0];
                                     $thii++;
-                                    $thhd[] = $exp[1];
-                                    $thii++;
+                                    if($exp[0] != $exp[1]){
+                                        $thhd[] = $exp[1];
+                                        $thii++;                                        
+                                    }
                                 }
                             }
                             if(in_array($k, ['fwtjthzc', 'fwtjthyc'])){
                                 $itemExp['loc'] = $thii;
                                 $item['fwtj']['th']['zcyc'][] = $itemExp;
                                 // goto p;
-                                if($itemExp['thumb']){
-                                    $thhd[] = $itemExp['thumb'];
+                                if(!empty($exp[0])){
+                                    $thhd[] = $exp[0];
                                     $thii++;
-                                    $thhd[] = $itemExp['image'];
-                                    $thii++;
+                                    if($exp[0] != $exp[1]){
+                                        $thhd[] = $exp[1];
+                                        $thii++;                                        
+                                    }
                                 }
                             }
                             if(in_array($k, ['fwtjthdb', 'fwtjthdb2'])){
                                 $itemExp['loc'] = $thii;
                                 $item['fwtj']['th']['dbdb2'][] = $itemExp;
                                 // goto p;
-                                if($itemExp['thumb']){
-                                    $thhd[] = $itemExp['thumb'];
+                                if(!empty($exp[0])){
+                                    $thhd[] = $exp[0];
                                     $thii++;
-                                    $thhd[] = $itemExp['image'];
-                                    $thii++;
+                                    if($exp[0] != $exp[1]){
+                                        $thhd[] = $exp[1];
+                                        $thii++;                                        
+                                    }
                                 }
                             }
                             // if(in_array($k, ['fwtjthgyh'])){
@@ -350,11 +356,13 @@ class Product extends BasicApi
                                 $itemExp['loc'] = $thii;
                                 $item['fwtj']['th']['gyh'][] = $itemExp;
                                 // goto p;
-                                if($itemExp['thumb']){
-                                    $thhd[] = $itemExp['thumb'];
+                                if(!empty($exp[0])){
+                                    $thhd[] = $exp[0];
                                     $thii++;
-                                    $thhd[] = $itemExp['image'];
-                                    $thii++;
+                                    if($exp[0] != $exp[1]){
+                                        $thhd[] = $exp[1];
+                                        $thii++;                                        
+                                    }
                                 }
                             }
                             // $item['fwtj']['th']['gyh'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
@@ -365,11 +373,13 @@ class Product extends BasicApi
                                 $itemExp['loc'] = $thii;
                                 $item['fwtj']['th']['jd'][] = $itemExp;
                                 // goto p;
-                                if($itemExp['thumb']){
-                                    $thhd[] = $itemExp['thumb'];
+                                if(!empty($exp[0])){
+                                    $thhd[] = $exp[0];
                                     $thii++;
-                                    $thhd[] = $itemExp['image'];
-                                    $thii++;
+                                    if($exp[0] != $exp[1]){
+                                        $thhd[] = $exp[1];
+                                        $thii++;                                        
+                                    }
                                 }
                             }
                             // $item['fwtj']['th']['jd'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
@@ -390,31 +400,37 @@ class Product extends BasicApi
                             if(in_array($k, ['fwtjxhzm', 'fwtjxhbm'])){
                                 $itemExp['loc'] = $xhii;
                                 $item['fwtj']['xh']['zmbm'][] = $itemExp;
-                                if($itemExp['thumb']){
-                                    $xhhd[] = $itemExp['thumb'];
-                                    $xhii++;
-                                    $xhhd[] = $itemExp['image'];
-                                    $xhii++;
+                                if(!empty($exp[0])){
+                                    $xhhd[] = $exp[0];
+                                    $thii++;
+                                    if($exp[0] != $exp[1]){
+                                        $xhhd[] = $exp[1];
+                                        $thii++;                                        
+                                    }
                                 }
                             }
                             if(in_array($k, ['fwtjxhzc', 'fwtjxhyc'])){
                                 $itemExp['loc'] = $xhii;
                                 $item['fwtj']['xh']['zcyc'][] = $itemExp;
-                                if($itemExp['thumb']){
-                                    $xhhd[] = $itemExp['thumb'];
-                                    $xhii++;
-                                    $xhhd[] = $itemExp['image'];
-                                    $xhii++;
+                                if(!empty($exp[0])){
+                                    $xhhd[] = $exp[0];
+                                    $thii++;
+                                    if($exp[0] != $exp[1]){
+                                        $xhhd[] = $exp[1];
+                                        $thii++;                                        
+                                    }
                                 }
                             }
                             if(in_array($k, ['fwtjxhdb', 'fwtjxhdb2'])){
                                 $itemExp['loc'] = $xhii;
                                 $item['fwtj']['xh']['dbdb2'][] = $itemExp;
-                                if($itemExp['thumb']){
-                                    $xhhd[] = $itemExp['thumb'];
-                                    $xhii++;
-                                    $xhhd[] = $itemExp['image'];
-                                    $xhii++;
+                                if(!empty($exp[0])){
+                                    $xhhd[] = $exp[0];
+                                    $thii++;
+                                    if($exp[0] != $exp[1]){
+                                        $xhhd[] = $exp[1];
+                                        $thii++;                                        
+                                    }
                                 }
                             }
                             // if(in_array($k, ['fwtjxhgyh'])){
@@ -436,11 +452,13 @@ class Product extends BasicApi
                             if(isset($exprr[1]) && $exprr[1] == $tid){
                                 $itemExp['loc'] = $xhii;
                                 $item['fwtj']['xh']['gyh'][] = $itemExp;
-                                if($itemExp['thumb']){
-                                    $xhhd[] = $itemExp['thumb'];
-                                    $xhii++;
-                                    $xhhd[] = $itemExp['image'];
-                                    $xhii++;
+                                if(!empty($exp[0])){
+                                    $xhhd[] = $exp[0];
+                                    $thii++;
+                                    if($exp[0] != $exp[1]){
+                                        $xhhd[] = $exp[1];
+                                        $thii++;                                        
+                                    }
                                 }
                             }
                             // $item['fwtj']['xh']['gyh'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
@@ -450,11 +468,13 @@ class Product extends BasicApi
                             if(isset($exprr[1]) && $exprr[1] == $tid){
                                 $itemExp['loc'] = $xhii;
                                 $item['fwtj']['xh']['jd'][] = $itemExp;
-                                if($itemExp['thumb']){
-                                    $xhhd[] = $itemExp['thumb'];
-                                    $xhii++;
-                                    $xhhd[] = $itemExp['image'];
-                                    $xhii++;
+                                if(!empty($exp[0])){
+                                    $xhhd[] = $exp[0];
+                                    $thii++;
+                                    if($exp[0] != $exp[1]){
+                                        $xhhd[] = $exp[1];
+                                        $thii++;                                        
+                                    }
                                 }
                             }
                             // $item['fwtj']['xh']['jd'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
@@ -514,8 +534,10 @@ class Product extends BasicApi
                                 if($it['thumb']){
                                     $yzhd[] = $it['thumb'];
                                     $yzii++;
-                                    $yzhd[] = $it['image'];
-                                    $yzii++;
+                                    if($it['thumb'] != $it['image']){
+                                        $yzhd[] = $it['image'];
+                                        $yzii++;                                        
+                                    }
                                 }
                                 $i++;
                             }
