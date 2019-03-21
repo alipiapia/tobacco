@@ -290,19 +290,40 @@ class Product extends BasicApi
                     
                     if(strpos($k, 'fwtjth') !== false){//防伪分组条盒
                         // //相册
-                        // $item['fwtj']['th']['hd'][$thii] = $itemExp['thumb'];
-                        // $item['fwtj']['th']['hd'][$thii+1] = $itemExp['image'];
+                        // $item['fwtj']['th']['thhd'][$thii] = $itemExp['thumb'];
+                        // $item['fwtj']['th']['thhd'][$thii+1] = $itemExp['image'];
                         // $thii++;
                         if($specInfo == 6){
                             // $item['fwtjth'][$k] = $item[$k];
                             if(in_array($k, ['fwtjthzm', 'fwtjthbm'])){
                                 $item['fwtj']['th']['zmbm'][] = $itemExp;
+                                // goto p;
+                                if($itemExp['thumb']){
+                                    $thhd[$thii] = $itemExp['thumb'];
+                                    $thii++;
+                                    $thhd[$thii] = $itemExp['image'];
+                                    $thii++;
+                                }
                             }
                             if(in_array($k, ['fwtjthzc', 'fwtjthyc'])){
                                 $item['fwtj']['th']['zcyc'][] = $itemExp;
+                                // goto p;
+                                if($itemExp['thumb']){
+                                    $thhd[$thii] = $itemExp['thumb'];
+                                    $thii++;
+                                    $thhd[$thii] = $itemExp['image'];
+                                    $thii++;
+                                }
                             }
                             if(in_array($k, ['fwtjthdb', 'fwtjthdb2'])){
                                 $item['fwtj']['th']['dbdb2'][] = $itemExp;
+                                // goto p;
+                                if($itemExp['thumb']){
+                                    $thhd[$thii] = $itemExp['thumb'];
+                                    $thii++;
+                                    $thhd[$thii] = $itemExp['image'];
+                                    $thii++;
+                                }
                             }
                             // if(in_array($k, ['fwtjthgyh'])){
                             //     $item['fwtj']['th']['gyh'][] = $itemExp;
@@ -324,6 +345,13 @@ class Product extends BasicApi
                             $exprr = explode('-', $k);
                             if(isset($exprr[1]) && $exprr[1] == $tid){
                                 $item['fwtj']['th']['gyh'][] = $itemExp;
+                                // goto p;
+                                if($itemExp['thumb']){
+                                    $thhd[$thii] = $itemExp['thumb'];
+                                    $thii++;
+                                    $thhd[$thii] = $itemExp['image'];
+                                    $thii++;
+                                }
                             }
                             // $item['fwtj']['th']['gyh'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                         }
@@ -331,23 +359,55 @@ class Product extends BasicApi
                             $exprr = explode('-', $k);
                             if(isset($exprr[1]) && $exprr[1] == $tid){
                                 $item['fwtj']['th']['jd'][] = $itemExp;
+                                // goto p;
+                                if($itemExp['thumb']){
+                                    $thhd[$thii] = $itemExp['thumb'];
+                                    $thii++;
+                                    $thhd[$thii] = $itemExp['image'];
+                                    $thii++;
+                                }
                             }
                             // $item['fwtj']['th']['jd'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                         }
-                        $thii++;
+                        // p:
+                        // if($itemExp['thumb']){
+                            // $thhd[] = $itemExp['thumb'];
+                            // $thii++;
+                            // $thhd[] = $itemExp['image'];
+                        // }
+                        // $thii++;
+                        $item['fwtj']['th']['hd'] = isset($thhd) ? $thhd : '';
                     }elseif(strpos($k, 'fwtjxh') !== false){//防伪分组小盒
-                        //相册
-                        $item['fwtj']['xh']['hd'][$xhii] = $itemExp;
+                        // //相册
+                        // $item['fwtj']['xh']['hd'][$xhii] = $itemExp;
                         if($specInfo == 6){
                             // $item['fwtjxh'][$k] = $item[$k];
                             if(in_array($k, ['fwtjxhzm', 'fwtjxhbm'])){
                                 $item['fwtj']['xh']['zmbm'][] = $itemExp;
+                                if($itemExp['thumb']){
+                                    $xhhd[$xhii] = $itemExp['thumb'];
+                                    $xhii++;
+                                    $xhhd[$xhii] = $itemExp['image'];
+                                    $xhii++;
+                                }
                             }
                             if(in_array($k, ['fwtjxhzc', 'fwtjxhyc'])){
                                 $item['fwtj']['xh']['zcyc'][] = $itemExp;
+                                if($itemExp['thumb']){
+                                    $xhhd[$xhii] = $itemExp['thumb'];
+                                    $xhii++;
+                                    $xhhd[$xhii] = $itemExp['image'];
+                                    $xhii++;
+                                }
                             }
                             if(in_array($k, ['fwtjxhdb', 'fwtjxhdb2'])){
                                 $item['fwtj']['xh']['dbdb2'][] = $itemExp;
+                                if($itemExp['thumb']){
+                                    $xhhd[$xhii] = $itemExp['thumb'];
+                                    $xhii++;
+                                    $hd[$xhii] = $itemExp['image'];
+                                    $xhii++;
+                                }
                             }
                             // if(in_array($k, ['fwtjxhgyh'])){
                             //     $item['fwtj']['xh']['gyh'][] = $itemExp;
@@ -367,6 +427,12 @@ class Product extends BasicApi
                             $exprr = explode('-', $k);
                             if(isset($exprr[1]) && $exprr[1] == $tid){
                                 $item['fwtj']['xh']['gyh'][] = $itemExp;
+                                if($itemExp['thumb']){
+                                    $xhhd[$xhii] = $itemExp['thumb'];
+                                    $xhii++;
+                                    $xhhd[$xhii] = $itemExp['image'];
+                                    $xhii++;
+                                }
                             }
                             // $item['fwtj']['xh']['gyh'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                         }
@@ -374,31 +440,56 @@ class Product extends BasicApi
                             $exprr = explode('-', $k);
                             if(isset($exprr[1]) && $exprr[1] == $tid){
                                 $item['fwtj']['xh']['jd'][] = $itemExp;
+                                if($itemExp['thumb']){
+                                    $xhhd[$xhii] = $itemExp['thumb'];
+                                    $xhii++;
+                                    $xhhd[$xhii] = $itemExp['image'];
+                                    $xhii++;
+                                }
                             }
                             // $item['fwtj']['xh']['jd'] =  (isset($exprr[1]) && $exprr[1] == $tid) ? $itemExp : $itemExp;
                         }
-                        $xhii++;
+                        // $xhii++;
+                        $item['fwtj']['xh']['hd'] = isset($xhhd) ? $xhhd : '';
                     }elseif(strpos($k, 'fwtjyz') !== false){//防伪分组烟支
-                        //相册
-                        $item['fwtj']['yz']['hd'][$yzii] = $itemExp;
-                        if($specInfo == 6){
-                            // $item['fwtjyz'][$k] = $item[$k];
-                            if(in_array($k, ['fwtjyzzm', 'fwtjyzbm'])){
-                                $item['fwtj']['yz']['zmbm'][] = $itemExp;
-                            }
-                            if(in_array($k, ['fwtjyzzc', 'fwtjyzyc'])){
-                                $item['fwtj']['yz']['zcyc'][] = $itemExp;
-                            }
-                            if(in_array($k, ['fwtjyzdb', 'fwtjyzdb2'])){
-                                $item['fwtj']['yz']['dbdb2'][] = $itemExp;
-                            }  
-                            // if(in_array($k, ['fwtjyzgyh'])){
-                            //     $item['fwtj']['yz']['gyh'][] = $itemExp;
-                            // } 
-                            // if(in_array($k, ['fwtjyzjd'])){
-                            //     $item['fwtj']['yz']['jd'][] = $itemExp;
-                            // }                       
-                        }
+                        // //相册
+                        // $item['fwtj']['yz']['hd'][$yzii] = $itemExp;
+                        // if($specInfo == 6){
+                        //     // $item['fwtjyz'][$k] = $item[$k];
+                        //     if(in_array($k, ['fwtjyzzm', 'fwtjyzbm'])){
+                        //         $item['fwtj']['yz']['zmbm'][] = $itemExp;
+                        //         if($itemExp['thumb']){
+                        //             $hd[$yzii] = $itemExp['thumb'];
+                        //             $yzii++;
+                        //             $hd[$yzii] = $itemExp['image'];
+                        //             $yzii++;
+                        //         }
+                        //     }
+                        //     if(in_array($k, ['fwtjyzzc', 'fwtjyzyc'])){
+                        //         $item['fwtj']['yz']['zcyc'][] = $itemExp;
+                        //         if($itemExp['thumb']){
+                        //             $hd[$yzii] = $itemExp['thumb'];
+                        //             $yzii++;
+                        //             $hd[$yzii] = $itemExp['image'];
+                        //             $yzii++;
+                        //         }
+                        //     }
+                        //     if(in_array($k, ['fwtjyzdb', 'fwtjyzdb2'])){
+                        //         $item['fwtj']['yz']['dbdb2'][] = $itemExp;
+                        //         if($itemExp['thumb']){
+                        //             $hd[$yzii] = $itemExp['thumb'];
+                        //             $yzii++;
+                        //             $hd[$yzii] = $itemExp['image'];
+                        //             $yzii++;
+                        //         }
+                        //     }  
+                        //     // if(in_array($k, ['fwtjyzgyh'])){
+                        //     //     $item['fwtj']['yz']['gyh'][] = $itemExp;
+                        //     // } 
+                        //     // if(in_array($k, ['fwtjyzjd'])){
+                        //     //     $item['fwtj']['yz']['jd'][] = $itemExp;
+                        //     // }                       
+                        // }
                         if(strpos($k, 'fwtjyzqt') !== false){
                             //烟支其它-列表
                             for ($i=0; $i < count($exp); $i++) { 
@@ -409,6 +500,12 @@ class Product extends BasicApi
                                 // $itemExpQt[]['thumb'] = isset($exp[$i]) ? $exp[$i] : '';
                                 // $itemExpQt[]['image'] = isset($exp[$i+1]) ? $exp[$i+1] : '';
                                 $itemExpQt[] = $it;
+                                if($it['thumb']){
+                                    $yzhd[$yzii] = $it['thumb'];
+                                    $yzii++;
+                                    $yzhd[$yzii] = $it['image'];
+                                    $yzii++;
+                                }
                                 $i++;
                             }
                             // halt($itemExpQt);
@@ -418,7 +515,8 @@ class Product extends BasicApi
                                 // $item['fwtj']['yz']['qt'][] = $itemExpQt02;
                             // }
                         }
-                        $yzii++;
+                        // $yzii++;
+                        $item['fwtj']['yz']['hd'] = isset($yzhd) ? $yzhd : '';
                     }else{//其他详细参数
                         // $item['detail'][$k] = $item[$k];
                         $specName = $this->productSpec->getValue(['mark' => $k], 'title');
