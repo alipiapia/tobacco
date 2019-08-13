@@ -8,3 +8,6 @@
 /nbproject
 !composer.json
 /composer.lock
+/404.html
+/index.html
+/.user.ini
