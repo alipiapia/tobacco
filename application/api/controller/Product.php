@@ -201,19 +201,27 @@ class Product extends BasicApi
         $mPatterns = $this->machine->getColumn($map, 'id,title,tpattern,xpattern');
         // halt($mPatterns);
         foreach ($mPatterns as $k => $v) {
-            if((strlen($sn) == 5) && $v['tpattern']){
-                $match = preg_match($v['tpattern'], $sn, $matches);
-                // halt($match);
-                if($match){
-                    $mids[] = $v['id'];
-                }                
+            // if((strlen($sn) == 5) && $v['tpattern']){
+            //     $match = preg_match($v['tpattern'], $sn, $matches);
+            //     // halt($match);
+            //     if($match){
+            //         $mids[] = $v['id'];
+            //     }                
+            // }
+            // if((strlen($sn) == 7) && $v['xpattern']){
+            //     $match = preg_match($v['xpattern'], $sn, $matches);
+            //     // halt($match);
+            //     if($match){
+            //         $mids[] = $v['id'];
+            //     }                
+            // }
+            
+            //条/盒规则更新：由之前固定5位条+7位盒修改为不区分位数自动匹配
+            if($v['tpattern'] && preg_match($v['tpattern'], $sn, $matches)){
+                $mids[] = $v['id'];
             }
-            if((strlen($sn) == 7) && $v['xpattern']){
-                $match = preg_match($v['xpattern'], $sn, $matches);
-                // halt($match);
-                if($match){
-                    $mids[] = $v['id'];
-                }                
+            if($v['xpattern'] && preg_match($v['xpattern'], $sn, $matches)){
+                $mids[] = $v['id'];  
             }
         }
         // halt($mids);
