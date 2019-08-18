@@ -216,6 +216,7 @@ class Product extends BasicApi
             //     }                
             // }
             
+            //UP. 20190818 By pp
             //条/盒规则更新：由之前固定5位条+7位盒修改为不区分位数自动匹配
             if($v['tpattern'] && preg_match($v['tpattern'], $sn, $matches)){
                 $mids[] = $v['id'];

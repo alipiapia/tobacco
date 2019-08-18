@@ -44,7 +44,9 @@ class Machine extends BasicAdmin
         $this->machineItem = model('common/MachineItem');
         $this->product = model('common/Product');
         $this->type = model('common/Type');
+        $this->factory = model('common/Factory');
         $products = $this->product->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,sort',0);
+        $factories = $this->factory->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,sort',0);
         $specs = $this->machineSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
         foreach ($specs as $k => $v) {
             $specs[$k]['items'] = $this->machineItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
@@ -55,6 +57,7 @@ class Machine extends BasicAdmin
         $this->assign('specs',$this->specs);
         $this->assign('products',$products);
         $this->assign('types',$types);
+        $this->assign('factories',$factories);
     }
 
     /**
@@ -93,9 +96,9 @@ class Machine extends BasicAdmin
         // halt($d);
         $this->title = '机台管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['title', 'type', 'desc', 'status'] as $key) {
+        foreach (['title','fid', 'type', 'desc', 'status'] as $key) {
             if(isset($get[$key]) && $get[$key] !== ''){
-                if($key == 'type' || $key == 'status'){
+                if($key == 'type' || $key == 'fid' || $key == 'status'){
                     $db->where($key, $get[$key]);
                 }else{
                     $db->whereLike($key, "%{$get[$key]}%");

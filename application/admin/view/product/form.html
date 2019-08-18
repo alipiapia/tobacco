@@ -20,13 +20,31 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">品牌</label>
                     <div class="layui-input-block">
-                        <select name="brand" lay-verify="required" lay-search>
-                            <option>请选择品牌</option>
+                        <select name="brand" lay-verify="required" required="required" lay-search>
+                            <option value>请选择品牌</option>
                             {foreach $brands as $brand}
                             <!--{if isset($vo.brand) && $vo.brand eq $brand.id}-->
                             <option selected="selected" value="{$brand.id}">{$brand.title}</option>
                             <!--{else}-->
                             <option value="{$brand.id}">{$brand.title}</option>
+                            <!--{/if}-->
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <!--{/if}-->
+
+                <!--{if !empty($factories)}-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">生产部门</label>
+                    <div class="layui-input-block">
+                        <select name="fid" lay-verify="required" required="required" lay-search>
+                            <option value>请选择生产部门</option>
+                            {foreach $factories as $fac}
+                            <!--{if isset($vo.fid) && $vo.fid eq $fac.id}-->
+                            <option selected="selected" value="{$fac.id}">{$fac.title}</option>
+                            <!--{else}-->
+                            <option value="{$fac.id}">{$fac.title}</option>
                             <!--{/if}-->
                             {/foreach}
                         </select>
@@ -256,7 +274,7 @@
 
     <div class="layui-form-item text-center">
         {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'>{/if}
-        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn" type='submit' lay-submit="">保存数据</button>
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
     </div>
     <!-- <script>window.form.render();</script> -->
