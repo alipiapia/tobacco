@@ -20,7 +20,7 @@ use service\ToolsService;
 use think\Db;
 
 /**
- * 生产部门/厂家/公司 控制器
+ * 生产机构 控制器
  * Class Factory
  * @package app\admin\controller
  * @author Anyon <zoujingli@qq.com>
@@ -50,7 +50,7 @@ class Factory extends BasicAdmin
      */
     public function index()
     {
-        $this->title = '生产部门/厂家/公司管理';
+        $this->title = '生产机构管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
         foreach (['name', 'desc', 'status'] as $key) {
             if(isset($get[$key]) && $get[$key] !== ''){

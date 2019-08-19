@@ -24,10 +24,10 @@
 
     <!--{if !empty($factories)}-->
     <div class="layui-form-item  layui-inline">
-        <label class="layui-form-label">生产部门</label>
+        <label class="layui-form-label">生产机构</label>
         <div class="layui-input-inline">
             <select name="fid" lay-verify="required" lay-search>
-                <option value="">请选择生产部门</option>
+                <option value="">请选择生产机构</option>
                 {foreach $factories as $fac}
                 <!--{if $Think.get.fid eq $fac.id}-->
                 <option selected="selected" value="{$fac.id}">{$fac.title}</option>

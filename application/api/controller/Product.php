@@ -48,6 +48,7 @@ class Product extends BasicApi
         $this->machineSpec = model('common/MachineSpec');
         $this->machineItem = model('common/MachineItem');
         $this->memberCollection = model('common/MemberCollection');
+        $this->factory = model('common/Factory');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
         $this->size = isset($param['size']) ? $param['size'] : 10;
@@ -233,7 +234,7 @@ class Product extends BasicApi
     private function formatItem($pid, $mid, $uid, $title = 'title'){
         $pMap = ['id' => $pid];
         $mMap = ['id' => $mid];
-        $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
+        $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,fid,video,video_thumb,item');
         $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,type,item');
         $tid = $machinInfo['type'];
         $item = json_decode($info['item'], true);
@@ -561,8 +562,10 @@ class Product extends BasicApi
                         $item['fwtj']['yz']['hd'] = isset($yzhd) ? $yzhd : '';
                     }else{//其他详细参数
                         // $item['detail'][$k] = $item[$k];
+                        $factoryName = $this->factory->getValue(['id' => $info['fid']], 'title');
+                        $ht .= '<tr><td>生产机构</td><td>'.$factoryName.'</td></tr>';//生产机构
                         $specName = $this->productSpec->getValue(['mark' => $k], 'title');
-                        $ht .= '<tr><td>'.$specName.'</td><td>'.$item[$k].'</td></tr>';
+                        $ht .= '<tr><td>'.$specName.'</td><td>'.$item[$k].'</td></tr>';//产品参数
                         // if($k == 'cpsp'){
                         //     $cpsp = $item[$k];
                         //     unset($item['detail'][$k]);
