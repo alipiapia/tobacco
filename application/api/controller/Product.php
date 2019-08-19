@@ -249,6 +249,8 @@ class Product extends BasicApi
         // halt($mItem);
         // $ht = "<table class='GeneratedTable'<thead><tr><th>Header</th><th>Header</th></tr></thead><tbody>";
         $ht = $ht1 = $this->hHead;
+        $factoryName = $this->factory->getValue(['id' => $info['fid']], 'title');
+        $ht .= '<tr><td>生产机构</td><td>'.$factoryName.'</td></tr>';//生产机构
         $thii = $xhii = $yzii = 1;
         if($item){
             foreach ($item as $k => $v) {
@@ -562,8 +564,6 @@ class Product extends BasicApi
                         $item['fwtj']['yz']['hd'] = isset($yzhd) ? $yzhd : '';
                     }else{//其他详细参数
                         // $item['detail'][$k] = $item[$k];
-                        $factoryName = $this->factory->getValue(['id' => $info['fid']], 'title');
-                        $ht .= '<tr><td>生产机构</td><td>'.$factoryName.'</td></tr>';//生产机构
                         $specName = $this->productSpec->getValue(['mark' => $k], 'title');
                         $ht .= '<tr><td>'.$specName.'</td><td>'.$item[$k].'</td></tr>';//产品参数
                         // if($k == 'cpsp'){
