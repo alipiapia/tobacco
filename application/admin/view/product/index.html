@@ -115,9 +115,10 @@
                 <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
             </th>
             <th class='text-left nowrap'>名 称</th>
-            <th class='text-left nowrap'>条条形码</th>
-            <th class='text-left nowrap'>盒条形码</th>
-            <th class='text-left nowrap'>添加时间</th>
+            <th class='text-left nowrap'>条 条 形 码</th>
+            <th class='text-left nowrap'>盒 条 形 码</th>
+            <th class='text-left nowrap'>生 产 机 构</th>
+            <th class='text-left nowrap'>添 加 时 间</th>
             <th class='text-left nowrap'>状 态</th>
             <th class='text-left nowrap'>操 作</th>
         </tr>
@@ -139,6 +140,9 @@
             </td>
             <td class='text-left nowrap'>
                 {$vo.htxm|default='<span class="color-desc">未设置</span>'|raw}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.fid|default='<span class="color-desc">未设置</span>'|raw|get_model_value='Factory','title'}
             </td>
             <td class='text-left nowrap'>
                 {$vo.create_at|date='Y-m-d H:i:s'}

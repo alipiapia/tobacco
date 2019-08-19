@@ -110,6 +110,7 @@
             <th class='text-left nowrap'>名 称</th>
             <th class='text-left nowrap'>机 型</th>
             <th class='text-left nowrap'>厂 家</th>
+            <th class='text-left nowrap'>生 产 机 构</th>
             <th class='text-left nowrap'>添 加 时 间</th>
             <th class='text-left nowrap'>状 态</th>
             <th class='text-left nowrap'>操 作</th>
@@ -132,6 +133,9 @@
             </td>
             <td class='text-left nowrap'>
                 {$vo.item.cj|default='<span class="color-desc">未设置</span>'|raw|get_model_value='MachineItem','title'}
+            </td>
+            <td class='text-left nowrap'>
+                {$vo.fid|default='<span class="color-desc">未设置</span>'|raw|get_model_value='Factory','title'}
             </td>
             <td class='text-left nowrap'>
                 {$vo.create_at|date='Y-m-d H:i:s'}
