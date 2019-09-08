@@ -38,8 +38,7 @@ class Machine extends BasicAdmin
 
     function __construct(){
         parent::__construct();
-        // $e  =json_encode([1,2]);
-        // halt($e);
+        $this->machine = model('common/Machine');
         $this->machineSpec = model('common/MachineSpec');
         $this->machineItem = model('common/MachineItem');
         $this->product = model('common/Product');
@@ -190,6 +189,12 @@ class Machine extends BasicAdmin
             //     $this->error('名称已经存在，请使用其它名称！');
             // }
         } else {
+            if(isset($data['id'])){
+                $data['pros'] = $this->product->getLists(['status' => 0, 'is_deleted' => 0, 'fid' => $data['fid']], 'sort asc,id asc', 'id,title,sort',0);
+            }else{
+                $data['pros'] = [];
+            }
+            // $this->assign('pros', $pros);
             // halt($data);
             // $data['item'] = unserialize(base64_decode(isset($data['item']) ? $data['item'] : ''));
             $data['pid'] = explode(',', isset($data['pid']) ? $data['pid'] : '');
@@ -235,6 +240,12 @@ class Machine extends BasicAdmin
             $this->success("启用成功！", '');
         }
         $this->error("启用失败，请稍候再试！");
+    }
+
+    //获取对应生产机构下机台
+    public function _get_macs(){
+        $fid = input('fid/d', 1);
+        return $this->machine->getLists(['status' => 0, 'is_deleted' => 0, 'fid' => $fid], 'sort asc,id asc', 'id,title',0);
     }
 
 }

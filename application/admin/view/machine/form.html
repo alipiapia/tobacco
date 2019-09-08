@@ -19,7 +19,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">生产机构</label>
                     <div class="layui-input-block">
-                        <select name="fid" lay-verify="required" required="required" lay-search>
+                        <select name="fid" lay-filter="fac" lay-verify="required" required="required" lay-search>
                             <option value>请选择生产机构</option>
                             {foreach $factories as $fac}
                             <!--{if isset($vo.fid) && $vo.fid eq $fac.id}-->
@@ -64,23 +64,21 @@
                     </div>
                 </div>
 
-                {if isset($products)}
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">产品</label>
-                        <div class="layui-input-block">
-                            {foreach $products as $product}
-                            <label class="think-checkbox">
-                                <!--{if in_array($product['id'],$vo['pid'])}-->
-                                <input type="checkbox" checked name="pid[]" value="{$product.id}" lay-ignore> {$product.title}
-                                <!--{else}-->
-                                <input type="checkbox" name="pid[]" value="{$product.id}" lay-ignore> {$product.title}
-                                <!--{/if}-->
-                            </label>
-                            {/foreach}
-                            {if empty($products)}<span class="color-desc" style="line-height:36px">未配置</span>{/if}
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">产品</label>
+                    <div class="layui-input-block" id="pid">
+                        {foreach $vo['pros'] as $v}
+                        <label class="think-checkbox">
+                            <!--{if in_array($v['id'],$vo['pid'])}-->
+                            <input type="checkbox" checked name="pid[]" value="{$v.id}" lay-ignore> {$v.title}
+                            <!--{else}-->
+                            <input type="checkbox" name="pid[]" value="{$v.id}" lay-ignore> {$v.title}
+                            <!--{/if}-->
+                        </label>
+                        {/foreach}
+                        {if empty($vo['pros'])}<span class="color-desc" style="line-height:36px">暂无相关产品</span>{/if}
                     </div>
-                {/if}
+                </div>
 
                 {if isset($specs)}
                     {foreach $specs as $spec}
@@ -177,6 +175,22 @@
         $(function () {
             $('.layui-tab ul.layui-tab-title li:first').trigger('click');
         });
+    </script>
+    <script type="text/javascript">
+        layui.use(['form'], function() {
+            form = layui.form;
+            form.on('select(fac)', function(data){   
+                var val = data.value; 
+                var id = $('input[name="id"]').val();
+                // if(val){
+                    var data = {fid:val, id:id};
+                    $.post("{:url('admin/product/_get_pros_html')}", data, function(res){
+                        // console.info(res);
+                        $("#pid").html(res)
+                    });
+                // }
+            });
+        });
     </script>
     <script type="text/javascript">
         require(['jquery', 'ckeditor', 'angular', 'ueditor.all', 'ueditor.config'], function () {

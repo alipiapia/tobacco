@@ -40,6 +40,7 @@ class Product extends BasicAdmin
     public function __construct(){
         parent::__construct();
         $this->brand = model('common/Brand');
+        $this->product = model('common/Product');
         $this->productSpec = model('common/ProductSpec');
         $this->productItem = model('common/ProductItem');
         $this->machine = model('common/Machine');
@@ -237,6 +238,36 @@ class Product extends BasicAdmin
             $this->success("启用成功！", '');
         }
         $this->error("启用失败，请稍候再试！");
+    }
+
+    //获取对应生产机构下产品
+    public function _get_pros(){
+        $fid = input('fid/d', 1);
+        return $this->product->getLists(['status' => 0, 'is_deleted' => 0, 'fid' => $fid], 'sort asc,id asc', 'id,title',0);
+    }
+
+    //获取对应生产机构下产品
+    public function _get_pros_html(){
+        $fid = input('fid/d', 0);
+        $id = input('id/s');
+        $pid = $this->machine->getValue(['id' => $id], 'pid');
+        $pros = $this->product->getLists(['status' => 0, 'is_deleted' => 0, 'fid' => $fid], 'sort asc,id asc', 'id,title',0);
+        // return $pid;
+        $html = '';
+        if($pros){
+            foreach ($pros as $k => $v) {
+                $html .= '<label class="think-checkbox">';
+                if(in_array($v['id'], explode(',', $pid))){
+                    $html .= '<input type="checkbox" checked name="pid[]" value="'.$v['id'].'" lay-ignore> '.$v['title'];
+                }else{
+                    $html .= '<input type="checkbox" name="pid[]" value="'.$v['id'].'" lay-ignore> '.$v['title'];
+                }
+                $html .= '</label>';
+            }
+        }else{
+            $html = '<span class="color-desc" style="line-height:36px">暂无相关产品</span>';
+        }
+        return $html;
     }
 
 }
