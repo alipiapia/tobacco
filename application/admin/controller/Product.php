@@ -246,7 +246,7 @@ class Product extends BasicAdmin
         return $this->product->getLists(['status' => 0, 'is_deleted' => 0, 'fid' => $fid], 'sort asc,id asc', 'id,title',0);
     }
 
-    //获取对应生产机构下产品
+    //获取对应生产机构下产品html
     public function _get_pros_html(){
         $fid = input('fid/d', 0);
         $id = input('id/s');

@@ -248,4 +248,28 @@ class Machine extends BasicAdmin
         return $this->machine->getLists(['status' => 0, 'is_deleted' => 0, 'fid' => $fid], 'sort asc,id asc', 'id,title',0);
     }
 
+    //获取对应生产机构下机台html
+    public function _get_macs_html(){
+        $fid = input('fid/d', 0);return $fid;
+        $id = input('id/s');
+        $pid = $this->machine->getValue(['id' => $id], 'pid');
+        $pros = $this->product->getLists(['status' => 0, 'is_deleted' => 0, 'fid' => $fid], 'sort asc,id asc', 'id,title',0);
+        // return $pid;
+        $html = '';
+        if($pros){
+            foreach ($pros as $k => $v) {
+                $html .= '<label class="think-checkbox">';
+                if(in_array($v['id'], explode(',', $pid))){
+                    $html .= '<input type="checkbox" checked name="pid[]" value="'.$v['id'].'" lay-ignore> '.$v['title'];
+                }else{
+                    $html .= '<input type="checkbox" name="pid[]" value="'.$v['id'].'" lay-ignore> '.$v['title'];
+                }
+                $html .= '</label>';
+            }
+        }else{
+            $html = '<span class="color-desc" style="line-height:36px">暂无相关产品</span>';
+        }
+        return $html;
+    }
+
 }

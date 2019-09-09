@@ -38,7 +38,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">生产机构</label>
                     <div class="layui-input-block">
-                        <select name="fid" lay-verify="required" required="required" lay-search>
+                        <select name="fid" lay-filter="fac" lay-verify="required" required="required" lay-search>
                             <option value>请选择生产机构</option>
                             {foreach $factories as $fac}
                             <!--{if isset($vo.fid) && $vo.fid eq $fac.id}-->
@@ -282,6 +282,22 @@
         $(function () {
             $('.layui-tab ul.layui-tab-title li:first').trigger('click');
         });
+    </script>
+    <script type="text/javascript">
+        layui.use(['form'], function() {
+            form = layui.form;
+            form.on('select(fac)', function(data){   
+                var val = data.value; 
+                var id = $('input[name="id"]').val();
+                // if(val){
+                    var data = {fid:val, id:id};
+                    $.post("{:url('admin/machine/_get_macs_html')}", data, function(res){
+                        console.info(res);
+                        $("#pid").html(res)
+                    });
+                // }
+            });
+        });
     </script>
     <script type="text/javascript">
         require(['jquery', 'ckeditor', 'angular', 'ueditor.all', 'ueditor.config'], function () {
