@@ -230,6 +230,7 @@
                             </div>
                         {/if}
                         {if $spec.type eq '6'}
+                            <div id="pid">
                             {if condition="in_array($c, ['fwtjthgyh', 'fwtjthjd', 'fwtjxhgyh', 'fwtjxhjd', 'fwtjyzgyh', 'fwtjyzjd'])"}
                                 {volist name="vo.mitem" id="mt" empty=""}
                                 <div class="layui-form-item">
@@ -247,6 +248,7 @@
                                     </div>
                                 </div>
                             {/if}
+                            </div>
                         {/if}
                         {if $spec.type eq '7'}
                             <div class="layui-form-item">
