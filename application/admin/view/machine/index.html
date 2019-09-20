@@ -58,12 +58,12 @@
     </div>
     <!--{/if}-->
 
-    <div class="layui-form-item layui-inline">
+<!--     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">描述</label>
         <div class="layui-input-inline">
             <input name="desc" value="{$Think.get.desc|default=''}" placeholder="请输入描述" class="layui-input">
         </div>
-    </div>
+    </div> -->
 
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">时间</label>
@@ -108,9 +108,9 @@
                 <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
             </th>
             <th class='text-left nowrap'>名 称</th>
-            <th class='text-left nowrap'>机 型</th>
-            <th class='text-left nowrap'>厂 家</th>
             <th class='text-left nowrap'>生 产 机 构</th>
+            <th class='text-left nowrap'>机 型</th>
+            <!-- <th class='text-left nowrap'>厂 家</th> -->
             <th class='text-left nowrap'>添 加 时 间</th>
             <th class='text-left nowrap'>状 态</th>
             <th class='text-left nowrap'>操 作</th>
@@ -129,14 +129,14 @@
                 {$vo.title|default=''}
             </td>
             <td class='text-left nowrap'>
-                {$vo.type|default='<span class="color-desc">未设置</span>'|raw|get_model_value='Type','title'}
-            </td>
-            <td class='text-left nowrap'>
-                {$vo.item.cj|default='<span class="color-desc">未设置</span>'|raw|get_model_value='MachineItem','title'}
-            </td>
-            <td class='text-left nowrap'>
                 {$vo.fid|default='<span class="color-desc">未设置</span>'|raw|get_model_value='Factory','title'}
             </td>
+            <td class='text-left nowrap'>
+                {$vo.type|default='<span class="color-desc">未设置</span>'|raw|get_model_value='Type','title'}
+            </td>
+<!--             <td class='text-left nowrap'>
+                {$vo.item.cj|default='<span class="color-desc">未设置</span>'|raw|get_model_value='MachineItem','title'}
+            </td> -->
             <td class='text-left nowrap'>
                 {$vo.create_at|date='Y-m-d H:i:s'}
             </td>
