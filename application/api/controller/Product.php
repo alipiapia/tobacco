@@ -223,7 +223,7 @@ class Product extends BasicApi
             if($v['tpattern'] && preg_match($v['tpattern'], $sn, $matches)){
                 $mids[] = $v['id'];
             }
-            if($v['xpattern'] && preg_match(preg_quote($v['xpattern']), $sn, $matches)){
+            if($v['xpattern'] && preg_match($v['xpattern'], $sn, $matches)){
                 $mids[] = $v['id'];  
             }
         }
