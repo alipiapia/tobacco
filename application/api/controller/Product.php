@@ -82,7 +82,15 @@ class Product extends BasicApi
                     $bids = $this->brand->getColumn($bMap, 'id');
                     $map[$key] = ['in', $bids];
                 }elseif($key == 'keyword'){
-                    $map['title|ttxm|htxm'] = ['like', "%{$param[$key]}%"]; 
+                    //如果匹配到钢印号
+                    $mids = $this->getMids($param[$key]);
+                    if($mids){
+                        $pmids = $this->getPMids($mids);
+                        // halt($pmids);
+                        $map['id'] = ['in', $pmids];
+                    }else{
+                        $map['title|ttxm|htxm'] = ['like', "%{$param[$key]}%"];
+                    }
                 }else{
                     $map[$key] = ['like', "%{$param[$key]}%"];                    
                 }
@@ -192,8 +200,8 @@ class Product extends BasicApi
     }
 
     //根据钢印号查询机型
-    public function getMids(){
-        $sn = input('sn');
+    public function getMids($sn){
+        // $sn = input('sn');
         $map = [
             'status' => 0,
             'is_deleted' => '0',
@@ -229,6 +237,28 @@ class Product extends BasicApi
         }
         // halt($mids);
         return $mids;
+    }
+
+    //根据机台ids查询产品ids
+    public function getPMids($mids){
+        // $mids = input('mids');
+        $pmMap = [
+            'id' => ['in', $mids],
+            'status' => 0,
+            'is_deleted' => '0',
+        ];
+        $pmMap = new Where($pmMap);
+        $pmids = $this->machine->getColumn($pmMap, 'pid');
+        $pmidss = [];
+        foreach ($pmids as $k => $v) {
+            if($v){
+                // $pmidss[$k] = $v;
+                $pmidss = array_merge($pmidss, explode(',', $v));
+            }
+        }
+        $pmidss = array_unique($pmidss);
+        // halt($pmidss);
+        return $pmidss;
     }
 
     //item
