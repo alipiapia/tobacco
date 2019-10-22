@@ -82,13 +82,12 @@ class Product extends BasicApi
                     $bids = $this->brand->getColumn($bMap, 'id');
                     $map[$key] = ['in', $bids];
                 }elseif($key == 'keyword'){
-                    //如果匹配到钢印号
                     $mids = $this->getMids($param[$key]);
-                    if($mids){
+                    if($mids){//如果匹配到钢印号
                         $pmids = $this->getPMids($mids);
                         // halt($pmids);
                         $map['id'] = ['in', $pmids];
-                    }else{
+                    }else{//否则匹配产品名称条盒小盒条形码
                         $map['title|ttxm|htxm'] = ['like', "%{$param[$key]}%"];
                     }
                 }else{
