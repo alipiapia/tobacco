@@ -84,7 +84,7 @@ class Product extends BasicApi
                 }elseif($key == 'keyword'){
                     $mids = $this->getMids($param[$key]);
                     if($mids){//如果匹配到钢印号
-                        $pmids = $this->getPMids($mids);
+                        $pmids = $this->getMPids($mids);
                         // halt($pmids);
                         $map['id'] = ['in', $pmids];
                     }else{//否则匹配产品名称条盒小盒条形码
@@ -239,25 +239,25 @@ class Product extends BasicApi
     }
 
     //根据机台ids查询产品ids
-    public function getPMids($mids){
+    public function getMPids($mids){
         // $mids = input('mids');
-        $pmMap = [
+        $mpMap = [
             'id' => ['in', $mids],
             'status' => 0,
             'is_deleted' => '0',
         ];
-        $pmMap = new Where($pmMap);
-        $pmids = $this->machine->getColumn($pmMap, 'pid');
-        $pmidss = [];
-        foreach ($pmids as $k => $v) {
+        $mpMap = new Where($mpMap);
+        $mpids = $this->machine->getColumn($mpMap, 'pid');
+        $mpidss = [];
+        foreach ($mpids as $k => $v) {
             if($v){
-                // $pmidss[$k] = $v;
-                $pmidss = array_merge($pmidss, explode(',', $v));
+                // $mpidss[$k] = $v;
+                $mpidss = array_merge($mpidss, explode(',', $v));
             }
         }
-        $pmidss = array_unique($pmidss);
-        // halt($pmidss);
-        return $pmidss;
+        $mpidss = array_unique($mpidss);
+        // halt($mpidss);
+        return $mpidss;
     }
 
     //item

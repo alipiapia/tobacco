@@ -33,6 +33,7 @@ class Type extends BasicApi
         parent::__construct();
         $this->type = model('common/Type');
         $this->machine = model('common/Machine');
+        $this->product = model('common/Product');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
         $this->size = isset($param['size']) ? $param['size'] : 50;
@@ -85,5 +86,25 @@ class Type extends BasicApi
         $list = $list ? $list : null;
         // halt($map);
         $this->success('请求成功', $list);
+    }
+
+    public function getPMids($pname){
+        $pMap = [
+            'title' => ['like', "%{$pname}%"],
+            'status' => 0,
+            'is_deleted' => '0',
+        ];
+        $pids = $this->product->getColumn($pMap, 'id');
+        halt($pids);
+        $mMap['pid'] = [
+            ['eq', $pid],
+            ['like', "{$ppid,%"],
+            ['like', "%,{$pid}"],
+            ['like', "%,{$pid},%"],
+            'or'
+        ];
+        // halt($map);
+        $mMap = new Where($mMap);
+        $mids = $this->machine->getColumn($mMap, 'type');
     }
 }
