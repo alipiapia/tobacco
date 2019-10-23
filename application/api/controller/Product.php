@@ -344,7 +344,7 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $thhd[] = $exp[0];
                                     $thii++;
-                                    if($exp[0] != $exp[1]){
+                                    if(!empty($exp[1]) && $exp[0] != $exp[1]){
                                         $thhd[] = $exp[1];
                                         $thii++;                                        
                                     }
@@ -357,7 +357,7 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $thhd[] = $exp[0];
                                     $thii++;
-                                    if($exp[0] != $exp[1]){
+                                    if(!empty($exp[1]) && $exp[0] != $exp[1]){
                                         $thhd[] = $exp[1];
                                         $thii++;                                        
                                     }
@@ -370,7 +370,7 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $thhd[] = $exp[0];
                                     $thii++;
-                                    if($exp[0] != $exp[1]){
+                                    if(!empty($exp[1]) && $exp[0] != $exp[1]){
                                         $thhd[] = $exp[1];
                                         $thii++;                                        
                                     }
@@ -401,7 +401,7 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $thhd[] = $exp[0];
                                     $thii++;
-                                    if($exp[0] != $exp[1]){
+                                    if(!empty($exp[1]) && $exp[0] != $exp[1]){
                                         $thhd[] = $exp[1];
                                         $thii++;                                        
                                     }
@@ -418,7 +418,7 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $thhd[] = $exp[0];
                                     $thii++;
-                                    if($exp[0] != $exp[1]){
+                                    if(!empty($exp[1]) && $exp[0] != $exp[1]){
                                         $thhd[] = $exp[1];
                                         $thii++;                                        
                                     }
@@ -445,7 +445,7 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $xhhd[] = $exp[0];
                                     $thii++;
-                                    if($exp[0] != $exp[1]){
+                                    if(!empty($exp[1]) && $exp[0] != $exp[1]){
                                         $xhhd[] = $exp[1];
                                         $thii++;                                        
                                     }
@@ -457,7 +457,7 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $xhhd[] = $exp[0];
                                     $thii++;
-                                    if($exp[0] != $exp[1]){
+                                    if(!empty($exp[1]) && $exp[0] != $exp[1]){
                                         $xhhd[] = $exp[1];
                                         $thii++;                                        
                                     }
@@ -469,7 +469,7 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $xhhd[] = $exp[0];
                                     $thii++;
-                                    if($exp[0] != $exp[1]){
+                                    if(!empty($exp[1]) && $exp[0] != $exp[1]){
                                         $xhhd[] = $exp[1];
                                         $thii++;                                        
                                     }
@@ -497,7 +497,7 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $xhhd[] = $exp[0];
                                     $thii++;
-                                    if($exp[0] != $exp[1]){
+                                    if(!empty($exp[1]) && $exp[0] != $exp[1]){
                                         $xhhd[] = $exp[1];
                                         $thii++;                                        
                                     }
@@ -513,7 +513,7 @@ class Product extends BasicApi
                                 if(!empty($exp[0])){
                                     $xhhd[] = $exp[0];
                                     $thii++;
-                                    if($exp[0] != $exp[1]){
+                                    if(!empty($exp[1]) && $exp[0] != $exp[1]){
                                         $xhhd[] = $exp[1];
                                         $thii++;                                        
                                     }
