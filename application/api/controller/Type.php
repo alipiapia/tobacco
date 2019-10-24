@@ -36,14 +36,14 @@ class Type extends BasicApi
         $this->product = model('common/Product');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
-        $this->size = isset($param['size']) ? $param['size'] : 50;
+        $this->size = isset($param['size']) ? $param['size'] : 5;
         // halt($param);
     }
 
     //列表
     public function index()
     {
-        if(!input('pid')){
+        if(!input('pname')){
             $this->error('产品参数错误');
         }
         $map = [
@@ -51,32 +51,11 @@ class Type extends BasicApi
             'is_deleted' => '0',
         ];
         $param = $this->request->param();
-        foreach (['title', 'pid'] as $k => $key) {
+        foreach (['title', 'pname'] as $k => $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
-                if($key == 'pid'){
-                    $mMap = [
-                        'status' => 0,
-                        'is_deleted' => '0',
-                    ];
-                    $mMap[$key] = [
-                        ['eq', $param[$key]],
-                        ['like', "{$param[$key]},%"],
-                        ['like', "%,{$param[$key]}"],
-                        ['like', "%,{$param[$key]},%"],
-                        'or'
-                    ];
-                    // $map1 = ['eq', $param[$key]];
-                    // $map2 = ['like', "%,{$param[$key]}"];
-                    // $map3 = ['like', "%,{$param[$key]},%"];
-                    // $map[$key]['_complex'] = [
-                    //     $map1,
-                    //     $map2,
-                    //     '_logic' => 'or'
-                    // ];
-                    // halt($map);
-                    $mMap = new Where($mMap);
-                    $mids = $this->machine->getColumn($mMap, 'type');
-                    $map['id'] = ['in', $mids];
+                if($key == 'pname'){
+                    $tids = $this->getPMids($param[$key]);
+                    $map['id'] = ['in', $tids];
                 }else{
                     $map[$key] = ['like', "%{$param[$key]}%"];
                 }
@@ -98,21 +77,39 @@ class Type extends BasicApi
             'status' => 0,
             'is_deleted' => '0',
         ];
+        $pMap = new Where($pMap);
         $pids = $this->product->getColumn($pMap, 'id');
-        halt($pids);
+        // halt($pids);
         $mMap = [
             'status' => 0,
             'is_deleted' => '0',
+            'pid' => ['or'],
         ];
-        $mMap['pid'] = [
-            ['eq', $pid],
-            ['like', "{$ppid}%"],
-            ['like', "%,{$pid}"],
-            ['like', "%,{$pid},%"],
-            'or'
-        ];
-        // halt($map);
+        foreach ($pids as $k => $v) {
+            // $mMap['pid'][$k] = [
+            //     ['eq', $v],
+            //     ['like', "{$v}%"],
+            //     ['like', "%,{$v}"],
+            //     ['like', "%,{$v},%"],
+            // ];
+            // $mMap['pid'] = [
+            //     ['eq', $pid],
+            //     ['like', "{$pid}%"],
+            //     ['like', "%,{$pid}"],
+            //     ['like', "%,{$pid},%"],
+            //     'or'
+            // ];
+            array_push($mMap['pid'], ['eq', $v]);
+            array_push($mMap['pid'], ['like', "{$v}%"]);
+            array_push($mMap['pid'], ['like', "%,{$v}"]);
+            array_push($mMap['pid'], ['like', "%,{$v},%"]);
+        }
+        array_shift($mMap['pid']);
+        array_push($mMap['pid'], 'or');
+        // halt($mMap['pid']);
         $mMap = new Where($mMap);
         $mids = $this->machine->getColumn($mMap, 'type');
+        // halt($mids);
+        return array_unique($mids);
     }
 }
