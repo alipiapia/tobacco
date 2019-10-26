@@ -55,7 +55,7 @@
     <!--{/if}-->
 
     <!--{if !empty($areaList)}-->
-    <div class="layui-form-item layui-inline">
+<!--     <div class="layui-form-item layui-inline">
         <label class="layui-form-label" style="width:auto">所属地区</label>
         <div class="layui-input-inline">
             <select name='aid' class='layui-select'>
@@ -69,7 +69,7 @@
                 {/foreach}
             </select>
         </div>
-    </div>
+    </div> -->
     <!--{/if}-->
 
     <div class="layui-form-item layui-inline">
@@ -104,7 +104,7 @@
             <th class='text-left nowrap'>昵 称</th>
             <th class='text-left nowrap'>手机号码</th>
             <th class='text-left nowrap'>角 色</th>
-            <th class='text-left nowrap'>地 区</th>
+            <!-- <th class='text-left nowrap'>地 区</th> -->
             <th class='text-left nowrap'>登录次数</th>
             <th class='text-left nowrap'>最后登录</th>
             <th class='text-left nowrap'>状 态</th>
@@ -133,9 +133,9 @@
                     {/if}
                 {/volist}
             </td>
-            <td class=text-left nowrap'>
+<!--             <td class=text-left nowrap'>
                 {$vo.aid|default="<span style='color:#ccc'>未设置</span>"|join_area_name}
-            </td>
+            </td> -->
             <td class='text-left nowrap'>{$vo.login_num|default=0}</td>
             <td class='text-left nowrap'>
                 {$vo.login_at|format_datetime|default="<span class='color-desc'>从未登录</span>"|raw}

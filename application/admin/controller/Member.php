@@ -234,9 +234,9 @@ class Member extends BasicAdmin
             } elseif (Db::name($this->table)->where(['phone' => $data['phone']])->count() > 0) {
                 $this->error('手机号码已经存在，请使用其它手机号码！');
             }
-            if(!isset($data['aid']) || $data['aid'] == ''){
-                $this->error('请选择地区');
-            }
+            // if(!isset($data['aid']) || $data['aid'] == ''){
+            //     $this->error('请选择地区');
+            // }
             if(!isset($data['id'])){
                 //环信注册验证
                 $data['password'] = '111111';//默认密码
