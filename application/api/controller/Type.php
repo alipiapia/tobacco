@@ -54,6 +54,10 @@ class Type extends BasicApi
         foreach (['title', 'pid'] as $k => $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
                 if($key == 'pid'){
+                    $mMap = [
+                        'status' => 0,
+                        'is_deleted' => '0',
+                    ];
                     $mMap[$key] = [
                         ['eq', $param[$key]],
                         ['like', "{$param[$key]},%"],
