@@ -179,12 +179,16 @@ class Product extends BasicAdmin
             // $data['mid'] = explode(',', isset($data['mid']) ? $data['mid'] : '');
             $data['item'] = json_decode(isset($data['item']) ? $data['item'] : '', true);
             if(isset($data['id'])){
-                $mMap['pid'] = [
-                        ['eq', $data['id']],
-                        ['like', "{$data['id']},%"],
-                        ['like', "%,{$data['id']}"],
-                        ['like', "%,{$data['id']},%"],
-                        'or'
+                $mMap = [
+                        'status' => 0,
+                        'is_deleted' => '0',
+                        'pid' => [
+                            ['eq', $data['id']],
+                            ['like', "{$data['id']},%"],
+                            ['like', "%,{$data['id']}"],
+                            ['like', "%,{$data['id']},%"],
+                            'or'
+                        ]
                     ];
                 $mMap = new Where($mMap);
                 $mids = $this->machine->getColumn($mMap, 'type');
