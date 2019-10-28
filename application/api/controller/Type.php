@@ -98,7 +98,7 @@ class Type extends BasicApi
         halt($pids);
         $mMap['pid'] = [
             ['eq', $pid],
-            ['like', "{$ppid,%"],
+            ['like', "{$pid},%"],
             ['like', "%,{$pid}"],
             ['like', "%,{$pid},%"],
             'or'
