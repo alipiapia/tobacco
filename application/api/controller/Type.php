@@ -92,7 +92,7 @@ class Type extends BasicApi
         $this->success('请求成功', $list);
     }
 
-    public function getPMids($pname){
+    public function _getPMids($pname){
         $pMap = [
             'title' => ['like', "%{$pname}%"],
             'status' => 0,
@@ -110,5 +110,86 @@ class Type extends BasicApi
         // halt($map);
         $mMap = new Where($mMap);
         $mids = $this->machine->getColumn($mMap, 'type');
+        return array_unique($mids);
+    }
+
+    //根据产品名称模糊查询机型列表
+    public function list(){
+        $param = $this->request->param();
+        // halt($param['pname']);
+        $pMap = [
+            'title' => ['like', "%{$param['pname']}%"],
+            'status' => 0,
+            'is_deleted' => '0',
+        ];
+        $pMap = new Where($pMap);
+        $pids = $this->product->getColumn($pMap, 'id');
+        // halt($pids);
+        $mMap = $map = [
+            // 'status' => 0,
+            // 'is_deleted' => '0',
+            // 'pid' => ['or'],
+        ];
+        $list = [];
+        foreach ($pids as $k => $v) {
+            // $mMap['pid'][$k] = [
+            //     ['eq', $v],
+            //     ['like', "{$v}%"],
+            //     ['like', "%,{$v}"],
+            //     ['like', "%,{$v},%"],
+            // ];
+
+            $mMap[$k] = [
+            'status' => 0,
+            'is_deleted' => '0',
+            ];
+
+            $mMap[$k]['pid'] = [
+                ['eq', $v],
+                ['like', "{$v},%"],
+                ['like', "%,{$v}"],
+                ['like', "%,{$v},%"],
+                'or'
+            ];
+
+            // array_push($mMap['pid'], ['eq', $v]);
+            // array_push($mMap['pid'], ['like', "{$v}%"]);
+            // array_push($mMap['pid'], ['like', "%,{$v}"]);
+            // array_push($mMap['pid'], ['like', "%,{$v},%"]);
+            
+            $mMap[$k] = new Where($mMap[$k]);
+            $macs = $this->machine->getColumn($mMap[$k], 'type as id,type,id as mid');
+            foreach ($macs as $kk => $vv) {
+                unset($macs[$kk]['type']);
+                unset($macs[$kk]['mid']);
+                $macs[$kk]['pid'] = $v;
+                $macs[$kk]['title'] = $this->type->getValue(['id' => $vv['type']], 'title');
+                if(empty($list)){
+                    $list = [$macs[$kk]];
+                }else{
+                    array_push($list, $macs[$kk]);
+                }
+            }
+            // halt($macs);
+            // array_push($list, $macs);
+            // $map['id'] = ['in', $mids];
+            // $list[$k] = $this->type->getColumn($map,'id,title');
+            // $list[$k]['pid'] = $v;
+        }
+        // halt($list);
+        $ret = a2p($list, $this->page, $this->size);
+        $this->success('请求成功', $ret);
+        // foreach ($list as $k => $v) {
+            // $list[$k]['pid'] = input('pid');
+        // }
+        // $list = $list ? $list : null;
+        // halt($list);
+        // array_shift($mMap['pid']);
+        // array_push($mMap['pid'], 'or');
+        // halt($mMap['pid']);
+        // $mMap = new Where($mMap);
+        // $mids = $this->machine->getColumn($mMap, 'type');
+        // halt($mids);
+        // return array_unique($mids);
     }
 }
