@@ -52,13 +52,6 @@ class Product extends BasicApi
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
         $this->size = isset($param['size']) ? $param['size'] : 10;
-        // halt($param);
-        // $specs = $this->productSpec->getLists(['status' => 0, 'is_deleted' => 0], 'sort asc,id asc', 'id,title,desc,type,mark',0);
-        // foreach ($specs as $k => $v) {
-        //     $specs[$k]['items'] = $this->productItem->getLists(['status' => 0, 'is_deleted' => 0, 'spec_id' => $v['id']], 'sort asc,id asc', 'id,title,desc',0);
-        // }
-        // halt($specs);
-        // $this->success('请求成功',$specs);
     }
 
     //列表+搜索1
@@ -97,15 +90,8 @@ class Product extends BasicApi
         }
         $map = new Where($map);
         // halt($map);
-        $list = $this->product->getNewPageLists($map, 'sort', 'id,title,logo', $this->page, $this->size);
+        $list = $this->product->getNewPageLists($map, 'title', 'sort', 'id,title,logo', $this->page, $this->size);
         $list = $list ? $list : null;
-        // foreach ($list as $k => $v) {
-        //     $map = ['id' => $v['id']];
-        //     $machinInfo = $this->machine->getOneDarry($map, 'id,title,item');
-        //     $mItem = $this->formatItem($v['item'], $machinInfo['item']);
-        //     $list[$k] = array_merge($list[$k], $mItem);
-        //     unset($list[$k]['item']);
-        // }
         // halt($list);
         $this->success('请求成功', $list);
     }
@@ -133,7 +119,6 @@ class Product extends BasicApi
         if(!$mids){
             $this->error('找不到机型');
         }
-        // halt($mids[0]);
         $map22 = ['id' => ['in', $mids]];
         $map22 = new Where($map22);
         $pids = $this->machine->getColumn($map22, 'pid');
@@ -143,29 +128,12 @@ class Product extends BasicApi
                 $newPids = array_unique(array_merge($newPids, explode(',', $v)));
             }
         }
-        // halt($newPids);
-        // if($mids){
-            $map['id'] = ['in', $newPids];
-        // }
-        // $map['htxm|ttxm'] = ['like', "%{$txm}%"];
+        $map['id'] = ['in', $newPids];
         $map['htxm|ttxm'] = ['eq', $txm];
         $map = new Where($map);
-        // halt($map);
         $list = $this->product->getLists($map, '', 'id,title,logo');
         $list = $list ? $list[0] : null;
         if($list){
-            // $pMap = ['id' => $list['id']];
-            // $mMap = ['id' => $newPids[0]];
-            // $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
-            // $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
-            // $mItem = $this->formatItem($info['item'], $machinInfo['item']);
-            // $info = array_merge($info, $mItem);
-            // unset($info['item']);
-            // $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => $newPids[0], 'mid' => $mids[0]]);
-            // $info['is_collect'] = $collect ? 1 : 0;
-            // $info['mid'] = $mids[0];
-            // $list = $info;
-            // $mid = $this->machine->getValue(['id' => $newPids[0]], 'type');
             $list = $this->formatItem($list['id'], $mids[0], input('uid'));
         }
         // halt($list);
@@ -183,18 +151,7 @@ class Product extends BasicApi
         if(!input('uid')){
             $this->error('用户参数错误');
         }
-        // $mid = $this->machine->getValue(['id' => input('mid')], 'type');
         $info = $this->formatItem(input('pid'), input('mid'), input('uid'));
-        // $pMap = ['id' => input('pid')];
-        // $mMap = ['id' => input('mid')];
-        // $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,video,video_thumb,item');
-        // $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,item');
-        // $mItem = $this->formatItem($info['item'], $machinInfo['item']);
-        // $info = array_merge($info, $mItem);
-        // unset($info['item']);
-        // $collect = $this->memberCollection->getOneDarry(['uid' => input('uid'), 'pid' => input('pid'), 'mid' => input('mid')]);
-        // $info['is_collect'] = $collect ? 1 : 0;
-        // $info['mid'] = input('mid');
         $this->success('请求成功', $info);
     }
 
@@ -208,23 +165,7 @@ class Product extends BasicApi
         $mids = [];
         $mPatterns = $this->machine->getColumn($map, 'id,title,tpattern,xpattern');
         // halt($mPatterns);
-        foreach ($mPatterns as $k => $v) {
-            // halt(filter_var($sn, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>$v['tpattern']))));
-            // if((strlen($sn) == 5) && $v['tpattern']){
-            //     $match = preg_match($v['tpattern'], $sn, $matches);
-            //     // halt($match);
-            //     if($match){
-            //         $mids[] = $v['id'];
-            //     }                
-            // }
-            // if((strlen($sn) == 7) && $v['xpattern']){
-            //     $match = preg_match($v['xpattern'], $sn, $matches);
-            //     // halt($match);
-            //     if($match){
-            //         $mids[] = $v['id'];
-            //     }                
-            // }
-            
+        foreach ($mPatterns as $k => $v) {            
             //UP. 20190818 By pp
             //条/盒规则更新：由之前固定5位条+7位盒修改为不区分位数自动匹配
             if($v['tpattern'] && preg_match($v['tpattern'], $sn, $matches)){

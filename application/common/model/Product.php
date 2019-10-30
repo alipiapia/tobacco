@@ -67,8 +67,8 @@ class Product extends Model {
   }
 
   //分页数据/接口用
-  public function getNewPageLists($where = 1, $order = ['id'], $field = "*", $page = 1, $size = 10){
-    $lists = $this->where($where)->order($order)->field($field)->page($page, $size)->select();
+  public function getNewPageLists($where = 1, $group = '', $order = ['id'], $field = "*", $page = 1, $size = 10){
+    $lists = $this->where($where)->group($group)->order($order)->field($field)->page($page, $size)->select();
     $return_lists = [];
    foreach ($lists as $k => $v){
        $return_lists[$k] = $v->toArray();
