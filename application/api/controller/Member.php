@@ -133,18 +133,18 @@ class Member extends BasicApi
             $this->error('登录密码错误，请重新输入');            
         }
 
-        $codeInfo = $this->SmsLog->getOneDarry($map, 'code,create_at');
-        if(!$codeInfo){
-            $this->error('验证码错误');
-        }
-        $timeDiff = floor(time() - $codeInfo['create_at']);
-        if(($timeDiff / 60) >= 60){
-            $this->error('验证码已过期');
-        }
-        if($codeInfo['code'] != $code){
-            $this->error('验证码错误');
-        }
-        // halt($code);
+        // $codeInfo = $this->SmsLog->getOneDarry($map, 'code,create_at');
+        // if(!$codeInfo){
+        //     $this->error('验证码错误');
+        // }
+        // $timeDiff = floor(time() - $codeInfo['create_at']);
+        // if(($timeDiff / 60) >= 60){
+        //     $this->error('验证码已过期');
+        // }
+        // if($codeInfo['code'] != $code){
+        //     $this->error('验证码错误');
+        // }
+        // // halt($code);
 
         // 更新登录信息
         $up = $this->member->where($map)->update([
