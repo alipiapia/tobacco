@@ -1,0 +1,45 @@
+body {
+	margin:0 auto;
+	padding:0;
+	font-family:"微软雅黑", Arial, Helvetica, sans-serif;
+	font-size:13px;
+	color:#333;
+	text-align:center;
+	background:#FFF;
+	background-size:100% 100%;
+	-moz-background-size: cover;
+	background-size: cover;
+}
+div, form, img, ul, ol, li, dl, dt, dd, p {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	list-style:none;
+}
+table, td, tr, th, input, select, textarea {
+	font-size:13px;
+	font-family:"微软雅黑";
+}
+.productdiv{
+	width:96%;
+	overflow:hidden;
+	padding: 2%;
+	background:#FFF;
+}
+.product_table{
+	border-top:1px solid #ffe6cc;
+	border-left:1px solid #ffe6cc;
+}
+.product_table td{
+	border-bottom:1px solid #ffe6cc;
+	border-right:1px solid #ffe6cc;
+	padding:5px 10px;
+	line-height:18px;
+	text-align:left;
+}
+.product_font{
+	background:#ffe6cc; 
+	color:#fe8100;
+	font-weight:bold;
+	font-size:15px;
+}
