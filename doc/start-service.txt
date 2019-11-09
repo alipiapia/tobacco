@@ -38,4 +38,6 @@ nginx 安装路径： /opt/rh/nginx16/root/usr/sbin
       php index.php > ~/aaa.html
       
       ps -ef | grep mysql
-      ystemctl start rh-mysql56-mysqld 
+      systemctl start rh-mysql56-mysqld
+      
+      grep -rin nginx ./* | grep -rn '重新' 
