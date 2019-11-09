@@ -1,0 +1,41 @@
+
+php  配置文件： /etc/opt/rh/rh-php70/php.ini
+     安装路径：/opt/rh/rh-php70/root/bin/php
+
+php-fpm  文件路径： /opt/rh/rh-php70/root/usr/sbin/php-fpm
+         配置文件： /etc/opt/rh/rh-php70/php-fpm.conf
+
+         启动php-fpm :  /opt/rh/rh-php70/root/usr/sbin/php-fpm  [启动前需要杀死原来的]
+
+
+mysql 安装文件： /opt/rh/rh-mysql56/root/bin/mysqld_safe
+
+        启动mysql systemctl start rh-mysql56-mysqld
+        /bin/sh /opt/rh/rh-mysql56/root/usr/bin/mysqld_safe --basedir=/opt/rh/rh-mysql56/root/usr 
+        数据库存放文件: /var/opt/rh/rh-mysql56/lib/mysql/
+
+        账号和密码： root   密码为空
+
+
+
+nginx 安装路径： /opt/rh/nginx16/root/usr/sbin
+      配置文件： /opt/rh/nginx16/root/etc/nginx
+      项目配置conf: /opt/rh/nginx16/root/etc/nginx/conf.d/
+      主配置： /opt/rh/nginx16/root/etc/nginx/nginx.conf
+
+
+      重启nginx :  /opt/rh/nginx16/root/usr/sbin/nginx -s reload   
+      测试配置：  /opt/rh/nginx16/root/usr/sbin/nginx -t 
+      
+      yum search php70
+      yum search all | grep php70
+      yum install rh-php70-php-mysqlnd.x86_64;
+      
+      ps -ef | grep php-fpm
+      kill -9 dddd
+      killall php-fpm
+      
+      php index.php > ~/aaa.html
+      
+      ps -ef | grep mysql
+      ystemctl start rh-mysql56-mysqld 
