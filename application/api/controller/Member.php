@@ -45,7 +45,6 @@ class Member extends BasicApi
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
         $this->size = isset($param['size']) ? $param['size'] : 10;
-        // halt($param);
     }
 
     //列表
@@ -74,7 +73,6 @@ class Member extends BasicApi
         $map = new Where($map);
         $list = $this->member->getNewPageLists($map, 'id desc', 'id,username,nickname,role,phone,status,avatar', $this->page, $this->size);
         $list = $list ? $list : null;
-        // halt($map);
         $this->success('请求成功', $list);
     }
 
@@ -96,7 +94,6 @@ class Member extends BasicApi
 
     //登录
     public function login(){
-        // halt(time());
         $phone = input('phone');
         $password = input('password');
         $code = input('code');
@@ -144,7 +141,6 @@ class Member extends BasicApi
         // if($codeInfo['code'] != $code){
         //     $this->error('验证码错误');
         // }
-        // // halt($code);
 
         // 更新登录信息
         $up = $this->member->where($map)->update([
@@ -195,7 +191,6 @@ class Member extends BasicApi
         if($codeInfo['code'] != $code){
             $this->error('验证码错误');
         }
-        // halt($code);
 
         // 更新登录信息
         $up = $this->member->where($map)->update([
@@ -263,7 +258,6 @@ class Member extends BasicApi
         if($codeInfo['code'] != $code){
             $this->error('验证码错误');
         }
-        // halt($code);
 
         // 更新登录信息
         $up = $this->member->where($map)->update([
@@ -286,16 +280,12 @@ class Member extends BasicApi
 
     //发送验证码
     public function send_code(){
-        // $send = send_sms('18208702258', '111111', '1', []);
-        // $send = send_sms('18208702258', '111111');
-        // halt($send);
         $phone = input('phone');
         if(!is_mobile($phone)){
             $this->error('请输入正确手机号码');
         }
         $code = create_code();
-        // $send = send_sms($phone, $code);
-        // halt($send);
+
         $this->success('发送成功', '111111');
 
         $map = [
@@ -371,13 +361,6 @@ class Member extends BasicApi
         if(!$param['id']){
             $this->error('用户参数错误');
         }
-        // halt($param);
-        // $parry = ['id', 'nickname', 'password', 'phone', 'role', 'avatar'];
-        // foreach ($param as $key => $v) {
-        //     if(!in_array($key, $parry)){
-        //         unset($param[$key]);
-        //     }
-        // }
         
         $map = [
             'id' => $param['id'],
@@ -411,9 +394,7 @@ class Member extends BasicApi
                 $this->error($ret['error']);
             }
         }
-        // halt($param);
         $info = $this->member->allowField(true)->isUpdate(true)->save($param);
-        // halt($info);
         $this->success('请求成功', $info);
     }
 
@@ -440,7 +421,6 @@ class Member extends BasicApi
                 $list[$k]['mtitle'] = $this->machine->getValue(['id' => $v['mid']], 'title');
             }
         }
-        // halt($map);
         $this->success('请求成功', $list);
     }
 
@@ -466,7 +446,6 @@ class Member extends BasicApi
         $map = new Where($data);
         $isE = $this->memberCollection->getOneDarry($map);
         if($isE){
-            // $this->error('已经收藏过');
             $del = $this->memberCollection->where($data)->delete();
             if($del){
                 $this->success('取消收藏成功', 2);
@@ -495,16 +474,10 @@ class Member extends BasicApi
             $this->error('产品参数错误');
         }
         $pids = explode(',', $pid);
-        // foreach ($pids as $k => $v) {
-        //     $data[$k]['pid'] = $v,
-        //     $data[$k]['uid'] => $uid,
-        //     $data[$k]['create_at'] => time(),
-        // }
         $data = [
             'uid' => $uid,
             'pid' => ['in', $pids],
         ];
-        // halt($data);
         $map = new Where($data);
         $del = $this->memberCollection->where($map)->delete();
         if($del){
@@ -516,7 +489,6 @@ class Member extends BasicApi
 
     //我的消息
     public function mlist(){
-        // halt(juhesms('18208702258', '9527'));
         $uid = input('uid');
         if(!$uid){
             $this->error('用户参数错误');
@@ -527,13 +499,11 @@ class Member extends BasicApi
         $map = new Where($map);
         $list = $this->memberMessage->getNewPageLists($map, 'id desc', '', $this->page, $this->size);
         $list = $list ? $list : null;
-        // halt($map);
         $this->success('请求成功', $list);
     }
 
     //聊天室
     public function chat(){
-        // halt(send_sms('18208702258', '1314111'));
         $create_by = input('create_by');
         $uid = input('uid');
         if(!$create_by){
@@ -549,14 +519,12 @@ class Member extends BasicApi
         $map = new Where($map);
         $list = $this->memberMessage->getNewPageLists($map, 'id desc', 'id,uid,create_by,title,desc,content,create_at', $this->page, $this->size);
         $list = $list ? $list : null;
-        // halt($list);
         if($list){
             foreach ($list as $k => $v) {
                 $list[$k]['uid'] = $this->member->getOneDarry(['id' => $v['uid']], 'id,username,avatar');
                 $list[$k]['create_by'] = $this->member->getOneDarry(['id' => $v['create_by']], 'id,username,avatar');
             }
         }
-        // halt($list);
         $this->success('请求成功', $list);
     }
 

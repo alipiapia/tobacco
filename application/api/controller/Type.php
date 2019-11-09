@@ -115,6 +115,9 @@ class Type extends BasicApi
 
     //根据产品名称模糊查询机型列表
     public function list(){
+        if(!input('pname')){
+            $this->error('产品参数错误');
+        }
         $param = $this->request->param();
         // halt($param['pname']);
         $pMap = [
