@@ -116,7 +116,7 @@ class Member extends BasicApi
             'phone' => ['eq', $phone],
         ];
         $map = new Where($map);
-        $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar');
+        $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar,accept');
         if(!$mem){
             $this->error('登录账号不存在，请重新输入');            
         }
@@ -130,18 +130,21 @@ class Member extends BasicApi
             $this->error('登录密码错误，请重新输入');            
         }
 
-        // $codeInfo = $this->SmsLog->getOneDarry($map, 'code,create_at');
-        // if(!$codeInfo){
-        //     $this->error('验证码错误');
-        // }
-        // $timeDiff = floor(time() - $codeInfo['create_at']);
-        // if(($timeDiff / 60) >= 60){
-        //     $this->error('验证码已过期');
-        // }
-        // if($codeInfo['code'] != $code){
-        //     $this->error('验证码错误');
-        // }
+        $codeInfo = $this->SmsLog->getOneDarry($map, 'code,create_at');
+        if(!$codeInfo){
+            $this->error('验证码错误');
+        }
+        $timeDiff = floor(time() - $codeInfo['create_at']);
+        if(($timeDiff / 60) >= 60){
+            $this->error('验证码已过期');
+        }
+        if($codeInfo['code'] != $code){
+            $this->error('验证码错误');
+        }
 
+        //增加用户保密协议文本内容
+        $mem['accept_content'] = sysconf('accept_content');
+        
         // 更新登录信息
         $up = $this->member->where($map)->update([
             'login_at'  => Db::raw('now()'),
@@ -286,7 +289,7 @@ class Member extends BasicApi
         }
         $code = create_code();
 
-        $this->success('发送成功', '111111');
+        // $this->success('发送成功', '111111');
 
         $map = [
             'phone' => ['eq', $phone],
@@ -560,5 +563,20 @@ class Member extends BasicApi
     public function aboutus(){
         $aboutus = sysconf('aboutus');
         $this->success('请求成功', $aboutus);
+    }
+
+    //用户保密协议
+    public function accept(){
+        $uid = input('uid');
+        // $accept = input('accept/d', 1);
+        // halt($accept);
+        if(!$uid){
+            $this->error('用户参数错误');
+        }
+        // if($accept != 1){
+        //     $this->error('协议参数错误');
+        // }
+        $up = $this->member->where(['id' => $uid])->update(['accept' => 1]);
+        $up ? $this->success('用户同意协议成功', 1) : $this->error('用户同意协议失败');
     }
 }

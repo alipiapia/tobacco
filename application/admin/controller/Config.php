@@ -92,4 +92,24 @@ class Config extends BasicAdmin
         }
     }
 
+    /**
+     * 用户保密协议
+     * @return string
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function accept()
+    {
+        $this->title = '用户保密协议';
+        if ($this->request->isGet()) {
+            return $this->fetch('', ['title' => $this->title]);
+        }
+        if ($this->request->isPost()) {
+            foreach ($this->request->post() as $key => $vo) {
+                sysconf($key, $vo);
+            }
+            $this->success('保存成功！', '');
+        }
+    }
+
 }

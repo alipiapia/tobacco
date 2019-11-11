@@ -242,3 +242,9 @@
 						地址:/api/member/aboutus
 						请求方式:GET
 						参数：无
+		
+	12	用户保密协议
+			12-1	用户保密协议
+						地址:/api/member/accept
+						请求方式:GET
+						参数：uid		(用户uid		类型：int		是否必填：必填)
