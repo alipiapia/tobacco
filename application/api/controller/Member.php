@@ -289,7 +289,7 @@ class Member extends BasicApi
         }
         $code = create_code();
 
-        // $this->success('发送成功', '111111');
+        $this->success('发送成功', '111111');
 
         $map = [
             'phone' => ['eq', $phone],
