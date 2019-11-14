@@ -130,17 +130,17 @@ class Member extends BasicApi
             $this->error('登录密码错误，请重新输入');            
         }
 
-        // $codeInfo = $this->SmsLog->getOneDarry($map, 'code,create_at');
-        // if(!$codeInfo){
-        //     $this->error('验证码错误');
-        // }
-        // $timeDiff = floor(time() - $codeInfo['create_at']);
-        // if(($timeDiff / 60) >= 60){
-        //     $this->error('验证码已过期');
-        // }
-        // if($codeInfo['code'] != $code){
-        //     $this->error('验证码错误');
-        // }
+        $codeInfo = $this->SmsLog->getOneDarry($map, 'code,create_at');
+        if(!$codeInfo){
+            $this->error('验证码错误');
+        }
+        $timeDiff = floor(time() - $codeInfo['create_at']);
+        if(($timeDiff / 60) >= 60){
+            $this->error('验证码已过期');
+        }
+        if($codeInfo['code'] != $code){
+            $this->error('验证码错误');
+        }
 
         //增加用户保密协议文本内容
         $mem['accept_content'] = sysconf('accept_content');
@@ -289,7 +289,7 @@ class Member extends BasicApi
         }
         $code = create_code();
 
-        $this->success('发送成功', '111111');
+        // $this->success('发送成功', '111111');
 
         $map = [
             'phone' => ['eq', $phone],
