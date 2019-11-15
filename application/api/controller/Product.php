@@ -214,6 +214,7 @@ class Product extends BasicApi
         $factoryName = $this->factory->getValue(['id' => $info['fid']], 'title');
         $ht .= '<tr><td>生产机构</td><td>'.$factoryName.'</td></tr>';//生产机构
         $thii = $xhii = $yzii = 1;
+        // halt($item);
         if($item){
             foreach ($item as $k => $v) {
                 $item[$k] = $v;
@@ -253,8 +254,10 @@ class Product extends BasicApi
                         }
                     }
                 }else{//其他详细参数
-                    $specName = $this->productSpec->getValue(['mark' => $k], 'title');
-                    $ht .= '<tr><td>'.$specName.'</td><td>'.$item[$k].'</td></tr>';//产品参数
+                    $proSpecInfo = $this->productSpec->getOneDarry(['mark' => $k]);
+                    if($proSpecInfo['status'] != 1){
+                        $ht .= '<tr><td>'.$proSpecInfo['title'].'</td><td>'.$item[$k].'</td></tr>';//产品参数
+                    }
                 }
                 unset($item[$k]);
             }
@@ -277,9 +280,11 @@ class Product extends BasicApi
                     $mItem[$k] = $mItemInfo ? $mItemInfo : ($mItem[$k] ? $mItem[$k] : '');
 
                     //多图拆解
-                    // $specInfo = $this->machineSpec->getValue(['mark' => $k], 'type');
-                    $specName1 = $this->machineSpec->getValue(['mark' => $k], 'title');
-                    $ht1 .= '<tr><td>'.$specName1.'</td><td>'.$mItem[$k].'</td></tr>';
+                    // $macSpecInfo = $this->machineSpec->getValue(['mark' => $k], 'type');
+                    $macSpecInfo = $this->machineSpec->getOneDarry(['mark' => $k]);
+                    if($macSpecInfo['status'] != 1){
+                        $ht1 .= '<tr><td>'.$macSpecInfo['title'].'</td><td>'.$mItem[$k].'</td></tr>';
+                    }
                 }
             }else{
                 $ht1 .= '未设置机台参数';            
