@@ -50,11 +50,12 @@ class Member extends BasicApi
     //列表
     public function index()
     {
+        $param = $this->request->param();
         $map = [
             'status' => 0,
             'is_deleted' => '0',
+            'id' => ['neq', $param['uid']],
         ];
-        $param = $this->request->param();
         if(empty($param['uid'])){
             $this->error('用户参数错误');
         }
@@ -62,9 +63,6 @@ class Member extends BasicApi
             if(isset($param[$key]) && $param[$key] !== ''){
                 if($key == 'role'){
                     $map[$key] = $param[$key];
-                    if($param[$key] == 1){
-                        $map['id'] = ['neq', $param['uid']];
-                    }
                 }else{
                     $map[$key] = ['like', "%{$param[$key]}%"];
                 }

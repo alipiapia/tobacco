@@ -79,7 +79,7 @@
 						参数：size		(每页数量		类型：int		是否必填：非必填	默认：10条)
 						
 	5	会员
-			5-1	会员列表【在线咨询列表：role=1】
+			5-1	会员列表【在线咨询列表：role=1（1质检站用户 2检验点用户）】
 						地址:/api/member/index
 						请求方式:GET
 						参数：username		(用户username		类型：string		是否必填：非必填)
