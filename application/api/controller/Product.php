@@ -232,7 +232,7 @@ class Product extends BasicApi
                 // halt($item[$k]);
                 // halt($k);
                 
-                if(strpos($k, 'fwtjth') !== false){//防伪分组条盒if(!empty($exp)){
+                if(strpos($k, 'fwtjth') !== false){//防伪分组条盒
                     foreach ($exp as $kk => $vv) {
                          if($vv){
                             $item['fwtj']['th'][] = $vv;
