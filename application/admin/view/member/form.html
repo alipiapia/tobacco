@@ -25,6 +25,22 @@
         </div>
     </div>
 
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否为咨询人员</label>
+        <div class="layui-input-block">
+            {foreach $is_advisor as $is_advisor}
+            <label class="think-checkbox">
+                <!--{if isset($vo['is_advisor']) and ($is_advisor['id'] eq $vo['is_advisor'])}-->
+                <input type="radio" checked name="is_advisor" value="{$is_advisor.id}" lay-ignore> {$is_advisor.title}
+                <!--{else}-->
+                <input type="radio" name="is_advisor" value="{$is_advisor.id}" lay-ignore> {$is_advisor.title}
+                <!--{/if}-->
+            </label>
+            {/foreach}
+            {if empty($is_advisor)}<span class="color-desc" style="line-height:36px">未配置</span>{/if}
+        </div>
+    </div>
+
     {if !empty($areaList)}
     <div class="layui-form-item">
         <label class="layui-form-label">所属地区</label>

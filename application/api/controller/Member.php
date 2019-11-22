@@ -63,6 +63,7 @@ class Member extends BasicApi
             if(isset($param[$key]) && $param[$key] !== ''){
                 if($key == 'role'){
                     $map[$key] = $param[$key];
+                	$map['is_advisor'] =  1;
                 }else{
                     $map[$key] = ['like', "%{$param[$key]}%"];
                 }

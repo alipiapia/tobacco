@@ -46,6 +46,7 @@ class Member extends BasicAdmin
         $this->area = model('common/Area');
         $this->hx = new HxService();
         $this->assign('roles', config('pp.role_type'));
+        $this->assign('is_advisor', config('pp.is_advisor'));
 
         //获取地区
         $this->areaList = $this->_getAreaTrees('Area', ['area_open' => 1]);
@@ -69,9 +70,11 @@ class Member extends BasicAdmin
         // halt($f);
         $this->title = '用户管理';
         list($get, $db) = [$this->request->get(), Db::name($this->table)];
-        foreach (['username', 'nickname', 'role', 'phone', 'mail', 'aid'] as $key) {
+        foreach (['username', 'nickname', 'role', 'phone', 'mail', 'aid', 'is_advisor'] as $key) {
             if(isset($get[$key]) && $get[$key] !== ''){
                 if($key == 'role'){
+                    $db->where($key, $get[$key]);
+                }elseif($key == 'is_advisor'){
                     $db->where($key, $get[$key]);
                 }elseif($key == 'aid'){
                     $areas = $this->area->order('area_id asc')->select();
