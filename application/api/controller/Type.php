@@ -33,7 +33,13 @@ class Type extends BasicApi
         parent::__construct();
         $this->type = model('common/Type');
         $this->machine = model('common/Machine');
+        $this->machineSpec = model('common/MachineSpec');
+        $this->machineItem = model('common/MachineItem');
         $this->product = model('common/Product');
+        $this->productSpec = model('common/ProductSpec');
+        $this->productItem = model('common/ProductItem');
+        $this->factory = model('common/Factory');
+        $this->memberCollection = model('common/MemberCollection');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
         $this->size = isset($param['size']) ? $param['size'] : 50;
@@ -194,5 +200,118 @@ class Type extends BasicApi
         // $mids = $this->machine->getColumn($mMap, 'type');
         // halt($mids);
         // return array_unique($mids);
+    }
+
+    //机型参数详情
+    public function info(){
+        $id = input('id');
+        $pid = input('pid');
+        $uid = input('uid');
+        $title = input('title','title');
+        if(!input('id')){
+            $this->error('机型参数错误');
+        }
+        if(!input('pid')){
+            $this->error('产品参数错误');
+        }
+        if(!input('uid')){
+            $this->error('用户参数错误');
+        }
+
+        $mMaplist = ['type' => $id];
+        $macs = $this->machine->getLists($mMaplist, 'id,title,type,item');
+        foreach ($macs as $k => $v) {
+            $macs[$k]['item'] = json_decode($v['item'], true);
+            if(count($macs[$k]['item']) > 1){
+                $mid = $macs[$k]['id'];
+            }else{
+                $mid = $macs[0]['id'];
+            }
+        }
+        // halt($mid);
+        if(!$mid){
+            $this->error('机型参数错误');
+        }
+        $mMap = ['id' => $mid];
+        $pMap = ['id' => $pid];
+        $info = $this->product->getOneDarry($pMap, 'item');
+        $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,type,item');
+        $item = json_decode($info['item'], true);
+        $mItem = json_decode($machinInfo['item'], true);
+        $ht = $ht1 = $this->hHead;
+        $thii = $xhii = $yzii = 1;
+        // halt($item);
+        if($item){
+            foreach ($item as $k => $v) {
+                $item[$k] = $v;
+
+                //属性值
+                $itemInfo = $this->productItem->getValue(['id' => $v], $title);
+                $item[$k] = $itemInfo ? $itemInfo : ($item[$k] ? $item[$k] : '');
+
+                //多图拆解
+                $specInfo = $this->productSpec->getValue(['mark' => $k], 'type');
+                //缩略图+实际图
+                $exp = explode('|', $v);
+                // unset($item[$k]);
+                // $item[$k] = $exp;
+                // halt($item[$k]);
+                // halt($k);
+                
+                if((strpos($k, 'fwtjthgyh') !== false) || (strpos($k, 'fwtjthjd') !== false) || (strpos($k, 'fwtjthldt') !== false) || (strpos($k, 'fwtjthqt') !== false)){//防伪分组条盒
+                    foreach ($exp as $kk => $vv) {
+                         if($vv){
+                            $item['th'][] = $vv;
+                        }
+                    }
+                }elseif((strpos($k, 'fwtjxhgyh') !== false) || (strpos($k, 'fwtjxhjd') !== false) || (strpos($k, 'fwtjxhldt') !== false) || (strpos($k, 'fwtjxhqt') !== false)){//防伪分组小盒
+                    foreach ($exp as $kk => $vv) {
+                         if($vv){
+                            $item['xh'][] = $vv;
+                        }
+                    }
+                }
+                unset($item[$k]);
+            }
+        }else{
+            // $ht .= '未设置产品参数';
+        }
+        // $ht .= $this->hFoot;
+        // $item['detail'] = $ht;
+
+        //机型参数
+        if($mid == 51){
+            $ht1 .= '手工包装';  
+        }else{
+            if($mItem){
+                foreach ($mItem as $k => $v) {
+                    $mItem[$k] = $v;
+
+                    //属性值
+                    $mItemInfo = $this->machineItem->getValue(['id' => $v], 'title');
+                    $mItem[$k] = $mItemInfo ? $mItemInfo : ($mItem[$k] ? $mItem[$k] : '');
+
+                    //多图拆解
+                    // $macSpecInfo = $this->machineSpec->getValue(['mark' => $k], 'type');
+                    $macSpecInfo = $this->machineSpec->getOneDarry(['mark' => $k]);
+                    if($macSpecInfo['status'] != 1){
+                        $ht1 .= '<tr><td>'.$macSpecInfo['title'].'</td><td>'.$mItem[$k].'</td></tr>';
+                    }
+                }
+            }else{
+                $ht1 .= '未配置机型参数';            
+            }
+            
+        }
+        $ht1 .= '</table></div></body></html>';
+        $item['machine'] = $ht1;
+
+        $info = array_merge($info, $item);
+        unset($info['item']);
+        // $collect = $this->memberCollection->getOneDarry(['uid' => $uid, 'pid' => $pid, 'mid' => $mid]);
+        // $info['is_collect'] = $collect ? 1 : 0;
+        // $info['mid'] = $mid;
+        // halt($item);
+        $this->success('请求成功', $info);
     }
 }
