@@ -234,7 +234,7 @@ class Product extends BasicApi
                 
                 if((strpos($k, 'fwtjth') !== false)){//防伪分组条盒
                     //6面
-                    if((strpos($k, 'fwtjthgyh') !== false) || (strpos($k, 'fwtjthjd') !== false) || (strpos($k, 'fwtjthldt') !== false) || (strpos($k, 'fwtjthqt') !== false)){
+                    if((strpos($k, 'fwtjthgyh') !== false) || (strpos($k, 'fwtjthjd') !== false) || (strpos($k, 'fwtjthldt') !== false)){
                         unset($item[$k]);
                         continue;
                     }
@@ -245,7 +245,7 @@ class Product extends BasicApi
                     }
                 }elseif(strpos($k, 'fwtjxh') !== false){//防伪分组小盒
                     //6面
-                    if((strpos($k, 'fwtjxhgyh') !== false) || (strpos($k, 'fwtjxhjd') !== false) || (strpos($k, 'fwtjxhldt') !== false) || (strpos($k, 'fwtjxhqt') !== false)){
+                    if((strpos($k, 'fwtjxhgyh') !== false) || (strpos($k, 'fwtjxhjd') !== false) || (strpos($k, 'fwtjxhldt') !== false)){
                         unset($item[$k]);
                         continue;
                     }
