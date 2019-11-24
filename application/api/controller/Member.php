@@ -71,13 +71,16 @@ class Member extends BasicApi
                 	}elseif($param[$key] == 2){
                 		$userAid =  $this->member->getValue(new Where(['id' => $uid]), 'aid');
                 		$userArea =  $this->area->getOneDarry(new Where(['area_id' => $userAid]), 'area_id,area_deep,area_parent_id');
-                		$userParentArea =  $this->area->getOneDarry(new Where(['area_id' => $userArea['area_parent_id']]), 'area_id,area_deep,area_parent_id');
-                		// halt($userParentArea);
                 		if($userArea['area_deep'] == 2){
                 			$map['aid'] = $userArea['area_id'];                			
                 		}
-                		if($userParentArea['area_deep'] == 2){
-                			$map['aid'] = $userParentArea['area_id'];                			
+
+                		if($userArea){
+	                		$userParentArea =  $this->area->getOneDarry(new Where(['area_id' => $userArea['area_parent_id']]), 'area_id,area_deep,area_parent_id');
+	                		// halt($userArea);
+	                		if($userParentArea['area_deep'] == 2){
+	                			$map['aid'] = $userParentArea['area_id'];                			
+	                		}                			
                 		}
                 	}
                 }else{
