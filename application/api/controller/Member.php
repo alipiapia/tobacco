@@ -430,16 +430,16 @@ class Member extends BasicApi
     public function addc(){        
         $uid = input('uid');
         $pid = input('pid');
-        $mid = input('mid');
+        $mid = input('mid', 0);
         if(!$uid){
             $this->error('用户参数错误');
         }
         if(!$pid){
             $this->error('产品参数错误');
         }
-        if(!$mid){
-            $this->error('机型参数错误');
-        }
+        // if(!$mid){
+        //     $this->error('机型参数错误');
+        // }
         $data = [
             'uid' => $uid,
             'pid' => $pid,

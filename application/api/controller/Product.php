@@ -145,13 +145,13 @@ class Product extends BasicApi
         if(!input('pid')){
             $this->error('产品参数错误');
         }
-        if(!input('mid')){
-            $this->error('机型参数错误');
-        }
+        // if(!input('mid')){
+        //     $this->error('机型参数错误');
+        // }
         if(!input('uid')){
             $this->error('用户参数错误');
         }
-        $info = $this->formatItem(input('pid'), input('mid'), input('uid'));
+        $info = $this->formatItem(input('uid'), input('pid'));
         $this->success('请求成功', $info);
     }
 
@@ -202,14 +202,14 @@ class Product extends BasicApi
     }
 
     //item
-    private function formatItem($pid, $mid, $uid, $title = 'title'){
+    private function formatItem($uid, $pid, $title = 'title'){
         $pMap = ['id' => $pid];
-        $mMap = ['id' => $mid];
+        // $mMap = ['id' => $mid];
         $info = $this->product->getOneDarry($pMap, 'id as pid,title,ttxm,htxm,brand,fid,video,video_thumb,item');
-        $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,type,item');
-        $tid = $machinInfo['type'];
+        // $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,type,item');
+        // $tid = $machinInfo['type'];
         $item = json_decode($info['item'], true);
-        $mItem = json_decode($machinInfo['item'], true);
+        // $mItem = json_decode($machinInfo['item'], true);
         $ht = $ht1 = $this->hHead;
         $factoryName = $this->factory->getValue(['id' => $info['fid']], 'title');
         $ht .= '<tr><td>生产机构</td><td>'.$factoryName.'</td></tr>';//生产机构
@@ -277,38 +277,38 @@ class Product extends BasicApi
         $ht .= $this->hFoot;
         $item['detail'] = $ht;
 
-        //机型参数
-        if($mid == 51){
-            $ht1 .= '手工包装';  
-        }else{
-            if($mItem){
-                foreach ($mItem as $k => $v) {
-                    $mItem[$k] = $v;
+        // //机型参数
+        // if($mid == 51){
+        //     $ht1 .= '手工包装';  
+        // }else{
+        //     if($mItem){
+        //         foreach ($mItem as $k => $v) {
+        //             $mItem[$k] = $v;
 
-                    //属性值
-                    $mItemInfo = $this->machineItem->getValue(['id' => $v], 'title');
-                    $mItem[$k] = $mItemInfo ? $mItemInfo : ($mItem[$k] ? $mItem[$k] : '');
+        //             //属性值
+        //             $mItemInfo = $this->machineItem->getValue(['id' => $v], 'title');
+        //             $mItem[$k] = $mItemInfo ? $mItemInfo : ($mItem[$k] ? $mItem[$k] : '');
 
-                    //多图拆解
-                    // $macSpecInfo = $this->machineSpec->getValue(['mark' => $k], 'type');
-                    $macSpecInfo = $this->machineSpec->getOneDarry(['mark' => $k]);
-                    if($macSpecInfo['status'] != 1){
-                        $ht1 .= '<tr><td>'.$macSpecInfo['title'].'</td><td>'.$mItem[$k].'</td></tr>';
-                    }
-                }
-            }else{
-                $ht1 .= '未设置机台参数';            
-            }
+        //             //多图拆解
+        //             // $macSpecInfo = $this->machineSpec->getValue(['mark' => $k], 'type');
+        //             $macSpecInfo = $this->machineSpec->getOneDarry(['mark' => $k]);
+        //             if($macSpecInfo['status'] != 1){
+        //                 $ht1 .= '<tr><td>'.$macSpecInfo['title'].'</td><td>'.$mItem[$k].'</td></tr>';
+        //             }
+        //         }
+        //     }else{
+        //         $ht1 .= '未设置机台参数';            
+        //     }
             
-        }
-        $ht1 .= '</table></div></body></html>';
-        $item['machine'] = $ht1;
+        // }
+        // $ht1 .= '</table></div></body></html>';
+        // $item['machine'] = $ht1;
 
         $info = array_merge($info, $item);
         unset($info['item']);
-        $collect = $this->memberCollection->getOneDarry(['uid' => $uid, 'pid' => $pid, 'mid' => $mid]);
+        $collect = $this->memberCollection->getOneDarry(['uid' => $uid, 'pid' => $pid]);
         $info['is_collect'] = $collect ? 1 : 0;
-        $info['mid'] = $mid;
+        // $info['mid'] = $mid;
         // halt($item);
         return $info;
     }
