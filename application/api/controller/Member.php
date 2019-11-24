@@ -419,8 +419,9 @@ class Member extends BasicApi
                 $list[$k]['title'] = $proInfo['title'];
                 $list[$k]['logo'] = $proInfo['logo'];
                 $list[$k]['brand'] = $brandInfo['logo'];
-                $list[$k]['mid'] = $v['mid'];
-                $list[$k]['mtitle'] = $this->machine->getValue(['id' => $v['mid']], 'title');
+                unset($list[$k]['mid']);
+                // $list[$k]['mid'] = $v['mid'];
+                // $list[$k]['mtitle'] = $this->machine->getValue(['id' => $v['mid']], 'title');
             }
         }
         $this->success('请求成功', $list);

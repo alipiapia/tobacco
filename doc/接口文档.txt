@@ -17,9 +17,8 @@
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						参数：pid		(产品id		类型：int		是否必填：必填)
-						参数：mid		(机台id		类型：int		是否必填：必填)
 						
-			1-2	产品搜索:[条码+钢印号]
+			1-3	产品搜索:[条码+钢印号]
 						地址:/api/product/check
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
@@ -160,7 +159,6 @@
 						请求方式:GET
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						参数：pid		(产品pid		类型：int		是否必填：必填)
-						参数：mid		(机型mid		类型：int		是否必填：必填)
 						
 			6-3	取消收藏【多个】
 						地址:/api/member/delc
@@ -239,7 +237,7 @@
 						地址:/api/chat/send
 						请求方式:POST
 						参数：create_by		(发送者create_by		类型：int		是否必填：必填)
-						参数：receive_by		(接收者receive_by		类型：int		是否必填：必填)
+						参数：receive_by	(接收者receive_by		类型：int		是否必填：必填)
 						参数：content		(内容content		类型：text		是否必填：必填)
 		
 	11	关于我们
