@@ -42,6 +42,7 @@ class Member extends BasicApi
         $this->memberMessage = model('common/MemberMessage');
         $this->memberCollection = model('common/MemberCollection');
         $this->SmsLog = model('common/SmsLog');
+        $this->area = model('common/Area');
         $param = $this->request->param();
         $this->page = isset($param['page']) ? $param['page'] : 1;
         $this->size = isset($param['size']) ? $param['size'] : 10;
@@ -51,19 +52,34 @@ class Member extends BasicApi
     public function index()
     {
         $param = $this->request->param();
+        $uid = input('uid');
+        if(!$uid){
+            $this->error('用户参数错误');
+        }
         $map = [
             'status' => 0,
             'is_deleted' => '0',
-            'id' => ['neq', $param['uid']],
+            'id' => ['neq', $uid],
         ];
-        if(empty($param['uid'])){
-            $this->error('用户参数错误');
-        }
         foreach (['username', 'nickname', 'role', 'phone'] as $key) {
             if(isset($param[$key]) && $param[$key] !== ''){
                 if($key == 'role'){
                     $map[$key] = $param[$key];
                 	$map['is_advisor'] =  1;
+                	if($param[$key] == 1){
+                		$map['aid'] = 1;
+                	}elseif($param[$key] == 2){
+                		$userAid =  $this->member->getValue(new Where(['id' => $uid]), 'aid');
+                		$userArea =  $this->area->getOneDarry(new Where(['area_id' => $userAid]), 'area_id,area_deep,area_parent_id');
+                		$userParentArea =  $this->area->getOneDarry(new Where(['area_id' => $userArea['area_parent_id']]), 'area_id,area_deep,area_parent_id');
+                		// halt($userParentArea);
+                		if($userArea['area_deep'] == 2){
+                			$map['aid'] = $userArea['area_id'];                			
+                		}
+                		if($userParentArea['area_deep'] == 2){
+                			$map['aid'] = $userParentArea['area_id'];                			
+                		}
+                	}
                 }else{
                     $map[$key] = ['like', "%{$param[$key]}%"];
                 }
@@ -115,7 +131,7 @@ class Member extends BasicApi
             'phone' => ['eq', $phone],
         ];
         $map = new Where($map);
-        $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,phone,status,avatar,accept');
+        $mem = $this->member->getOneDarry($map, 'id,username,nickname,password,role,aid,phone,status,avatar,accept');
         if(!$mem){
             $this->error('登录账号不存在，请重新输入');            
         }
