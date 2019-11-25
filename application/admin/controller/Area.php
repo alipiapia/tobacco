@@ -139,9 +139,9 @@ class Area extends BasicAdmin
             $datas[$key]['delete_url'] = url('/').'admin.html#'.url('del');
             $datas[$key]['auth_add'] = auth("admin/area/add");
             $datas[$key]['auth_close'] = auth("admin/area/close");
-            $datas[$key]['close_url'] = url('#/Area/close');
+            $datas[$key]['close_url'] = url('admin/Area/close');
             $datas[$key]['auth_open'] = auth("admin/area/open");
-            $datas[$key]['open_url'] = url('#/Area/open');
+            $datas[$key]['open_url'] = url('admin/Area/open');
 
             $datas[$key]['auth_edit'] = auth("admin/area/edit");
             $datas[$key]['auth_del'] = auth("admin/area/del");
