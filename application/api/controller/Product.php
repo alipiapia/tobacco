@@ -134,7 +134,7 @@ class Product extends BasicApi
         $list = $this->product->getLists($map, '', 'id,title,logo');
         $list = $list ? $list[0] : null;
         if($list){
-            $list = $this->formatItem($list['id'], $mids[0], input('uid'));
+            $list = $this->formatItem($uid, $list['id']);
         }
         // halt($list);
         $this->success('请求成功', $list);
