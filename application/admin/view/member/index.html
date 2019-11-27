@@ -160,7 +160,7 @@
             </td>
             <td class='text-left nowrap'>{$vo.login_num|default=0}</td>
             <td class='text-left nowrap'>
-                {$vo.login_at|format_datetime|default="<span class='color-desc'>从未登录</span>"|raw}
+                {$vo.login_at|default="<span class='color-desc'>从未登录</span>"|raw}
             </td>
             <td class='text-left nowrap'>
                 {if $vo.status eq 1}<span class="color-red">已禁用</span>{elseif $vo.status eq 0}<span class="color-green">使用中</span>{/if}

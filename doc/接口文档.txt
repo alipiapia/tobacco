@@ -84,6 +84,13 @@
 						参数：pid		(产品id		类型：int		是否必填：必填)
 						参数：uid		(用户uid		类型：int		是否必填：必填)
 						
+			4-5	钢印号匹配机型（20191127新增）
+						地址:/api/type/check
+						请求方式:GET
+						参数：sn		(钢印号		类型：string		是否必填：必填)
+						参数：pid		(产品id		类型：int		是否必填：必填)
+						参数：uid		(用户uid		类型：int		是否必填：必填)
+						
 	5	会员
 			5-1	会员列表
 						地址:/api/member/index
