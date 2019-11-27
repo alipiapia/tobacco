@@ -142,21 +142,23 @@ class Product extends BasicApi
 
     //详情
     public function info(){
-        if(!input('pid')){
+        $uid = input('uid');
+        $pid = input('pid');
+        if(!$pid){
             $this->error('产品参数错误');
         }
         // if(!input('mid')){
         //     $this->error('机型参数错误');
         // }
-        if(!input('uid')){
+        if(!$uid){
             $this->error('用户参数错误');
         }
-        $info = $this->formatItem(input('uid'), input('pid'));
+        $info = $this->formatItem($uid, $pid);
         $this->success('请求成功', $info);
     }
 
     //根据钢印号查询机型
-    public function getMids($sn){
+    private function getMids($sn){
         // $sn = input('sn');
         $map = [
             'status' => 0,
@@ -180,7 +182,7 @@ class Product extends BasicApi
     }
 
     //根据机台ids查询产品ids
-    public function getMPids($mids){
+    private function getMPids($mids){
         // $mids = input('mids');
         $mpMap = [
             'id' => ['in', $mids],

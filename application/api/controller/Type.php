@@ -98,7 +98,8 @@ class Type extends BasicApi
         $this->success('请求成功', $list);
     }
 
-    public function _getPMids($pname){
+    //根据产品名称机台ids
+    private function _getPMids($pname){
         $pMap = [
             'title' => ['like', "%{$pname}%"],
             'status' => 0,
@@ -202,21 +203,94 @@ class Type extends BasicApi
         // return array_unique($mids);
     }
 
+    //钢印号搜索
+    public function check()
+    {
+        $sn = input('sn');
+        $pid = input('pid');
+        $uid = input('uid');
+        if(!$sn){
+            $this->error('钢印号参数错误');
+        }
+        if(!$pid){
+            $this->error('产品参数错误');
+        }
+        if(!$uid){
+            $this->error('用户参数错误');
+        }
+        $map = [
+            'status' => 0,
+            'is_deleted' => '0',
+        ];        
+        $mids = $this->getMids($sn);
+        if(!$mids){
+            $this->error('找不到机型');
+        }
+        $map22 = ['id' => ['in', $mids]];
+        $map22 = new Where($map22);
+        $tids = $this->machine->getColumn($map22, 'type');
+        $newPids  =[];
+        foreach ($tids as $k => $v) {
+            if($v){
+                $newPids = array_unique(array_merge($newPids, [$v]));
+            }
+        }
+        $map['id'] = ['in', $newPids];
+        $map = new Where($map);
+        $list = $this->type->getColumn($map, 'id');
+        $list = $list ? $list[0] : null;
+        if($list){
+            $list = $this->formatItem($list, $pid, $uid);
+        }
+        // halt($list);
+        $this->success('请求成功', $list);
+    }
+
     //机型参数详情
     public function info(){
         $id = input('id');
         $pid = input('pid');
         $uid = input('uid');
         $title = input('title','title');
-        if(!input('id')){
+        if(!$id){
             $this->error('机型参数错误');
         }
-        if(!input('pid')){
+        if(!$pid){
             $this->error('产品参数错误');
         }
-        if(!input('uid')){
+        if(!$uid){
             $this->error('用户参数错误');
         }
+        $info = $this->formatItem($id, $pid, $uid);
+        $this->success('请求成功', $info);
+    }
+
+    //根据钢印号查询机型
+    private function getMids($sn){
+        // $sn = input('sn');
+        $map = [
+            'status' => 0,
+            'is_deleted' => '0',
+        ];
+        $mids = [];
+        $mPatterns = $this->machine->getColumn($map, 'id,title,tpattern,xpattern');
+        // halt($mPatterns);
+        foreach ($mPatterns as $k => $v) {            
+            //UP. 20190818 By pp
+            //条/盒规则更新：由之前固定5位条+7位盒修改为不区分位数自动匹配
+            if(($v['tpattern'] && @preg_match($v['tpattern'], $sn, $matches)) || ($v['xpattern'] && @preg_match($v['xpattern'], $sn, $matches))){
+                $mids[] = $v['id'];
+            }
+            // if($v['xpattern'] && preg_match($v['xpattern'], $sn, $matches)){
+            //     $mids[] = $v['id'];  
+            // }
+        }
+        // halt($mids);
+        return $mids;
+    }
+
+    //item
+    private function formatItem($id, $pid, $uid){
 
         $mMaplist = ['type' => $id];
         $macs = $this->machine->getLists($mMaplist, 'id,title,type,item');
@@ -248,7 +322,7 @@ class Type extends BasicApi
                 $item[$k] = $v;
 
                 //属性值
-                $itemInfo = $this->productItem->getValue(['id' => $v], $title);
+                $itemInfo = $this->productItem->getValue(['id' => $v], 'title');
                 $item[$k] = $itemInfo ? $itemInfo : ($item[$k] ? $item[$k] : '');
 
                 //多图拆解
@@ -313,13 +387,8 @@ class Type extends BasicApi
         }
         $ht1 .= '</table></div></body></html>';
         $item['machine'] = $ht1;
-
         $info = array_merge($info, $item);
         unset($info['item']);
-        // $collect = $this->memberCollection->getOneDarry(['uid' => $uid, 'pid' => $pid, 'mid' => $mid]);
-        // $info['is_collect'] = $collect ? 1 : 0;
-        // $info['mid'] = $mid;
-        // halt($item);
-        $this->success('请求成功', $info);
+        return $info;
     }
 }
