@@ -253,22 +253,28 @@ class Type extends BasicApi
                 $specInfo = $this->productSpec->getValue(['mark' => $k], 'type');
                 //缩略图+实际图
                 $exp = explode('|', $v);
+                $exv = explode('-', $k);
                 // unset($item[$k]);
                 // $item[$k] = $exp;
                 // halt($item[$k]);
                 // halt($k);
                 
-                if((strpos($k, 'fwtjthgyh') !== false) || (strpos($k, 'fwtjthjd') !== false) || (strpos($k, 'fwtjthldt') !== false) || (strpos($k, 'fwtjthqt') !== false)){//防伪分组条盒
-                    foreach ($exp as $kk => $vv) {
-                         if($vv){
-                            $item['th'][] = $vv;
+                if((strpos($k, 'fwtjthgyh') !== false) || (strpos($k, 'fwtjthjd') !== false) || (strpos($k, 'fwtjthldt') !== false)){//防伪分组条盒
+                    // halt($exv);
+                    if(($exv[1] == $id)){
+                        foreach ($exp as $kk => $vv) {
+                             if($vv){
+                                $item['th'][] = $vv;
+                            }
                         }
                     }
-                }elseif((strpos($k, 'fwtjxhgyh') !== false) || (strpos($k, 'fwtjxhjd') !== false) || (strpos($k, 'fwtjxhldt') !== false) || (strpos($k, 'fwtjxhqt') !== false)){//防伪分组小盒
-                    foreach ($exp as $kk => $vv) {
-                         if($vv){
-                            $item['xh'][] = $vv;
-                        }
+                }elseif((strpos($k, 'fwtjxhgyh') !== false) || (strpos($k, 'fwtjxhjd') !== false) || (strpos($k, 'fwtjxhldt') !== false)){//防伪分组小盒
+                    if(($exv[1] == $id)){
+                        foreach ($exp as $kk => $vv) {
+                             if($vv){
+                                $item['xh'][] = $vv;
+                            }
+                        }                        
                     }
                 }
                 unset($item[$k]);
