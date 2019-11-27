@@ -211,8 +211,8 @@ class Product extends BasicApi
         $item = json_decode($info['item'], true);
         // $mItem = json_decode($machinInfo['item'], true);
         $ht = $ht1 = $this->hHead;
-        $factoryName = $this->factory->getValue(['id' => $info['fid']], 'title');
-        $ht .= '<tr><td>生产机构</td><td>'.$factoryName.'</td></tr>';//生产机构
+        // $factoryName = $this->factory->getValue(['id' => $info['fid']], 'title');
+        // $ht .= '<tr><td>生产机构</td><td>'.$factoryName.'</td></tr>';//生产机构
         $thii = $xhii = $yzii = 1;
         // halt($item);
         if($item){
