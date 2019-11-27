@@ -234,11 +234,13 @@ class Type extends BasicApi
         }
         $mMap = ['id' => $mid];
         $pMap = ['id' => $pid];
-        $info = $this->product->getOneDarry($pMap, 'item');
+        $info = $this->product->getOneDarry($pMap);
         $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,type,item');
         $item = json_decode($info['item'], true);
         $mItem = json_decode($machinInfo['item'], true);
         $ht = $ht1 = $this->hHead;
+        $factoryName = $this->factory->getValue(['id' => $info['fid']], 'title');
+        $ht1 .= '<tr><td>生产机构</td><td>'.$factoryName.'</td></tr>';//生产机构
         $thii = $xhii = $yzii = 1;
         // halt($item);
         if($item){
@@ -259,7 +261,7 @@ class Type extends BasicApi
                 // halt($item[$k]);
                 // halt($k);
                 
-                if((strpos($k, 'fwtjthgyh') !== false) || (strpos($k, 'fwtjthjd') !== false) || (strpos($k, 'fwtjthldt') !== false) || (strpos($k, 'fwtjthqt') !== false)){//防伪分组条盒
+                if((strpos($k, 'fwtjthgyh') !== false) || (strpos($k, 'fwtjthjd') !== false) || (strpos($k, 'fwtjthldt') !== false)){//防伪分组条盒
                     // halt($exv);
                     if(($exv[1] == $id)){//机型匹配
                         foreach ($exp as $kk => $vv) {
@@ -268,7 +270,7 @@ class Type extends BasicApi
                             }
                         }
                     }
-                }elseif((strpos($k, 'fwtjxhgyh') !== false) || (strpos($k, 'fwtjxhjd') !== false) || (strpos($k, 'fwtjxhldt') !== false) || (strpos($k, 'fwtjxhqt') !== false)){//防伪分组小盒
+                }elseif((strpos($k, 'fwtjxhgyh') !== false) || (strpos($k, 'fwtjxhjd') !== false) || (strpos($k, 'fwtjxhldt') !== false)){//防伪分组小盒
                     if(($exv[1] == $id)){//机型匹配
                         foreach ($exp as $kk => $vv) {
                              if($vv){
