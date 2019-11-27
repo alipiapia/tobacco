@@ -229,8 +229,8 @@ class Type extends BasicApi
             }
         }
         // halt($mid);
-        if(!$mid){
-            $this->error('机型参数错误');
+        if(empty($mid)){
+            $this->error('找不到相关机型');
         }
         $mMap = ['id' => $mid];
         $pMap = ['id' => $pid];
@@ -253,7 +253,7 @@ class Type extends BasicApi
                 $specInfo = $this->productSpec->getValue(['mark' => $k], 'type');
                 //缩略图+实际图
                 $exp = explode('|', $v);
-                $exv = explode('-', $k);
+                $exv = explode('-', $k);//机型id
                 // unset($item[$k]);
                 // $item[$k] = $exp;
                 // halt($item[$k]);
@@ -261,7 +261,7 @@ class Type extends BasicApi
                 
                 if((strpos($k, 'fwtjthgyh') !== false) || (strpos($k, 'fwtjthjd') !== false) || (strpos($k, 'fwtjthldt') !== false)){//防伪分组条盒
                     // halt($exv);
-                    if(($exv[1] == $id)){
+                    if(($exv[1] == $id)){//机型匹配
                         foreach ($exp as $kk => $vv) {
                              if($vv){
                                 $item['th'][] = $vv;
@@ -269,7 +269,7 @@ class Type extends BasicApi
                         }
                     }
                 }elseif((strpos($k, 'fwtjxhgyh') !== false) || (strpos($k, 'fwtjxhjd') !== false) || (strpos($k, 'fwtjxhldt') !== false)){//防伪分组小盒
-                    if(($exv[1] == $id)){
+                    if(($exv[1] == $id)){//机型匹配
                         foreach ($exp as $kk => $vv) {
                              if($vv){
                                 $item['xh'][] = $vv;
