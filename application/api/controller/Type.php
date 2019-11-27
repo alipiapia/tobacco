@@ -259,7 +259,7 @@ class Type extends BasicApi
                 // halt($item[$k]);
                 // halt($k);
                 
-                if((strpos($k, 'fwtjthgyh') !== false) || (strpos($k, 'fwtjthjd') !== false) || (strpos($k, 'fwtjthldt') !== false)){//防伪分组条盒
+                if((strpos($k, 'fwtjthgyh') !== false) || (strpos($k, 'fwtjthjd') !== false) || (strpos($k, 'fwtjthldt') !== false) || (strpos($k, 'fwtjthqt') !== false)){//防伪分组条盒
                     // halt($exv);
                     if(($exv[1] == $id)){//机型匹配
                         foreach ($exp as $kk => $vv) {
@@ -268,7 +268,7 @@ class Type extends BasicApi
                             }
                         }
                     }
-                }elseif((strpos($k, 'fwtjxhgyh') !== false) || (strpos($k, 'fwtjxhjd') !== false) || (strpos($k, 'fwtjxhldt') !== false)){//防伪分组小盒
+                }elseif((strpos($k, 'fwtjxhgyh') !== false) || (strpos($k, 'fwtjxhjd') !== false) || (strpos($k, 'fwtjxhldt') !== false) || (strpos($k, 'fwtjxhqt') !== false)){//防伪分组小盒
                     if(($exv[1] == $id)){//机型匹配
                         foreach ($exp as $kk => $vv) {
                              if($vv){
