@@ -359,6 +359,13 @@ class Type extends BasicApi
                 }
                 unset($item[$k]);
             }
+
+            if(empty($item['th'])){
+                $item['th'] = null;
+            }
+            if(empty($item['xh'])){
+                $item['xh'] = null;
+            }
         }else{
             // $ht .= '未设置产品参数';
         }
