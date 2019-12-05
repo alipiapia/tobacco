@@ -240,7 +240,7 @@ class Type extends BasicApi
         $list = $this->type->getColumn($map, 'id');
         $list = $list ? $list[0] : null;
         if($list){
-            $list = $this->formatItem($list, $pid, $uid);
+            $list = $this->formatItem($pid, $uid, $list, $mids[0]);
         }
         // halt($list);
         $this->success('请求成功', $list);
@@ -261,7 +261,7 @@ class Type extends BasicApi
         if(!$uid){
             $this->error('用户参数错误');
         }
-        $info = $this->formatItem($id, $pid, $uid);
+        $info = $this->formatItem($pid, $uid, $id, '');
         $this->success('请求成功', $info);
     }
 
@@ -290,30 +290,34 @@ class Type extends BasicApi
     }
 
     //item
-    private function formatItem($id, $pid, $uid){
+    private function formatItem($pid, $uid, $id, $mid){
 
-        $mMaplist = ['type' => $id];
-        $macs = $this->machine->getLists($mMaplist, 'id,title,type,item');
-        foreach ($macs as $k => $v) {
-            $macs[$k]['item'] = json_decode($v['item'], true);
-            if(count($macs[$k]['item']) > 1){
-                $mid = $macs[$k]['id'];
-            }else{
-                $mid = $macs[0]['id'];
+        if(!$mid){
+            $mMaplist = ['type' => $id];
+            $macs = $this->machine->getLists($mMaplist, 'id,title,type,item');
+            foreach ($macs as $k => $v) {
+                $macs[$k]['item'] = json_decode($v['item'], true);
+                if(count($macs[$k]['item']) > 1){
+                    $mid = $macs[$k]['id'];
+                }else{
+                    $mid = $macs[0]['id'];
+                }
             }
+            // halt($macs);
+            if(empty($mid)){
+                $this->error('找不到相关机型');
+            }            
         }
-        // halt($mid);
-        if(empty($mid)){
-            $this->error('找不到相关机型');
-        }
+            // halt($mid);
+        
         $mMap = ['id' => $mid];
         $pMap = ['id' => $pid];
         $info = $this->product->getOneDarry($pMap);
-        $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,type,item');
+        $machinInfo = $this->machine->getOneDarry($mMap, 'id,title,fid,type,item');
         $item = json_decode($info['item'], true);
         $mItem = json_decode($machinInfo['item'], true);
         $ht = $ht1 = $this->hHead;
-        $factoryName = $this->factory->getValue(['id' => $info['fid']], 'title');
+        $factoryName = $this->factory->getValue(['id' => $machinInfo['fid']], 'title');
         $ht1 .= '<tr><td>生产机构</td><td>'.$factoryName.'</td></tr>';//生产机构
         $thii = $xhii = $yzii = 1;
         // halt($item);

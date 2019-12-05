@@ -216,7 +216,8 @@ class Product extends BasicApi
         // $factoryName = $this->factory->getValue(['id' => $info['fid']], 'title');
         // $ht .= '<tr><td>生产机构</td><td>'.$factoryName.'</td></tr>';//生产机构
         $thii = $xhii = $yzii = 1;
-        // halt($item);
+        $kvs['th'] = $kvs['xh'] = [];
+        // halt($kvs);
         if($item){
             foreach ($item as $k => $v) {
                 $item[$k] = $v;
@@ -240,9 +241,16 @@ class Product extends BasicApi
                         unset($item[$k]);
                         continue;
                     }
+                    if($kvs['th']){
+                        unset($item[$k]);
+                        continue;
+                    }
                     foreach ($exp as $kk => $vv) {
                          if($vv){
                             $item['fwtj']['th'][] = $vv;
+                            if((strpos($k, 'fwtjthqt') !== false)){
+                                $kvs['th'][]  = $vv;
+                            }
                         }
                     }
                 }elseif(strpos($k, 'fwtjxh') !== false){//防伪分组小盒
@@ -251,9 +259,16 @@ class Product extends BasicApi
                         unset($item[$k]);
                         continue;
                     }
+                    if($kvs['xh']){
+                        unset($item[$k]);
+                        continue;
+                    }
                     foreach ($exp as $kk => $vv) {
                          if($vv){
                             $item['fwtj']['xh'][] = $vv;
+                            if((strpos($k, 'fwtjxhqt') !== false)){
+                                $kvs['xh'][]  = $vv;
+                            }
                         }
                     }
                 }elseif(strpos($k, 'fwtjyz') !== false){//防伪分组烟支
